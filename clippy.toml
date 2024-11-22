@@ -1,0 +1,14 @@
+# https://rust-lang.github.io/rust-clippy/master/index.html
+# https://doc.rust-lang.org/clippy/lint_configuration.html
+
+# https://doc.rust-lang.org/clippy/lint_configuration.html#allow-unwrap-in-tests
+allow-unwrap-in-tests = true
+
+# https://doc.rust-lang.org/clippy/lint_configuration.html#too-many-lines-threshold
+too-many-lines-threshold = 1000
+
+# https://doc.rust-lang.org/clippy/lint_configuration.html#disallowed-types
+disallowed-types = [
+	{ path = "std::sync::Mutex", reason = "use parking_lot::Mutex" },
+	{ path = "std::sync::RwLock", reason = "use parking_lot::RwLock" },
+]
