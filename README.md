@@ -1,4 +1,4 @@
-# libspotify
+# spotify_web_api
 
 A wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/web-api) written in Rust.
 
