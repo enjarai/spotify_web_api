@@ -1,5 +1,5 @@
 use super::error::BodyError;
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, Utc};
 use serde_json::Value;
 use std::borrow::Cow;
 use url::Url;
@@ -67,12 +67,6 @@ impl ParamValue<'static> for DateTime<Utc> {
     fn as_value(&self) -> Cow<'static, str> {
         self.to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
             .into()
-    }
-}
-
-impl ParamValue<'static> for NaiveDate {
-    fn as_value(&self) -> Cow<'static, str> {
-        format!("{}", self.format("%Y-%m-%d")).into()
     }
 }
 
