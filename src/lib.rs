@@ -8,13 +8,10 @@ pub mod model;
 pub mod api;
 
 #[cfg(feature = "client_api")]
-mod auth;
+pub mod auth;
 
 #[cfg(feature = "client_api")]
-pub use auth::{AuthError, AuthResult};
-
-#[cfg(feature = "client_api")]
-pub use spotify::{RestError, Spotify, SpotifyError, SpotifyResult};
+pub use spotify::*;
 
 #[cfg(test)]
 mod test;

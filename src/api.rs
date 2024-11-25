@@ -1,5 +1,6 @@
 mod client;
 mod endpoint;
+pub mod endpoints;
 mod error;
 mod ignore;
 mod params;

@@ -8,7 +8,7 @@ use thiserror::Error;
 #[non_exhaustive]
 pub enum BodyError {
     /// Body data could not be serialized from form parameters.
-    #[error("failed to URL encode form parameters: {}", source)]
+    #[error("failed to URL encode form parameters: {source}")]
     UrlEncoded {
         /// The source of the error.
         #[from]
@@ -16,7 +16,7 @@ pub enum BodyError {
     },
 
     /// Body data could not be serialized to JSON from form parameters.
-    #[error("failed to JSON encode form parameters: {}", source)]
+    #[error("failed to JSON encode form parameters: {source}")]
     JsonEncoded {
         /// The source of the error.
         #[from]
@@ -32,14 +32,14 @@ where
     E: Error + Send + Sync + 'static,
 {
     /// The client encountered an error.
-    #[error("client error: {}", source)]
+    #[error("client error: {source}")]
     Client {
         /// The client error.
         source: E,
     },
 
     /// Authentication failed.
-    #[error("failed to authenticate: {}", source)]
+    #[error("failed to authenticate: {source}")]
     Auth {
         /// The source of the error.
         #[from]
@@ -47,7 +47,7 @@ where
     },
 
     /// The URL failed to parse.
-    #[error("failed to parse url: {}", source)]
+    #[error("failed to parse url: {source}")]
     UrlParse {
         /// The source of the error.
         #[from]
@@ -55,7 +55,7 @@ where
     },
 
     /// Body data could not be created.
-    #[error("failed to create form data: {}", source)]
+    #[error("failed to create form data: {source}")]
     Body {
         /// The source of the error.
         #[from]
@@ -63,7 +63,7 @@ where
     },
 
     /// JSON deserialization from Spotify failed.
-    #[error("could not parse JSON response: {}", source)]
+    #[error("could not parse JSON response: {source}")]
     Json {
         /// The source of the error.
         #[from]
@@ -78,7 +78,7 @@ where
     },
 
     /// Spotify returned an error without JSON information.
-    #[error("spotify internal server error {}", status)]
+    #[error("spotify internal server error {status}")]
     SpotifyService {
         /// The status code for the return.
         status: http::StatusCode,
@@ -88,7 +88,7 @@ where
     },
 
     /// Failed to parse an expected data type from JSON.
-    #[error("could not parse {} data from JSON: {}", typename, source)]
+    #[error("could not parse {typename} data from JSON: {source}")]
     DataType {
         /// The source of the error.
         source: serde_json::Error,
@@ -98,14 +98,14 @@ where
     },
 
     /// The client does not understand how to use an endpoint for the given URL base.
-    #[error("unsupported URL base: {:?}", url_base)]
+    #[error("unsupported URL base: {url_base:?}")]
     UnsupportedUrlBase {
         /// The URL base that is not supported.
         url_base: UrlBase,
     },
 
     /// Spotify returned an error message with an HTTP error.
-    #[error("spotify server error ({}): {}", status, msg)]
+    #[error("spotify server error ({status}): {msg}")]
     SpotifyWithStatus {
         /// The HTTP status code.
         status: http::StatusCode,
@@ -115,7 +115,7 @@ where
     },
 
     /// Spotify returned an error object with an HTTP error.
-    #[error("spotify server error ({}): {:?}", status, obj)]
+    #[error("spotify server error ({status}): {obj:?}")]
     SpotifyObjectWithStatus {
         /// The HTTP status code.
         status: http::StatusCode,
@@ -125,7 +125,7 @@ where
     },
 
     /// Spotify returned an HTTP error with JSON we did not recognize.
-    #[error("spotify server error ({}): {:?}", status, obj)]
+    #[error("spotify server error ({status}): {obj:?}")]
     SpotifyUnrecognizedWithStatus {
         /// The HTTP status code.
         status: http::StatusCode,
