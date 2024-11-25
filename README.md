@@ -14,7 +14,7 @@ Choosing one flow over the rest depends on the application you are building:
 The following table summarizes the flows' behaviors:
 
 | Flow | Access User Resources | Requires Secret Key (Server-Side) | Access Token Refresh |
-| -------- | ------- | ------- | ------- |
+| :--- | :--- | :--- | :--- |
 | Authorization code with PKCE | Yes | 	No | Yes |
 | Client credentials | No | Yes | No |
 
