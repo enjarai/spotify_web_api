@@ -349,7 +349,7 @@ impl Spotify<AuthCodePKCE> {
     /// * `Err(ApiError<RestError>)` - If the token request fails due to network issues, invalid authorization code, or other API errors.
     pub fn request_token(&mut self, code: &str) -> Result<(), ApiError<RestError>> {
         let token = self.auth.request_token(code, &self.client)?;
-        self.token = Some(token);
+        self.set_token(token);
         Ok(())
     }
 
