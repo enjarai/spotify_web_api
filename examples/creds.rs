@@ -13,9 +13,7 @@ fn main() {
     let mut spotify = Spotify::with_client_credentials(client_id, client_secret)
         .expect("failed to create client");
 
-    spotify
-        .request_token()
-        .expect("Failed to request token: {e}");
+    spotify.request_token().expect("Failed to request token");
 
     let artist: Artist = ArtistEndpoint::from("0559tR6WyukLWH68JIGBuC")
         .query(&spotify)
