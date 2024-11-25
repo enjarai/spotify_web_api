@@ -1,5 +1,4 @@
 /// Asserts that the given JSON string can be deserialized into the given type.
-#[cfg(feature = "client_api")]
 macro_rules! assert_deserialized {
     ($type:ty, $json:expr) => {
         match serde_json::from_str::<$type>($json) {
@@ -9,7 +8,6 @@ macro_rules! assert_deserialized {
     };
 }
 
-#[cfg(feature = "client_api")]
 pub(crate) use assert_deserialized;
 
 // #[cfg(test)]
