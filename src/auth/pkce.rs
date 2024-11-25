@@ -162,15 +162,20 @@ impl AuthCodePKCE {
         let Some(code_verifier) = self.code_verifier.as_ref() else {
             return Err(AuthError::NoCodeVerifier.into());
         };
-
-        let mut params = FormParams::default();
-        params.push("grant_type", &"authorization_code");
-        params.push("code", &code);
-        params.push("redirect_uri", &self.redirect_uri);
-        params.push("client_id", &self.client_id);
-        params.push("code_verifier", &code_verifier);
-
+        let params = self.token_request_params(code, code_verifier);
         super::request_token(client, None, params)
+    }
+
+    pub(crate) async fn request_token_async(
+        &self,
+        code: &str,
+        client: &reqwest::Client,
+    ) -> Result<Token, ApiError<RestError>> {
+        let Some(code_verifier) = self.code_verifier.as_ref() else {
+            return Err(AuthError::NoCodeVerifier.into());
+        };
+        let params = self.token_request_params(code, code_verifier);
+        super::request_token_async(client, None, params).await
     }
 
     pub(crate) fn request_token_from_redirect_url(
@@ -179,19 +184,34 @@ impl AuthCodePKCE {
         client: &Client,
     ) -> Result<Token, ApiError<RestError>> {
         let code = self.verify_authorization_code(url)?;
-
         let Some(code_verifier) = self.code_verifier.as_ref() else {
             return Err(AuthError::NoCodeVerifier.into());
         };
+        let params = self.token_request_params(&code, code_verifier);
+        super::request_token(client, None, params)
+    }
 
+    pub(crate) async fn request_token_from_redirect_url_async(
+        &self,
+        url: &str,
+        client: &reqwest::Client,
+    ) -> Result<Token, ApiError<RestError>> {
+        let code = self.verify_authorization_code(url)?;
+        let Some(code_verifier) = self.code_verifier.as_ref() else {
+            return Err(AuthError::NoCodeVerifier.into());
+        };
+        let params = self.token_request_params(&code, code_verifier);
+        super::request_token_async(client, None, params).await
+    }
+
+    fn token_request_params<'a>(&self, code: &'a str, code_verifier: &'a str) -> FormParams<'a> {
         let mut params = FormParams::default();
         params.push("grant_type", &"authorization_code");
         params.push("code", &code);
         params.push("redirect_uri", &self.redirect_uri);
         params.push("client_id", &self.client_id);
         params.push("code_verifier", &code_verifier);
-
-        super::request_token(client, None, params)
+        params
     }
 }
 

@@ -54,6 +54,19 @@ impl ClientCredentials {
     }
 
     pub(crate) fn request_token(&self, client: &Client) -> Result<Token, ApiError<RestError>> {
+        let (auth, params) = self.auth_value_and_params();
+        super::request_token(client, Some(auth), params)
+    }
+
+    pub(crate) async fn request_token_async(
+        &self,
+        client: &reqwest::Client,
+    ) -> Result<Token, ApiError<RestError>> {
+        let (auth, params) = self.auth_value_and_params();
+        super::request_token_async(client, Some(auth), params).await
+    }
+
+    fn auth_value_and_params(&self) -> (String, FormParams<'_>) {
         let credentials = format!("{}:{}", self.client_id, self.client_secret);
         let mut auth = general_purpose::URL_SAFE_NO_PAD.encode(credentials);
         auth.insert_str(0, "Basic ");
@@ -61,6 +74,6 @@ impl ClientCredentials {
         let mut params = FormParams::default();
         params.push("grant_type", &"client_credentials");
 
-        super::request_token(client, Some(auth), params)
+        (auth, params)
     }
 }
