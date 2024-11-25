@@ -45,6 +45,7 @@ tokio = { version = "1.41.1", features = [
 	"macros",
 	# "time",
 ] }
+webbrowser = "1.0.2"
 
 [lints.rust]
 unsafe_code = "deny"
