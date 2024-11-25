@@ -23,11 +23,6 @@ pub type SpotifyResult<T> = Result<T, SpotifyError>;
 /// with the Spotify API, such as authentication issues, HTTP errors, or
 /// communication failures.
 ///
-/// # Variants
-/// - `AuthError`: An error related to setting the authentication header.
-/// - `Communication`: An error during communication with the Spotify API.
-/// - `Http`: An error related to constructing or processing HTTP requests.
-///
 /// This enum is marked as `#[non_exhaustive]`, meaning new variants may be added
 /// in future versions. When matching against it, include a wildcard arm (`_`)
 /// to account for any future variants.
@@ -72,17 +67,11 @@ pub enum RestError {
 /// Represents errors that can occur while interacting with the Spotify API.
 ///
 /// This enum captures various error scenarios, including URL parsing failures,
-/// authentication issues, communication errors, and API-specific issues. It is
-/// marked as `#[non_exhaustive]`, meaning new variants may be added in future versions.
+/// authentication issues, communication errors, and API-specific issues.
 ///
-/// # Variants
-/// - `UrlParse`: Errors related to URL parsing.
-/// - `AuthError`: Issues related to authentication headers.
-/// - `Communication`: Errors in network communication with the Spotify API.
-/// - `Http`: HTTP errors returned by the Spotify API.
-/// - `NoResponse`: Indicates no response was received from the Spotify API.
-/// - `DataType`: Errors parsing data from JSON responses.
-/// - `Api`: Represents errors from the Spotify API, wrapping an `ApiError`.
+/// This enum is marked as `#[non_exhaustive]`, meaning new variants may be added
+/// in future versions. When matching against it, include a wildcard arm (`_`)
+/// to account for any future variants.
 #[derive(Debug, Error)]
 #[non_exhaustive]
 pub enum SpotifyError {
@@ -374,6 +363,32 @@ impl Spotify<AuthCodePKCE> {
             .auth
             .request_token_from_redirect_url(url, &self.client)?;
         self.set_token(token);
+        Ok(())
+    }
+
+    /// Refreshes the access token using the stored refresh token.
+    ///
+    /// This method retrieves a new access token by exchanging the stored refresh token.
+    /// It requires that a valid refresh token is present in the current token.
+    ///
+    /// # Returns
+    /// * `Ok(())` - If the token was successfully refreshed and updated.
+    /// * `Err(AuthError::EmptyAccessToken)` - If no token is available.
+    /// * `Err(AuthError::EmptyRefreshToken)` - If no refresh token is available.
+    /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
+    ///   or other API errors.
+    pub fn refresh_token(&mut self) -> Result<(), ApiError<RestError>> {
+        let Some(token) = self.token.as_ref() else {
+            return Err(AuthError::EmptyAccessToken.into());
+        };
+
+        let Some(refresh_token) = token.refresh_token.as_ref() else {
+            return Err(AuthError::EmptyRefreshToken.into());
+        };
+
+        let token = self.auth.refresh_token(&self.client, refresh_token)?;
+        self.set_token(token);
+
         Ok(())
     }
 }
@@ -682,6 +697,35 @@ impl AsyncSpotify<AuthCodePKCE> {
             .request_token_from_redirect_url_async(url, &self.client)
             .await?;
         self.set_token(token);
+        Ok(())
+    }
+
+    /// Asynchronously refreshes the access token using the stored refresh token.
+    ///
+    /// This method retrieves a new access token by exchanging the stored refresh token.
+    /// It requires that a valid refresh token is present in the current token.
+    ///
+    /// # Returns
+    /// * `Ok(())` - If the token was successfully refreshed and updated.
+    /// * `Err(AuthError::EmptyAccessToken)` - If no token is available.
+    /// * `Err(AuthError::EmptyRefreshToken)` - If no refresh token is available.
+    /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
+    ///   or other API errors.
+    pub async fn refresh_token(&mut self) -> Result<(), ApiError<RestError>> {
+        let Some(token) = self.token.as_ref() else {
+            return Err(AuthError::EmptyAccessToken.into());
+        };
+
+        let Some(refresh_token) = token.refresh_token.as_ref() else {
+            return Err(AuthError::EmptyRefreshToken.into());
+        };
+
+        let token = self
+            .auth
+            .refresh_token_async(&self.client, refresh_token)
+            .await?;
+        self.set_token(token);
+
         Ok(())
     }
 }

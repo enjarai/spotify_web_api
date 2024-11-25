@@ -204,6 +204,30 @@ impl AuthCodePKCE {
         super::request_token_async(client, None, params).await
     }
 
+    pub(crate) fn refresh_token(
+        &self,
+        client: &Client,
+        refresh_token: &str,
+    ) -> Result<Token, ApiError<RestError>> {
+        let params = self.refresh_token_request_params(refresh_token);
+        let (req, data) = super::http_request_and_data(None, params)?;
+        let rsp = super::http_response(client, req, data).map_err(ApiError::client)?;
+        super::parse_response(&rsp)
+    }
+
+    pub(crate) async fn refresh_token_async(
+        &self,
+        client: &reqwest::Client,
+        refresh_token: &str,
+    ) -> Result<Token, ApiError<RestError>> {
+        let params = self.refresh_token_request_params(refresh_token);
+        let (req, data) = super::http_request_and_data(None, params)?;
+        let rsp = super::http_response_async(client, req, data)
+            .await
+            .map_err(ApiError::client)?;
+        super::parse_response(&rsp)
+    }
+
     fn token_request_params<'a>(&self, code: &'a str, code_verifier: &'a str) -> FormParams<'a> {
         let mut params = FormParams::default();
         params.push("grant_type", &"authorization_code");
@@ -211,6 +235,14 @@ impl AuthCodePKCE {
         params.push("redirect_uri", &self.redirect_uri);
         params.push("client_id", &self.client_id);
         params.push("code_verifier", &code_verifier);
+        params
+    }
+
+    fn refresh_token_request_params<'a>(&self, refresh_token: &'a str) -> FormParams<'a> {
+        let mut params = FormParams::default();
+        params.push("grant_type", &"refresh_token");
+        params.push("refresh_token", &refresh_token);
+        params.push("client_id", &self.client_id);
         params
     }
 }

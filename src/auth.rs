@@ -1,8 +1,3 @@
-// FLOW		                     Access User Resources		Requires Secret Key (Server-Side)		Access Token Refresh
-// --------------------------------------------------------------------------------------------------------------
-// Authorization code with PKCE	 Yes	                    No	                                    Yes
-// Client credentials	         No	                        Yes	                                    No
-
 mod client_credentials;
 mod pkce;
 pub mod scopes;
@@ -27,12 +22,6 @@ pub type AuthResult<T> = Result<T, AuthError>;
 /// This enum defines various error conditions that may arise while handling OAuth
 /// authorization flows, such as invalid headers, URL parsing issues, or mismatched
 /// state parameters.
-///
-/// # Variants
-/// - `HeaderValue`: An error related to an invalid HTTP header value.
-/// - `UrlParse`: An error that occurs when parsing a URL fails.
-/// - `CodeNotFound`: Indicates that the authorization code was not found in the URL.
-/// - `InvalidState`: Indicates a mismatch between the expected and received state parameters.
 ///
 /// This enum is marked as `#[non_exhaustive]`, meaning new variants may be added in future versions.
 /// When matching against it, include a wildcard arm (`_`) to account for any future variants.
@@ -102,13 +91,18 @@ pub enum AuthError {
     /// authentication cannot proceed without a valid token.
     #[error("access token is empty")]
     EmptyAccessToken,
+
+    /// Represents an error when the refresh token is empty, indicating that
+    /// token refreshing cannot proceed.
+    #[error("refresh token is empty")]
+    EmptyRefreshToken,
 }
 
 pub(crate) mod private {
     pub trait AuthFlow {}
 }
 
-pub(super) fn request_token(
+fn request_token(
     client: &Client,
     auth_header_value: Option<String>,
     params: FormParams<'_>,
@@ -118,7 +112,7 @@ pub(super) fn request_token(
     parse_response(&rsp)
 }
 
-pub(super) async fn request_token_async(
+async fn request_token_async(
     client: &reqwest::Client,
     auth_header_value: Option<String>,
     params: FormParams<'_>,
