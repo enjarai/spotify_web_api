@@ -26,3 +26,15 @@ impl Endpoint for AlbumEndpoint {
         format!("albums/{}", self.id).into()
     }
 }
+
+impl From<&str> for AlbumEndpoint {
+    fn from(id: &str) -> Self {
+        Self { id: id.to_owned() }
+    }
+}
+
+impl From<String> for AlbumEndpoint {
+    fn from(id: String) -> Self {
+        Self { id }
+    }
+}

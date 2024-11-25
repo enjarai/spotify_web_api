@@ -38,6 +38,3 @@ impl From<String> for ArtistEndpoint {
         Self { id }
     }
 }
-
-// #[builder(setter(into, strip_option), default)]
-// market: Option<Market>,
