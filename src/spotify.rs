@@ -267,6 +267,31 @@ where
 }
 
 impl Spotify<AuthCodePKCE> {
+    /// Creates a new instance of `Spotify` configured for the Authorization Code PKCE flow.
+    ///
+    /// This method initializes the `Spotify` client with an `AuthCodePKCE` authentication method.
+    /// The Authorization Code PKCE flow is typically used for client-side applications where user
+    /// authentication is required, and it uses a secure code challenge to mitigate interception risks.
+    ///
+    /// # Parameters
+    /// - `client_id`: The Client ID of your Spotify application.
+    /// - `redirect_uri`: The URI to which the user will be redirected after authentication.
+    /// - `scopes`: An optional set of scopes that define the permissions the application is requesting.
+    ///
+    /// # Returns
+    /// A [`SpotifyResult`] containing the [`Spotify`] client configured with Authorization Code PKCE authentication,
+    /// or a [`SpotifyError`] if initialization fails.
+    ///
+    /// # Example
+    /// ```no_run
+    /// use spotify_web_api::{Spotify, auth::scopes};
+    ///
+    /// let client_id = "your-client-id";
+    /// let redirect_uri = "your-redirect-uri";
+    ///
+    /// let spotify = Spotify::with_authorization_code_pkce(client_id, redirect_uri, scopes::user_details())
+    ///     .expect("Failed to create Spotify client");
+    /// ```
     pub fn with_authorization_code_pkce(
         client_id: impl Into<String>,
         redirect_uri: impl Into<String>,
