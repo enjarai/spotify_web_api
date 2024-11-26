@@ -87,8 +87,8 @@ where
         data: Vec<u8>,
     },
 
-    /// Failed to parse an expected data type from JSON.
-    #[error("could not parse {typename} data from JSON: {source}")]
+    /// Failed to parse an expected data type.
+    #[error("could not parse {typename} data: {source}")]
     DataType {
         /// The source of the error.
         source: serde_json::Error,
