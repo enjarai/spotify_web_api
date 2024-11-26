@@ -1,5 +1,7 @@
 # spotify_web_api
 
+[![Build Status](https://img.shields.io/github/actions/workflow/status/ry-sev/spotify_web_api/ci.yml?branch=main)](https://github.com/ry-sev/spotify_web_api/actions)
+
 A wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/web-api) written in Rust.
 
 > Spotify Web API enables the creation of applications that can interact with Spotify's streaming service, such as retrieving content metadata, getting recommendations, creating and managing playlists, or controlling playback.
