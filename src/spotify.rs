@@ -558,6 +558,21 @@ where
         Ok(api)
     }
 
+    /// Sets the access token for the Spotify client and returns the updated instance.
+    ///
+    /// This method allows chaining by consuming the current instance, updating the
+    /// stored access token, and returning the updated instance.
+    ///
+    /// # Parameters
+    /// * `token` - The new access token to be stored in the client.
+    ///
+    /// # Returns
+    /// The updated `Spotify` instance with the new token set.
+    pub fn with_token(mut self, token: Token) -> Self {
+        self.token = Some(token);
+        self
+    }
+
     /// Perform a REST query with a given auth.
     async fn rest_async_auth(
         &self,
@@ -623,6 +638,25 @@ where
     /// * `None` - If no token has been retrieved or stored yet.
     pub fn token(&self) -> Option<&Token> {
         self.token.as_ref()
+    }
+
+    /// Serializes the currently stored access token to a JSON string.
+    ///
+    /// This method converts the access token into a `String` in JSON format, allowing
+    /// it to be easily stored or transmitted. If no token is stored, it returns `Ok(None)`.
+    ///
+    /// # Errors
+    /// Returns a `SpotifyError::DataType` if serialization of the token fails.
+    ///
+    /// # Returns
+    /// * `Ok(Some(String))` - The serialized token string, if available.
+    /// * `Ok(None)` - If no token is currently stored.
+    pub fn token_to_string(&self) -> SpotifyResult<Option<String>> {
+        let Some(token) = self.token.as_ref() else {
+            return Ok(None);
+        };
+        let s = serde_json::to_string(token).map_err(SpotifyError::data_type::<Token>)?;
+        Ok(Some(s))
     }
 
     fn set_token(&mut self, mut token: Token) {
