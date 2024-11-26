@@ -10,7 +10,7 @@ async fn main() -> anyhow::Result<()> {
     let client_id = env::var("SPOTIFY_CLIENT_ID")?;
     let client_secret = env::var("SPOTIFY_CLIENT_SECRET")?;
 
-    let mut spotify = AsyncSpotify::with_client_credentials(client_id, client_secret)?;
+    let spotify = AsyncSpotify::with_client_credentials(client_id, client_secret)?;
 
     spotify.request_token().await?;
 
