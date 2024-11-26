@@ -2,28 +2,17 @@ use super::{
     Copyright, ExternalIds, ExternalUrls, Image, ItemType, Page, ReleaseDatePrecision,
     Restrictions, SimplifiedArtist, SimplifiedTrack,
 };
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum AlbumType {
+    #[serde(alias = "ALBUM")]
     Album,
+    #[serde(alias = "SINGLE")]
     Single,
+    #[serde(alias = "COMPILATION")]
     Compilation,
-}
-
-impl<'de> Deserialize<'de> for AlbumType {
-    fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(d)?;
-        match s.to_lowercase().as_str() {
-            "album" => Ok(Self::Album),
-            "single" => Ok(Self::Single),
-            "compilation" => Ok(Self::Compilation),
-            _ => Err(serde::de::Error::custom(
-                format!("unknown album type: {s}",),
-            )),
-        }
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
