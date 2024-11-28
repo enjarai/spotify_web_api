@@ -8,7 +8,7 @@ use crate::{
 use async_trait::async_trait;
 use bytes::Bytes;
 use http::{HeaderMap, HeaderValue, Response as HttpResponse};
-use parking_lot::Mutex;
+use parking_lot::RwLock;
 use reqwest::{blocking::Client, Client as AsyncClient};
 use std::{collections::HashSet, sync::Arc};
 use thiserror::Error;
@@ -173,7 +173,7 @@ where
     auth: A,
 
     /// The current access token, if available.
-    token: Arc<Mutex<Option<Token>>>,
+    token: Arc<RwLock<Option<Token>>>,
 }
 
 impl<A> Spotify<A>
@@ -189,7 +189,7 @@ where
             client,
             api_url,
             auth,
-            token: Arc::new(Mutex::new(None)),
+            token: Arc::new(RwLock::new(None)),
         };
         Ok(api)
     }
@@ -205,7 +205,7 @@ where
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
     pub fn with_token(mut self, token: Token) -> Self {
-        self.token = Arc::new(Mutex::new(Some(token)));
+        self.token = Arc::new(RwLock::new(Some(token)));
         self
     }
 
@@ -251,15 +251,12 @@ where
         &self,
         headers: &'a mut HeaderMap<HeaderValue>,
     ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
-        let access_token = {
-            let token_guard = self.token.lock();
-            let Some(token) = token_guard.as_ref() else {
-                return Err(AuthError::EmptyAccessToken);
-            };
-            token.access_token.clone()
+        let token = self.token.read();
+        let Some(token) = token.as_ref() else {
+            return Err(AuthError::EmptyAccessToken);
         };
 
-        let value = format!("Bearer {access_token}");
+        let value = format!("Bearer {}", token.access_token);
         let mut token_header_value = HeaderValue::from_str(&value)?;
         token_header_value.set_sensitive(true);
         headers.insert(http::header::AUTHORIZATION, token_header_value);
@@ -271,14 +268,14 @@ where
     /// This method provides access to the current access token stored within the `Spotify` instance.
     /// The access token is required for making authenticated requests to the Spotify Web API.
     ///
-    /// The token is wrapped in an `Arc<Mutex<Option<Token>>>` to ensure thread-safe access and
+    /// The token is wrapped in an `Arc<RwLock<Option<Token>>>` to ensure thread-safe access and
     /// shared ownership. This allows multiple threads to retrieve or update the token as needed.
     ///
     /// # Returns
-    /// An `Arc<Mutex<Option<Token>>>` containing:
+    /// An `Arc<RwLock<Option<Token>>>` containing:
     /// - `Some(Token)` if an access token is currently available.
     /// - `None` if no access token has been set or retrieved.
-    pub fn token(&self) -> Arc<Mutex<Option<Token>>> {
+    pub fn token(&self) -> Arc<RwLock<Option<Token>>> {
         self.token.clone()
     }
 
@@ -294,8 +291,8 @@ where
     /// * `Ok(Some(String))` - The serialized token string, if available.
     /// * `Ok(None)` - If no token is currently stored.
     pub fn token_to_string(&self) -> SpotifyResult<Option<String>> {
-        let token_guard = self.token.lock();
-        let Some(token) = token_guard.as_ref() else {
+        let token = self.token.read();
+        let Some(token) = token.as_ref() else {
             return Ok(None);
         };
         let s = serde_json::to_string(token).map_err(SpotifyError::data_type::<Token>)?;
@@ -305,8 +302,7 @@ where
     fn set_token(&self, mut token: Token) {
         token.expires_at = chrono::Utc::now()
             .checked_add_signed(chrono::Duration::seconds(token.expires_in as i64));
-        let mut token_guard = self.token.lock();
-        *token_guard = Some(token);
+        *self.token.write() = Some(token);
     }
 }
 
@@ -429,18 +425,16 @@ impl Spotify<AuthCodePKCE> {
     /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
     ///   or other API errors.
     pub fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
-        let refresh_token = {
-            let token_guard = self.token.lock();
-            let Some(token) = token_guard.as_ref() else {
-                return Err(AuthError::EmptyAccessToken.into());
-            };
-            let Some(refresh_token) = token.refresh_token.as_ref() else {
-                return Err(AuthError::EmptyRefreshToken.into());
-            };
-            refresh_token.clone()
+        let token = self.token.read();
+
+        let Some(token) = token.as_ref() else {
+            return Err(AuthError::EmptyAccessToken.into());
+        };
+        let Some(refresh_token) = token.refresh_token.as_ref() else {
+            return Err(AuthError::EmptyRefreshToken.into());
         };
 
-        let token = self.auth.refresh_token(&self.client, &refresh_token)?;
+        let token = self.auth.refresh_token(&self.client, refresh_token)?;
         self.set_token(token);
 
         Ok(())
@@ -548,7 +542,7 @@ where
     auth: A,
 
     /// The current access token, if available.
-    token: Arc<Mutex<Option<Token>>>,
+    token: Arc<RwLock<Option<Token>>>,
 }
 
 impl<A> AsyncSpotify<A>
@@ -564,7 +558,7 @@ where
             client,
             api_url,
             auth,
-            token: Arc::new(Mutex::new(None)),
+            token: Arc::new(RwLock::new(None)),
         };
         Ok(api)
     }
@@ -580,7 +574,7 @@ where
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
     pub fn with_token(mut self, token: Token) -> Self {
-        self.token = Arc::new(Mutex::new(Some(token)));
+        self.token = Arc::new(RwLock::new(Some(token)));
         self
     }
 
@@ -628,14 +622,12 @@ where
         &self,
         headers: &'a mut HeaderMap<HeaderValue>,
     ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
-        let access_token = {
-            let token_guard = self.token.lock();
-            let Some(token) = token_guard.as_ref() else {
-                return Err(AuthError::EmptyAccessToken);
-            };
-            token.access_token.clone()
+        let token = self.token.read();
+        let Some(token) = token.as_ref() else {
+            return Err(AuthError::EmptyAccessToken);
         };
-        let value = format!("Bearer {access_token}");
+
+        let value = format!("Bearer {}", token.access_token);
         let mut token_header_value = HeaderValue::from_str(&value)?;
         token_header_value.set_sensitive(true);
         headers.insert(http::header::AUTHORIZATION, token_header_value);
@@ -647,14 +639,14 @@ where
     /// This method provides access to the current access token stored within the `Spotify` instance.
     /// The access token is required for making authenticated requests to the Spotify Web API.
     ///
-    /// The token is wrapped in an `Arc<Mutex<Option<Token>>>` to ensure thread-safe access and
+    /// The token is wrapped in an `Arc<RwLock<Option<Token>>>` to ensure thread-safe access and
     /// shared ownership. This allows multiple threads to retrieve or update the token as needed.
     ///
     /// # Returns
-    /// An `Arc<Mutex<Option<Token>>>` containing:
+    /// An `Arc<RwLock<Option<Token>>>` containing:
     /// - `Some(Token)` if an access token is currently available.
     /// - `None` if no access token has been set or retrieved.
-    pub fn token(&self) -> Arc<Mutex<Option<Token>>> {
+    pub fn token(&self) -> Arc<RwLock<Option<Token>>> {
         self.token.clone()
     }
 
@@ -670,8 +662,8 @@ where
     /// * `Ok(Some(String))` - The serialized token string, if available.
     /// * `Ok(None)` - If no token is currently stored.
     pub fn token_to_string(&self) -> SpotifyResult<Option<String>> {
-        let token_guard = self.token.lock();
-        let Some(token) = token_guard.as_ref() else {
+        let token = self.token.read();
+        let Some(token) = token.as_ref() else {
             return Ok(None);
         };
         let s = serde_json::to_string(token).map_err(SpotifyError::data_type::<Token>)?;
@@ -681,8 +673,7 @@ where
     fn set_token(&self, mut token: Token) {
         token.expires_at = chrono::Utc::now()
             .checked_add_signed(chrono::Duration::seconds(token.expires_in as i64));
-        let mut token_guard = self.token.lock();
-        *token_guard = Some(token);
+        *self.token.write() = Some(token);
     }
 }
 
@@ -810,20 +801,22 @@ impl AsyncSpotify<AuthCodePKCE> {
     ///   or other API errors.
     pub async fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
         let refresh_token = {
-            let token_guard = self.token.lock();
-            let Some(token) = token_guard.as_ref() else {
+            let token = self.token.read();
+            let Some(token) = token.as_ref() else {
                 return Err(AuthError::EmptyAccessToken.into());
             };
-            let Some(refresh_token) = token.refresh_token.as_ref() else {
+            let Some(refresh_token) = token.refresh_token.clone() else {
                 return Err(AuthError::EmptyRefreshToken.into());
             };
-            refresh_token.clone()
+
+            refresh_token
         };
 
         let token = self
             .auth
             .refresh_token_async(&self.client, &refresh_token)
             .await?;
+
         self.set_token(token);
 
         Ok(())
