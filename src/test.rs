@@ -1,3 +1,5 @@
+pub mod client;
+
 /// Asserts that the given JSON string can be deserialized into the given type.
 macro_rules! assert_deserialized {
     ($type:ty, $json:expr) => {
