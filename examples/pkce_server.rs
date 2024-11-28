@@ -1,6 +1,6 @@
 use anyhow::{bail, Context, Result};
 use spotify_web_api::{
-    api::{endpoints::CurrentUserProfileEndpoint, Query as _},
+    api::{users::GetCurrentUserProfile, Query as _},
     auth::{scopes, AuthCodePKCE},
     model::CurrentUserProfile,
     Spotify,
@@ -25,7 +25,7 @@ fn main() -> Result<()> {
 
     spotify.request_token_from_redirect_url(&callback_url)?;
 
-    let user_profile: CurrentUserProfile = CurrentUserProfileEndpoint.query(&spotify)?;
+    let user_profile: CurrentUserProfile = GetCurrentUserProfile.query(&spotify)?;
 
     println!("{user_profile:#?}");
 

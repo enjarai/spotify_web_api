@@ -5,7 +5,7 @@ use std::borrow::Cow;
 
 /// Get Spotify catalog information for a single track identified by its unique Spotify ID.
 #[derive(Debug, Builder, Clone)]
-pub struct TrackEndpoint {
+pub struct GetTrack {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the track.
     #[builder(setter(into))]
     id: String,
@@ -21,13 +21,13 @@ pub struct TrackEndpoint {
     market: Option<String>,
 }
 
-impl TrackEndpoint {
-    pub fn builder() -> TrackEndpointBuilder {
-        TrackEndpointBuilder::default()
+impl GetTrack {
+    pub fn builder() -> GetTrackBuilder {
+        GetTrackBuilder::default()
     }
 }
 
-impl Endpoint for TrackEndpoint {
+impl Endpoint for GetTrack {
     fn method(&self) -> Method {
         Method::GET
     }
@@ -43,7 +43,7 @@ impl Endpoint for TrackEndpoint {
     }
 }
 
-impl From<&str> for TrackEndpoint {
+impl From<&str> for GetTrack {
     fn from(id: &str) -> Self {
         Self {
             id: id.to_owned(),
@@ -52,7 +52,7 @@ impl From<&str> for TrackEndpoint {
     }
 }
 
-impl From<String> for TrackEndpoint {
+impl From<String> for GetTrack {
     fn from(id: String) -> Self {
         Self { id, market: None }
     }

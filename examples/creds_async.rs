@@ -1,5 +1,5 @@
 use spotify_web_api::{
-    api::{endpoints::ArtistEndpoint, AsyncQuery as _},
+    api::{artists::GetArtist, AsyncQuery as _},
     model::Artist,
     AsyncSpotify,
 };
@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
 
     spotify.request_token().await?;
 
-    let artist: Artist = ArtistEndpoint::from("0559tR6WyukLWH68JIGBuC")
+    let artist: Artist = GetArtist::from("0559tR6WyukLWH68JIGBuC")
         .query_async(&spotify)
         .await?;
 

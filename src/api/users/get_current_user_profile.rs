@@ -3,9 +3,9 @@ use http::Method;
 use std::borrow::Cow;
 
 #[derive(Default, Debug, Clone)]
-pub struct CurrentUserProfileEndpoint;
+pub struct GetCurrentUserProfile;
 
-impl Endpoint for CurrentUserProfileEndpoint {
+impl Endpoint for GetCurrentUserProfile {
     fn method(&self) -> Method {
         Method::GET
     }

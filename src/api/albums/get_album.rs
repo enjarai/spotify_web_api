@@ -5,19 +5,19 @@ use std::borrow::Cow;
 
 /// Get Spotify catalog information for a single album.
 #[derive(Debug, Builder, Clone)]
-pub struct AlbumEndpoint {
+pub struct GetAlbum {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
     #[builder(setter(into))]
     id: String,
 }
 
-impl AlbumEndpoint {
-    pub fn builder() -> AlbumEndpointBuilder {
-        AlbumEndpointBuilder::default()
+impl GetAlbum {
+    pub fn builder() -> GetAlbumBuilder {
+        GetAlbumBuilder::default()
     }
 }
 
-impl Endpoint for AlbumEndpoint {
+impl Endpoint for GetAlbum {
     fn method(&self) -> Method {
         Method::GET
     }
@@ -27,13 +27,13 @@ impl Endpoint for AlbumEndpoint {
     }
 }
 
-impl From<&str> for AlbumEndpoint {
+impl From<&str> for GetAlbum {
     fn from(id: &str) -> Self {
         Self { id: id.to_owned() }
     }
 }
 
-impl From<String> for AlbumEndpoint {
+impl From<String> for GetAlbum {
     fn from(id: String) -> Self {
         Self { id }
     }

@@ -1,5 +1,5 @@
 use spotify_web_api::{
-    api::{endpoints::ArtistEndpoint, Query as _},
+    api::{artists::GetArtist, Query as _},
     model::Artist,
     Spotify,
 };
@@ -13,7 +13,7 @@ fn main() -> anyhow::Result<()> {
 
     spotify.request_token()?;
 
-    let artist: Artist = ArtistEndpoint::from("0559tR6WyukLWH68JIGBuC").query(&spotify)?;
+    let artist: Artist = GetArtist::from("0559tR6WyukLWH68JIGBuC").query(&spotify)?;
 
     println!("\n{} -> {}\n", artist.name, artist.external_urls.spotify);
 

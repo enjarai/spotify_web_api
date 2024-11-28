@@ -1,5 +1,5 @@
 use spotify_web_api::{
-    api::{endpoints::TrackEndpoint, Query as _},
+    api::{tracks::GetTrack, Query as _},
     Spotify,
 };
 use std::env;
@@ -24,7 +24,7 @@ fn main() -> anyhow::Result<()> {
 
     spotify.request_token()?;
 
-    let track: Track = TrackEndpoint::from("2HZasNmIAzprwJjFLPoSGM").query(&spotify)?;
+    let track: Track = GetTrack::from("2HZasNmIAzprwJjFLPoSGM").query(&spotify)?;
 
     let artist_names = track
         .artists

@@ -1,5 +1,5 @@
 use spotify_web_api::{
-    api::{endpoints::CurrentUserProfileEndpoint, Query as _},
+    api::{users::GetCurrentUserProfile, Query as _},
     auth::scopes,
     model::CurrentUserProfile,
     Spotify,
@@ -20,7 +20,7 @@ fn main() -> anyhow::Result<()> {
     )?
     .with_token(token);
 
-    let user_profile: CurrentUserProfile = CurrentUserProfileEndpoint.query(&spotify)?;
+    let user_profile: CurrentUserProfile = GetCurrentUserProfile.query(&spotify)?;
 
     println!("{user_profile:#?}");
 
