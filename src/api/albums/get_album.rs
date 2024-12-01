@@ -38,3 +38,26 @@ impl From<String> for GetAlbum {
         Self { id }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        api::{self, Query as _},
+        test::client::{ExpectedUrl, SingleTestClient},
+    };
+
+    #[test]
+    fn endpoint() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("albums/0oKvU088cLhKbbVvQc9lQF")
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_raw(endpoint, "");
+
+        let endpoint = GetAlbum::from("0oKvU088cLhKbbVvQc9lQF");
+
+        api::ignore(endpoint).query(&client).unwrap();
+    }
+}
