@@ -108,9 +108,8 @@ where
         let rsp = client.rest(req, data)?;
         let status = rsp.status();
 
-        let Ok(v) = serde_json::from_slice(rsp.body()) else {
-            return Err(ApiError::server_error(status, rsp.body()));
-        };
+        let v = serde_json::from_slice(rsp.body())
+            .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
 
         if !status.is_success() {
             return Err(ApiError::from_spotify_with_status(status, v));
@@ -147,9 +146,8 @@ where
         let rsp = client.rest_async(req, data).await?;
         let status = rsp.status();
 
-        let Ok(v) = serde_json::from_slice(rsp.body()) else {
-            return Err(ApiError::server_error(status, rsp.body()));
-        };
+        let v = serde_json::from_slice(rsp.body())
+            .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
 
         if !status.is_success() {
             return Err(ApiError::from_spotify_with_status(status, v));

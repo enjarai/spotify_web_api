@@ -1,10 +1,14 @@
-use super::{private::AuthFlow, AuthError, AuthResult};
+use super::{
+    private::{AsyncRefresh, AuthFlow, Refresh},
+    AuthError, AuthResult,
+};
 use crate::{
     api::{ApiError, FormParams, QueryParams},
     auth::scopes::{self, Scope},
     model::Token,
     RestError,
 };
+use async_trait::async_trait;
 use reqwest::blocking::Client;
 use std::collections::HashSet;
 use url::Url;
@@ -121,9 +125,7 @@ impl AuthCodePKCE {
     }
 
     pub(crate) fn verify_authorization_code(&self, url: &str) -> AuthResult<String> {
-        let Some(self_state) = self.state.as_ref() else {
-            return Err(AuthError::NoState);
-        };
+        let self_state = self.state.as_ref().ok_or(AuthError::NoState)?;
 
         let url = Url::parse(url)?;
 
@@ -159,9 +161,10 @@ impl AuthCodePKCE {
         code: &str,
         client: &Client,
     ) -> Result<Token, ApiError<RestError>> {
-        let Some(code_verifier) = self.code_verifier.as_ref() else {
-            return Err(AuthError::NoCodeVerifier.into());
-        };
+        let code_verifier = self
+            .code_verifier
+            .as_ref()
+            .ok_or(AuthError::NoCodeVerifier)?;
         let params = self.token_request_params(code, code_verifier);
         super::request_token(client, None, params)
     }
@@ -171,9 +174,10 @@ impl AuthCodePKCE {
         code: &str,
         client: &reqwest::Client,
     ) -> Result<Token, ApiError<RestError>> {
-        let Some(code_verifier) = self.code_verifier.as_ref() else {
-            return Err(AuthError::NoCodeVerifier.into());
-        };
+        let code_verifier = self
+            .code_verifier
+            .as_ref()
+            .ok_or(AuthError::NoCodeVerifier)?;
         let params = self.token_request_params(code, code_verifier);
         super::request_token_async(client, None, params).await
     }
@@ -184,9 +188,10 @@ impl AuthCodePKCE {
         client: &Client,
     ) -> Result<Token, ApiError<RestError>> {
         let code = self.verify_authorization_code(url)?;
-        let Some(code_verifier) = self.code_verifier.as_ref() else {
-            return Err(AuthError::NoCodeVerifier.into());
-        };
+        let code_verifier = self
+            .code_verifier
+            .as_ref()
+            .ok_or(AuthError::NoCodeVerifier)?;
         let params = self.token_request_params(&code, code_verifier);
         super::request_token(client, None, params)
     }
@@ -197,35 +202,12 @@ impl AuthCodePKCE {
         client: &reqwest::Client,
     ) -> Result<Token, ApiError<RestError>> {
         let code = self.verify_authorization_code(url)?;
-        let Some(code_verifier) = self.code_verifier.as_ref() else {
-            return Err(AuthError::NoCodeVerifier.into());
-        };
+        let code_verifier = self
+            .code_verifier
+            .as_ref()
+            .ok_or(AuthError::NoCodeVerifier)?;
         let params = self.token_request_params(&code, code_verifier);
         super::request_token_async(client, None, params).await
-    }
-
-    pub(crate) fn refresh_token(
-        &self,
-        client: &Client,
-        refresh_token: &str,
-    ) -> Result<Token, ApiError<RestError>> {
-        let params = self.refresh_token_request_params(refresh_token);
-        let (req, data) = super::http_request_and_data(None, params)?;
-        let rsp = super::http_response(client, req, data).map_err(ApiError::client)?;
-        super::parse_response(&rsp)
-    }
-
-    pub(crate) async fn refresh_token_async(
-        &self,
-        client: &reqwest::Client,
-        refresh_token: &str,
-    ) -> Result<Token, ApiError<RestError>> {
-        let params = self.refresh_token_request_params(refresh_token);
-        let (req, data) = super::http_request_and_data(None, params)?;
-        let rsp = super::http_response_async(client, req, data)
-            .await
-            .map_err(ApiError::client)?;
-        super::parse_response(&rsp)
     }
 
     fn token_request_params<'a>(&self, code: &'a str, code_verifier: &'a str) -> FormParams<'a> {
@@ -248,6 +230,35 @@ impl AuthCodePKCE {
 }
 
 impl AuthFlow for AuthCodePKCE {}
+
+impl Refresh for AuthCodePKCE {
+    fn refresh_token(
+        &self,
+        client: &Client,
+        refresh_token: &str,
+    ) -> Result<Token, ApiError<RestError>> {
+        let params = self.refresh_token_request_params(refresh_token);
+        let (req, data) = super::http_request_and_data(None, params)?;
+        let rsp = super::http_response(client, req, data).map_err(ApiError::client)?;
+        super::parse_response(&rsp)
+    }
+}
+
+#[async_trait]
+impl AsyncRefresh for AuthCodePKCE {
+    async fn refresh_token_async(
+        &self,
+        client: &reqwest::Client,
+        refresh_token: &str,
+    ) -> Result<Token, ApiError<RestError>> {
+        let params = self.refresh_token_request_params(refresh_token);
+        let (req, data) = super::http_request_and_data(None, params)?;
+        let rsp = super::http_response_async(client, req, data)
+            .await
+            .map_err(ApiError::client)?;
+        super::parse_response(&rsp)
+    }
+}
 
 mod crypto {
     use base64::{engine::general_purpose, Engine as _};

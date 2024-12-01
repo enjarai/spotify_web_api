@@ -99,7 +99,37 @@ pub enum AuthError {
 }
 
 pub(crate) mod private {
+    use super::AuthError;
+    use crate::{api::ApiError, model::Token, RestError};
+    use async_trait::async_trait;
+    use reqwest::blocking::Client;
+
     pub trait AuthFlow {}
+
+    pub trait Refresh {
+        fn refresh_token(
+            &self,
+            client: &Client,
+            refresh_token: &str,
+        ) -> Result<Token, ApiError<RestError>> {
+            let _ = client;
+            let _ = refresh_token;
+            Err(AuthError::EmptyRefreshToken.into())
+        }
+    }
+
+    #[async_trait]
+    pub trait AsyncRefresh {
+        async fn refresh_token_async(
+            &self,
+            client: &reqwest::Client,
+            refresh_token: &str,
+        ) -> Result<Token, ApiError<RestError>> {
+            let _ = client;
+            let _ = refresh_token;
+            Err(AuthError::EmptyRefreshToken.into())
+        }
+    }
 }
 
 fn request_token(
@@ -215,9 +245,8 @@ async fn http_response_async(
 fn parse_response(rsp: &http::Response<Bytes>) -> Result<Token, ApiError<RestError>> {
     let status = rsp.status();
 
-    let Ok(v) = serde_json::from_slice(rsp.body()) else {
-        return Err(ApiError::server_error(status, rsp.body()));
-    };
+    let v = serde_json::from_slice(rsp.body())
+        .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
 
     if !status.is_success() {
         return Err(ApiError::from_spotify_with_status(status, v));

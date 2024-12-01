@@ -1,7 +1,9 @@
 use crate::{
     api::{self, ApiError, RestClient},
     auth::{
-        private::AuthFlow, scopes::Scope, AuthCodePKCE, AuthError, AuthResult, ClientCredentials,
+        private::{AsyncRefresh, AuthFlow, Refresh},
+        scopes::Scope,
+        AuthCodePKCE, AuthError, AuthResult, ClientCredentials,
     },
     model::Token,
 };
@@ -161,7 +163,7 @@ impl SpotifyError {
 
 pub struct Spotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + Refresh,
 {
     /// The client to use for API calls.
     client: Client,
@@ -178,7 +180,7 @@ where
 
 impl<A> Spotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + Refresh,
 {
     fn new_impl(auth: A) -> SpotifyResult<Self> {
         let api_url = Url::parse(BASE_API_URL)?;
@@ -215,6 +217,17 @@ where
         mut request: http::request::Builder,
         body: Vec<u8>,
     ) -> Result<HttpResponse<Bytes>, ApiError<<Self as RestClient>::Error>> {
+        {
+            let token = self.token.read();
+            let token = token.as_ref().ok_or(AuthError::EmptyAccessToken)?;
+
+            if let Some(refresh_token) = token.refresh_token.as_ref().filter(|_| token.is_expired())
+            {
+                let new_token = self.auth.refresh_token(&self.client, refresh_token)?;
+                self.set_token(new_token);
+            }
+        }
+
         let call = || -> Result<_, RestError> {
             self.set_header(
                 request
@@ -252,12 +265,10 @@ where
         headers: &'a mut HeaderMap<HeaderValue>,
     ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
         let token = self.token.read();
-        let Some(token) = token.as_ref() else {
-            return Err(AuthError::EmptyAccessToken);
-        };
+        let token = token.as_ref().ok_or(AuthError::EmptyAccessToken)?;
 
         let value = format!("Bearer {}", token.access_token);
-        let mut token_header_value = HeaderValue::from_str(&value)?;
+        let mut token_header_value = HeaderValue::from_str(&value).map_err(AuthError::from)?;
         token_header_value.set_sensitive(true);
         headers.insert(http::header::AUTHORIZATION, token_header_value);
         Ok(headers)
@@ -425,16 +436,17 @@ impl Spotify<AuthCodePKCE> {
     /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
     ///   or other API errors.
     pub fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
-        let token = self.token.read();
-
-        let Some(token) = token.as_ref() else {
-            return Err(AuthError::EmptyAccessToken.into());
+        let refresh_token = {
+            let token = self.token.read();
+            token
+                .as_ref()
+                .ok_or(AuthError::EmptyAccessToken)?
+                .refresh_token
+                .clone()
+                .ok_or(AuthError::EmptyRefreshToken)?
         };
-        let Some(refresh_token) = token.refresh_token.as_ref() else {
-            return Err(AuthError::EmptyRefreshToken.into());
-        };
 
-        let token = self.auth.refresh_token(&self.client, refresh_token)?;
+        let token = self.auth.refresh_token(&self.client, &refresh_token)?;
         self.set_token(token);
 
         Ok(())
@@ -505,7 +517,7 @@ impl Spotify<ClientCredentials> {
 
 impl<A> RestClient for Spotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + Refresh,
 {
     type Error = RestError;
 
@@ -517,7 +529,7 @@ where
 
 impl<A> api::Client for Spotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + Refresh,
 {
     fn rest(
         &self,
@@ -530,7 +542,7 @@ where
 
 pub struct AsyncSpotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + AsyncRefresh,
 {
     /// The client to use for API calls.
     client: reqwest::Client,
@@ -547,7 +559,7 @@ where
 
 impl<A> AsyncSpotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + AsyncRefresh + Sync,
 {
     fn new_impl(auth: A) -> SpotifyResult<Self> {
         let api_url = Url::parse(BASE_API_URL)?;
@@ -586,6 +598,21 @@ where
     ) -> Result<HttpResponse<Bytes>, ApiError<<Self as RestClient>::Error>> {
         use futures_util::TryFutureExt;
 
+        let (refresh_token, is_expired) = {
+            let token_guard = self.token.read();
+            let token = token_guard.as_ref().ok_or(AuthError::EmptyAccessToken)?;
+            (token.refresh_token.clone(), token.is_expired())
+        };
+
+        if refresh_token.is_some() && is_expired {
+            let refresh_token = refresh_token.ok_or(AuthError::EmptyRefreshToken)?;
+            let new_token = self
+                .auth
+                .refresh_token_async(&self.client, &refresh_token)
+                .await?;
+            self.set_token(new_token);
+        }
+
         let call = || async {
             self.set_header(
                 request
@@ -623,12 +650,10 @@ where
         headers: &'a mut HeaderMap<HeaderValue>,
     ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
         let token = self.token.read();
-        let Some(token) = token.as_ref() else {
-            return Err(AuthError::EmptyAccessToken);
-        };
+        let token = token.as_ref().ok_or(AuthError::EmptyAccessToken)?;
 
         let value = format!("Bearer {}", token.access_token);
-        let mut token_header_value = HeaderValue::from_str(&value)?;
+        let mut token_header_value = HeaderValue::from_str(&value).map_err(AuthError::from)?;
         token_header_value.set_sensitive(true);
         headers.insert(http::header::AUTHORIZATION, token_header_value);
         Ok(headers)
@@ -802,14 +827,12 @@ impl AsyncSpotify<AuthCodePKCE> {
     pub async fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
         let refresh_token = {
             let token = self.token.read();
-            let Some(token) = token.as_ref() else {
-                return Err(AuthError::EmptyAccessToken.into());
-            };
-            let Some(refresh_token) = token.refresh_token.clone() else {
-                return Err(AuthError::EmptyRefreshToken.into());
-            };
-
-            refresh_token
+            token
+                .as_ref()
+                .ok_or(AuthError::EmptyAccessToken)?
+                .refresh_token
+                .clone()
+                .ok_or(AuthError::EmptyRefreshToken)?
         };
 
         let token = self
@@ -875,7 +898,7 @@ impl AsyncSpotify<ClientCredentials> {
 #[async_trait]
 impl<A> RestClient for AsyncSpotify<A>
 where
-    A: AuthFlow,
+    A: AuthFlow + AsyncRefresh,
 {
     type Error = RestError;
 
@@ -888,7 +911,7 @@ where
 #[async_trait]
 impl<A> api::AsyncClient for AsyncSpotify<A>
 where
-    A: AuthFlow + Sync + Send,
+    A: AuthFlow + AsyncRefresh + Sync + Send,
 {
     async fn rest_async(
         &self,

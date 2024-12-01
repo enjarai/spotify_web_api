@@ -44,9 +44,8 @@ where
         let status = rsp.status();
 
         if !status.is_success() {
-            let Ok(v) = serde_json::from_slice(rsp.body()) else {
-                return Err(ApiError::server_error(status, rsp.body()));
-            };
+            let v = serde_json::from_slice(rsp.body())
+                .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
             return Err(ApiError::from_spotify_with_status(status, v));
         } else if status == http::StatusCode::MOVED_PERMANENTLY {
             return Err(ApiError::moved_permanently(rsp.headers().get(LOCATION)));
@@ -85,9 +84,8 @@ where
         let status = rsp.status();
 
         if !status.is_success() {
-            let Ok(v) = serde_json::from_slice(rsp.body()) else {
-                return Err(ApiError::server_error(status, rsp.body()));
-            };
+            let v = serde_json::from_slice(rsp.body())
+                .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
             return Err(ApiError::from_spotify_with_status(status, v));
         } else if status == http::StatusCode::MOVED_PERMANENTLY {
             return Err(ApiError::moved_permanently(rsp.headers().get(LOCATION)));

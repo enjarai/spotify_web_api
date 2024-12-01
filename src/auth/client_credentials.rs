@@ -1,4 +1,4 @@
-use super::private::AuthFlow;
+use super::private::{AsyncRefresh, AuthFlow, Refresh};
 use crate::{
     api::{ApiError, FormParams},
     model::Token,
@@ -26,6 +26,9 @@ pub struct ClientCredentials {
 }
 
 impl AuthFlow for ClientCredentials {}
+
+impl Refresh for ClientCredentials {}
+impl AsyncRefresh for ClientCredentials {}
 
 impl ClientCredentials {
     /// Creates a new instance of `ClientCredentials` with the provided client ID and secret.

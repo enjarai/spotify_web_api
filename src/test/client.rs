@@ -36,6 +36,7 @@ impl ExpectedUrlBuilder {
         self
     }
 
+    #[allow(dead_code)]
     pub fn body_str(&mut self, body: &str) -> &mut Self {
         self.body = Some(body.bytes().collect());
         self
@@ -120,6 +121,7 @@ impl SingleTestClient {
         Self { client, expected }
     }
 
+    #[allow(dead_code)]
     pub fn new_json<T>(expected: ExpectedUrl, data: &T) -> Self
     where
         T: Serialize,
