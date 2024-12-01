@@ -121,7 +121,6 @@ impl SingleTestClient {
         Self { client, expected }
     }
 
-    #[allow(dead_code)]
     pub fn new_json<T>(expected: ExpectedUrl, data: &T) -> Self
     where
         T: Serialize,
