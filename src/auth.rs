@@ -183,14 +183,19 @@ fn http_request_and_data(
         )?;
     }
 
-    let value = if let Some((mime, data)) = params.into_body()? {
-        let req = req.header(http::header::CONTENT_TYPE, mime);
-        (req, data)
+    let (mime, data) = params
+        .into_body()?
+        .map_or((None, Vec::new()), |(mime, data)| {
+            (Some(mime), data.clone())
+        });
+
+    let req = if let Some(mime) = mime {
+        req.header(http::header::CONTENT_TYPE, mime)
     } else {
-        (req, Vec::new())
+        req
     };
 
-    Ok(value)
+    Ok((req, data))
 }
 
 #[inline(always)]

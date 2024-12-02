@@ -94,15 +94,18 @@ where
 
         self.parameters().add_to_url(&mut url);
 
+        let (mime, data) = self.body()?.map_or((None, Vec::new()), |(mime, data)| {
+            (Some(mime), data.clone())
+        });
+
         let req = Request::builder()
             .method(self.method())
             .uri(query::url_to_http_uri(&url));
 
-        let (req, data) = if let Some((mime, data)) = self.body()? {
-            let req = req.header(header::CONTENT_TYPE, mime);
-            (req, data)
+        let req = if let Some(mime) = mime {
+            req.header(header::CONTENT_TYPE, mime)
         } else {
-            (req, Vec::new())
+            req
         };
 
         let rsp = client.rest(req, data)?;
@@ -130,17 +133,21 @@ where
 {
     async fn query_async(&self, client: &C) -> Result<T, ApiError<C::Error>> {
         let mut url = self.url_base().endpoint_for(client, &self.endpoint())?;
+
         self.parameters().add_to_url(&mut url);
+
+        let (mime, data) = self.body()?.map_or((None, Vec::new()), |(mime, data)| {
+            (Some(mime), data.clone())
+        });
 
         let req = Request::builder()
             .method(self.method())
             .uri(query::url_to_http_uri(&url));
 
-        let (req, data) = if let Some((mime, data)) = self.body()? {
-            let req = req.header(header::CONTENT_TYPE, mime);
-            (req, data)
+        let req = if let Some(mime) = mime {
+            req.header(header::CONTENT_TYPE, mime)
         } else {
-            (req, Vec::new())
+            req
         };
 
         let rsp = client.rest_async(req, data).await?;
