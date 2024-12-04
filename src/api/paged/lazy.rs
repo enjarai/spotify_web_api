@@ -249,10 +249,11 @@ mod tests {
     use super::*;
     use crate::{
         api::{self, Pagination},
-        test::client::{ExpectedUrl, PagedTestClient},
+        test::client::{ExpectedUrl, PagedTestClient, SingleTestClient},
     };
-    use http::Method;
+    use http::{Method, StatusCode};
     use serde::{Deserialize, Serialize};
+    use serde_json::json;
     use std::borrow::Cow;
 
     #[derive(Debug, Default)]
@@ -330,6 +331,80 @@ mod tests {
 
         for (i, value) in res.iter().enumerate() {
             assert_eq!(value.value, i as u8);
+        }
+    }
+
+    #[test]
+    fn non_json_response() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .add_query_params(&[("offset", "0"), ("limit", "50")])
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_raw(endpoint, "not json");
+
+        let res: Result<Vec<DummyResult>, _> =
+            api::paged(Dummy, Pagination::All).iter(&client).collect();
+
+        let err = res.unwrap_err();
+
+        if let ApiError::SpotifyService { status, .. } = err {
+            assert_eq!(status, StatusCode::OK);
+        } else {
+            panic!("unexpected error: {err}");
+        }
+    }
+
+    #[test]
+    fn error_bad_json() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .add_query_params(&[("offset", "0"), ("limit", "50")])
+            .status(StatusCode::NOT_FOUND)
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_raw(endpoint, "");
+
+        let res: Result<Vec<DummyResult>, _> =
+            api::paged(Dummy, Pagination::All).iter(&client).collect();
+
+        let err = res.unwrap_err();
+
+        if let ApiError::SpotifyService { status, .. } = err {
+            assert_eq!(status, StatusCode::NOT_FOUND);
+        } else {
+            panic!("unexpected error: {err}");
+        }
+    }
+
+    #[test]
+    fn error_detection() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .add_query_params(&[("offset", "0"), ("limit", "50")])
+            .status(StatusCode::NOT_FOUND)
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_json(
+            endpoint,
+            &json!({
+                "message": "dummy error message",
+            }),
+        );
+
+        let res: Result<Vec<DummyResult>, _> =
+            api::paged(Dummy, Pagination::All).iter(&client).collect();
+
+        let err = res.unwrap_err();
+
+        if let ApiError::SpotifyWithStatus { status, msg } = err {
+            assert_eq!(status, StatusCode::NOT_FOUND);
+            assert_eq!(msg, "dummy error message");
+        } else {
+            panic!("unexpected error: {err}");
         }
     }
 }
