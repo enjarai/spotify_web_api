@@ -1,10 +1,13 @@
-use crate::api::{ApiError, AsyncClient, Client, RestClient};
+use crate::{
+    api::{ApiError, AsyncClient, Client, RestClient},
+    model::Page,
+};
 use async_trait::async_trait;
 use bytes::Bytes;
 use derive_builder::Builder;
 use http::{header, request::Builder as RequestBuilder, Method, Response, StatusCode};
 use serde::Serialize;
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::HashMap, fmt::Debug};
 use thiserror::Error;
 use url::Url;
 
@@ -26,6 +29,9 @@ pub struct ExpectedUrl {
 
     #[builder(default = "StatusCode::OK")]
     pub status: StatusCode,
+
+    #[builder(default = "false")]
+    pub paginated: bool,
 }
 
 impl ExpectedUrlBuilder {
@@ -49,10 +55,10 @@ impl ExpectedUrl {
     }
 
     fn check(&self, method: &Method, url: &Url) {
-        // Test that the method is as expected.
+        // test that the method is as expected.
         assert_eq!(method, self.method);
 
-        // Ensure that the URL was not tampered with in the meantime.
+        // ensure that the URL was not tampered with in the meantime.
         assert_eq!(url.scheme(), "https");
         assert_eq!(url.username(), "");
         assert_eq!(url.password(), None);
@@ -63,6 +69,10 @@ impl ExpectedUrl {
         let mut count = 0;
 
         url.query_pairs().into_iter().for_each(|(key, value)| {
+            if self.paginated && Self::is_pagination_key(&key) {
+                return;
+            }
+
             let found = self.query.iter().any(|(expected_key, expected_value)| {
                 &key == expected_key && &value == expected_value
             });
@@ -72,6 +82,11 @@ impl ExpectedUrl {
 
         assert_eq!(count, self.query.len());
         assert_eq!(url.fragment(), None);
+    }
+
+    #[inline(always)]
+    fn is_pagination_key(key: &str) -> bool {
+        matches!(key, "limit" | "offset")
     }
 }
 
@@ -191,6 +206,159 @@ impl Client for SingleTestClient {
 
 #[async_trait]
 impl AsyncClient for SingleTestClient {
+    async fn rest_async(
+        &self,
+        request: RequestBuilder,
+        body: Vec<u8>,
+    ) -> Result<Response<Bytes>, ApiError<<Self as RestClient>::Error>> {
+        <Self as Client>::rest(self, request, body)
+    }
+}
+
+const DEFAULT_LIMIT: usize = 20;
+
+pub struct PagedTestClient<T> {
+    expected: ExpectedUrl,
+    data: Vec<T>,
+}
+
+impl<T> PagedTestClient<T> {
+    pub fn new_raw<I>(expected: ExpectedUrl, data: I) -> Self
+    where
+        I: IntoIterator<Item = T>,
+    {
+        Self {
+            expected,
+            data: data.into_iter().collect(),
+        }
+    }
+}
+
+impl<T> RestClient for PagedTestClient<T> {
+    type Error = TestClientError;
+
+    fn rest_endpoint(&self, endpoint: &str) -> Result<Url, ApiError<Self::Error>> {
+        Ok(Url::parse(&format!(
+            "https://api.spotify.com/v1/{endpoint}"
+        ))?)
+    }
+}
+
+impl<T> Client for PagedTestClient<T>
+where
+    T: Debug + Clone + Serialize,
+{
+    fn rest(
+        &self,
+        request: RequestBuilder,
+        body: Vec<u8>,
+    ) -> Result<Response<Bytes>, ApiError<Self::Error>> {
+        let url = Url::parse(&format!("{}", request.uri_ref().unwrap())).unwrap();
+
+        self.expected.check(request.method_ref().unwrap(), &url);
+
+        assert_eq!(
+            &body,
+            &self.expected.body,
+            "\nbody is not the same:\nactual  : {}\nexpected: {}\n",
+            String::from_utf8_lossy(&body),
+            String::from_utf8_lossy(&self.expected.body),
+        );
+
+        let headers = request.headers_ref().unwrap();
+
+        let content_type = headers
+            .get_all(header::CONTENT_TYPE)
+            .iter()
+            .map(|value| value.to_str().unwrap());
+
+        if let Some(expected_content_type) = self.expected.content_type.as_ref() {
+            itertools::assert_equal(
+                content_type,
+                std::iter::once(&expected_content_type).copied(),
+            );
+        } else {
+            assert_eq!(content_type.count(), 0);
+        }
+
+        let mut offset: usize = 0;
+        let mut limit = DEFAULT_LIMIT;
+
+        url.query_pairs()
+            .into_iter()
+            .for_each(|(key, value)| match key.as_ref() {
+                "offset" => {
+                    offset = value.parse().unwrap();
+                }
+                "limit" => {
+                    limit = value.parse().unwrap();
+                }
+                _ => (),
+            });
+
+        let range = {
+            let mut range = offset..offset + limit;
+            range.end = std::cmp::min(range.end, self.data.len());
+            range
+        };
+
+        let request = request.body(body).unwrap();
+
+        assert_eq!(*request.method(), Method::GET);
+
+        let previous = if offset > 0 {
+            Some(
+                url.clone()
+                    .query_pairs_mut()
+                    .clear()
+                    .append_pair("offset", (offset - limit).to_string().as_str())
+                    .append_pair("limit", limit.to_string().as_str())
+                    .finish()
+                    .to_string(),
+            )
+        } else {
+            None
+        };
+
+        let next = if range.end < self.data.len() {
+            Some(
+                url.clone()
+                    .query_pairs_mut()
+                    .clear()
+                    .append_pair("offset", range.end.to_string().as_str())
+                    .append_pair("limit", limit.to_string().as_str())
+                    .finish()
+                    .to_string(),
+            )
+        } else {
+            None
+        };
+
+        let page = Page {
+            href: url.as_str().to_owned(),
+            limit,
+            next,
+            offset,
+            previous,
+            total: self.data.len(),
+            items: self.data[range].to_vec(),
+        };
+
+        let response = Response::builder()
+            .status(self.expected.status)
+            .body(serde_json::to_vec(&page).unwrap())
+            .unwrap()
+            .map(Into::into);
+
+        Ok(response)
+    }
+}
+
+#[async_trait]
+impl<T> AsyncClient for PagedTestClient<T>
+where
+    T: Debug + Clone + Serialize + Send + Sync,
+{
     async fn rest_async(
         &self,
         request: RequestBuilder,
