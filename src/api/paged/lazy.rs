@@ -204,7 +204,7 @@ where
     }
 }
 
-impl<'a, E, C, T> Iterator for LazilyPagedIter<'a, E, C, T>
+impl<E, C, T> Iterator for LazilyPagedIter<'_, E, C, T>
 where
     E: Endpoint + Pageable,
     T: DeserializeOwned,
