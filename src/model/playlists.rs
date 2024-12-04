@@ -151,24 +151,10 @@ pub struct AddedBy {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TaggedPlaylists {
-    pub message: String,
-    pub playlists: Page<SimplifiedPlaylist>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnapshotId {
     /// The version identifier for the current playlist.
     /// Can be supplied in other requests to target a specific playlist version.
     pub snapshot_id: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FeaturedPlaylist {
-    /// The localized message of a playlist.
-    pub message: String,
-
-    pub playlists: Page<SimplifiedPlaylist>,
 }
 
 #[cfg(test)]
