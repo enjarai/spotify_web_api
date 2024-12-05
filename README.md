@@ -87,7 +87,7 @@ async fn main() -> anyhow::Result<()> {
 
 ## API
 
-Supported endpoints are organized under the [`api`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api.rs) module. Each endpoint can be constructed using a builder pattern, allowing users to set the supported fields in a fluent and flexible manner. To interact with an endpoint, you can use either the `Query` or `AsyncQuery` [traits](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/query.rs).
+Supported endpoints are organized under the [`api`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api.rs) module. Each endpoint can be constructed using a builder pattern, allowing you to set the supported fields in a fluent and flexible manner. To interact with an endpoint, you can use either the `Query` or `AsyncQuery` [traits](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/query.rs).
 - `Query` is designed for blocking code, making it ideal for synchronous workflows or environments where asynchronous execution is unnecessary or not supported. Opt for this when simplicity is key, such as in single-threaded environments or scripts where blocking is acceptable.
 - `AsyncQuery` is intended for asynchronous code and integrates seamlessly with an asynchronous runtime of your choice, such as `Tokio` or `async-std`. This approach is particularly useful when working in environments that benefit from non-blocking operations. Use this trait when building applications that require high concurrency or when interacting with other asynchronous code.
 
@@ -95,9 +95,9 @@ There are additional helpers to handle different cases:
 - [`api::ignore`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/ignore.rs): Ignore the Spotify response (useful for POST or PUT endpoints).
 - [`api::paged`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/paged/all_at_once.rs): Fetch results that are paginated.
 
-Users are not restricted to the predefined endpoints; they can define their own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
+You're not restricted to the predefined endpoints; they can define their own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
 
-All endpoints return data types chosen by the caller, provided these types implement `serde`'s `Deserialize` trait. The library offers predefined structs in the [`model`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model.rs) module, but callers are free to use their own structs by implementing the `Deserialize` trait. This flexibility is particularly useful when a custom data structure better suits the caller's needs or when avoiding the overhead of deserializing the entire response is desirable. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_model.rs).
+All endpoints return data types chosen by the caller, provided these types implement `serde`'s `Deserialize` trait. The library offers predefined structs in the [`model`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model.rs) module, but you are free to use your own structs by implementing the `Deserialize` trait. This flexibility is particularly useful when a custom data structure better suits the your needs or when avoiding the overhead of deserializing the entire response is desirable. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_model.rs).
 
 ## Implemented Endpoints
 
