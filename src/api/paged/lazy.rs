@@ -297,13 +297,14 @@ where
 mod tests {
     use super::*;
     use crate::{
-        api::{self, Pagination},
+        api::{self, ApiError, Endpoint, Pagination},
         test::client::{ExpectedUrl, PagedTestClient, SingleTestClient},
     };
     use http::{Method, StatusCode};
     use serde::{Deserialize, Serialize};
     use serde_json::json;
     use std::borrow::Cow;
+    use url::Url;
 
     #[derive(Debug, Default)]
     struct Dummy;
@@ -327,14 +328,14 @@ mod tests {
 
     #[test]
     fn page_next_url() {
-        let url = Url::parse("https://example.com/foobar").unwrap();
-        let page_keyset_first = PageCursor::First;
-        let page_keyset_next = PageCursor::Next(url.clone());
-        let page_done = PageCursor::Done;
+        let url = Url::parse("https://example.com").unwrap();
+        let first = PageCursor::First;
+        let next = PageCursor::Next(url.clone());
+        let done = PageCursor::Done;
 
-        assert_eq!(page_keyset_first.next_url(), None);
-        assert_eq!(page_keyset_next.next_url(), Some(&url));
-        assert_eq!(page_done.next_url(), None);
+        assert_eq!(first.next_url(), None);
+        assert_eq!(next.next_url(), Some(&url));
+        assert_eq!(done.next_url(), None);
     }
 
     #[test]

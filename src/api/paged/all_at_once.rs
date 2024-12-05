@@ -125,3 +125,79 @@ where
         Ok(std::mem::take(&mut locked_results))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::test::client::{ExpectedUrl, PagedTestClient};
+    use http::Method;
+    use serde::{Deserialize, Serialize};
+    use std::borrow::Cow;
+
+    use super::*;
+
+    #[derive(Debug, Default)]
+    struct Dummy;
+
+    impl Endpoint for Dummy {
+        fn method(&self) -> Method {
+            Method::GET
+        }
+
+        fn endpoint(&self) -> Cow<'static, str> {
+            "paged_dummy".into()
+        }
+    }
+
+    impl Pageable for Dummy {}
+
+    #[derive(Debug, Clone, Deserialize, Serialize)]
+    struct DummyResult {
+        value: u8,
+    }
+
+    #[tokio::test]
+    async fn pagination_limit_async() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .paginated(true)
+            .build()
+            .unwrap();
+
+        let client =
+            PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
+
+        let res: Vec<DummyResult> = paged(Dummy, Pagination::Limit(3))
+            .query_async(&client)
+            .await
+            .unwrap();
+
+        assert_eq!(res.len(), 3);
+
+        for (i, value) in res.iter().enumerate() {
+            assert_eq!(value.value, i as u8);
+        }
+    }
+
+    #[tokio::test]
+    async fn pagination_all_async() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .paginated(true)
+            .build()
+            .unwrap();
+
+        let client =
+            PagedTestClient::new_raw(endpoint, (0..=55).map(|value| DummyResult { value }));
+
+        let res: Vec<DummyResult> = paged(Dummy, Pagination::All)
+            .query_async(&client)
+            .await
+            .unwrap();
+
+        assert_eq!(res.len(), 56);
+
+        for (i, value) in res.iter().enumerate() {
+            assert_eq!(value.value, i as u8);
+        }
+    }
+}
