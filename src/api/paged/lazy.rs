@@ -1,10 +1,12 @@
-use self::query::Query;
+use self::query::{AsyncQuery, Query};
 use super::{Pageable, Paged};
 use crate::{
-    api::{query, ApiError, Client, Endpoint, RestClient},
+    api::{query, ApiError, AsyncClient, Client, Endpoint, RestClient},
     model::Page,
 };
+use async_trait::async_trait;
 use bytes::Bytes;
+use futures_util::Stream;
 use http::{
     request::Builder as RequestBuilder,
     {header, Request, Response},
@@ -181,6 +183,24 @@ where
     }
 }
 
+#[async_trait]
+impl<E, T, C> AsyncQuery<Vec<T>, C> for LazilyPagedState<E>
+where
+    E: Endpoint + Pageable + Sync,
+    T: DeserializeOwned + 'static,
+    C: AsyncClient + Sync,
+{
+    async fn query_async(&self, client: &C) -> Result<Vec<T>, ApiError<C::Error>> {
+        let Some(url) = self.page_url(client)? else {
+            return Ok(Vec::new());
+        };
+        let (req, data) = self.build_request::<C>(&url)?;
+        let rsp = client.rest_async(req, data).await?;
+        let page = self.process_response::<C, _>(&rsp)?;
+        Ok(page.items)
+    }
+}
+
 /// An iterator which yields items from a paginated result.
 ///
 /// The pages are fetched lazily, so endpoints not using offset pagination may observe duplicate or
@@ -221,6 +241,35 @@ where
             self.current_page.reverse();
         }
         self.current_page.pop().map(Ok)
+    }
+}
+
+impl<'a, E, C, T> LazilyPagedIter<'a, E, C, T>
+where
+    E: Endpoint + Pageable + Sync,
+    T: DeserializeOwned + 'static,
+    C: AsyncClient + Sync,
+{
+    async fn next_async(&mut self) -> Option<Result<T, ApiError<C::Error>>> {
+        if self.current_page.is_empty() {
+            self.current_page = match self.state.query_async(self.client).await {
+                Ok(data) => data,
+                Err(err) => return Some(Err(err)),
+            };
+            self.current_page.reverse();
+        }
+
+        self.current_page.pop().map(Ok)
+    }
+
+    /// Converts a "normal iterator" into an async iterator
+    pub fn into_async(self) -> impl Stream<Item = Result<T, ApiError<C::Error>>> + 'a
+    where
+        E: 'a,
+    {
+        futures_util::stream::unfold(self, |mut iter| async move {
+            iter.next_async().await.map(|item| (item, iter))
+        })
     }
 }
 
