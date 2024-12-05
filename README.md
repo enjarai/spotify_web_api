@@ -95,7 +95,7 @@ There are additional helpers to handle different cases:
 - [`api::ignore`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/ignore.rs): Ignore the Spotify response (useful for POST or PUT endpoints).
 - [`api::paged`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/paged/all_at_once.rs): Fetch results that are paginated.
 
-You're not restricted to the predefined endpoints; they can define their own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
+You're not restricted to the predefined endpoints; you can define your own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
 
 All endpoints return data types chosen by the caller, provided these types implement `serde`'s `Deserialize` trait. The library offers predefined structs in the [`model`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model.rs) module, but you are free to use your own structs by implementing the `Deserialize` trait. This flexibility is particularly useful when a custom data structure better suits the your needs or when avoiding the overhead of deserializing the entire response is desirable. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_model.rs).
 
