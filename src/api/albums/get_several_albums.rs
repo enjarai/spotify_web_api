@@ -1,7 +1,4 @@
-use crate::api::{Endpoint, QueryParams};
-use derive_builder::Builder;
-use http::Method;
-use std::borrow::Cow;
+use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single album.
 #[derive(Debug, Builder, Clone)]

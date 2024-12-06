@@ -1,7 +1,4 @@
-use crate::api::{Endpoint, Pageable, QueryParams};
-use derive_builder::Builder;
-use http::Method;
-use std::borrow::Cow;
+use crate::api::prelude::*;
 
 /// Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
 #[derive(Debug, Builder, Clone)]

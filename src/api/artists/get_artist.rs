@@ -1,7 +1,4 @@
-use crate::api::Endpoint;
-use derive_builder::Builder;
-use http::Method;
-use std::borrow::Cow;
+use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single artist identified by their unique Spotify ID.
 #[derive(Debug, Builder, Clone)]

@@ -1,6 +1,4 @@
-use crate::api::Endpoint;
-use http::Method;
-use std::borrow::Cow;
+use crate::api::prelude::*;
 
 #[derive(Default, Debug, Clone)]
 pub struct GetCurrentUserProfile;

@@ -1,7 +1,4 @@
-use crate::api::{Endpoint, QueryParams};
-use derive_builder::Builder;
-use http::Method;
-use std::borrow::Cow;
+use crate::api::prelude::*;
 
 /// Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
 #[derive(Debug, Builder, Clone)]
