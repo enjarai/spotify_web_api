@@ -22,6 +22,7 @@ pub use query::{AsyncQuery, Query};
 
 mod prelude {
     pub use super::{Endpoint, Pageable, QueryParams};
+    pub use crate::model::Market;
     pub use derive_builder::Builder;
     pub use http::Method;
     pub use std::borrow::Cow;

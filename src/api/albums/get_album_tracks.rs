@@ -15,7 +15,7 @@ pub struct GetAlbumTracks {
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     #[builder(setter(into, strip_option), default)]
-    market: Option<String>,
+    market: Option<Market>,
 }
 
 impl GetAlbumTracks {
@@ -37,7 +37,7 @@ impl Endpoint for GetAlbumTracks {
 
     fn parameters(&self) -> QueryParams<'_> {
         let mut params = QueryParams::default();
-        params.push_opt("market", self.market.as_deref());
+        params.push_opt("market", self.market.as_ref());
         params
     }
 }
