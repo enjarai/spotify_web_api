@@ -21,9 +21,10 @@ pub use params::{FormParams, JsonParams, ParamValue, QueryParams};
 pub use query::{AsyncQuery, Query};
 
 mod prelude {
-    pub use super::{Endpoint, Pageable, QueryParams};
+    pub use super::{BodyError, Endpoint, JsonParams, Pageable, QueryParams};
     pub use crate::model::Market;
     pub use derive_builder::Builder;
     pub use http::Method;
+    pub use serde_json::json;
     pub use std::borrow::Cow;
 }

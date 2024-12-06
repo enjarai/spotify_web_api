@@ -42,7 +42,6 @@ impl ExpectedUrlBuilder {
         self
     }
 
-    #[allow(dead_code)]
     pub fn body_str(&mut self, body: &str) -> &mut Self {
         self.body = Some(body.bytes().collect());
         self

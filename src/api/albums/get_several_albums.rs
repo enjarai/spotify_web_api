@@ -57,7 +57,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint_query() {
+    fn endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("albums")
             .add_query_params(&[(

@@ -108,11 +108,11 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 - [x] Get Album `GET` `/albums/{id}` [get-an-album](https://developer.spotify.com/documentation/web-api/reference/get-an-album)
 - [x] Get Several Albums `GET` `/albums` [get-multiple-albums](https://developer.spotify.com/documentation/web-api/reference/get-multiple-albums)
 - [x] Get Album Tracks `GET` `/albums/{id}/tracks` [get-an-albums-tracks](https://developer.spotify.com/documentation/web-api/reference/get-an-albums-tracks)
-- [ ] Get User's Saved Albums `GET` `me/albums` [get-users-saved-albums](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-albums)
-- [ ] Save Albums for Current User `PUT` `me/albums` [save-albums-user](https://developer.spotify.com/documentation/web-api/reference/save-albums-user)
-- [ ] Remove User's Saved Albums `DELETE` `me/albums` [remove-albums-user](https://developer.spotify.com/documentation/web-api/reference/remove-albums-user)
+- [X] Get User's Saved Albums `GET` `me/albums` [get-users-saved-albums](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-albums)
+- [X] Save Albums for Current User `PUT` `me/albums` [save-albums-user](https://developer.spotify.com/documentation/web-api/reference/save-albums-user)
+- [X] Remove User's Saved Albums `DELETE` `me/albums` [remove-albums-user](https://developer.spotify.com/documentation/web-api/reference/remove-albums-user)
 - [x] Check User's Saved Albums `GET` `me/albums/contains` [check-users-saved-albums](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-albums)
-- [ ] Get New Releases `GET` `/browse/new-releases` [get-new-releases](https://developer.spotify.com/documentation/web-api/reference/get-new-releases)
+- [X] Get New Releases `GET` `/browse/new-releases` [get-new-releases](https://developer.spotify.com/documentation/web-api/reference/get-new-releases)
 
 ### Artists
 
