@@ -54,3 +54,26 @@ impl From<String> for GetTrack {
         Self { id, market: None }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        api::{self, Query as _},
+        test::client::{ExpectedUrl, SingleTestClient},
+    };
+
+    #[test]
+    fn endpoint() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("tracks/5IoBP6aTHHBStOrbLFc5uQ")
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_raw(endpoint, "");
+
+        let endpoint = GetTrack::from("5IoBP6aTHHBStOrbLFc5uQ");
+
+        api::ignore(endpoint).query(&client).unwrap();
+    }
+}

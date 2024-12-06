@@ -35,3 +35,26 @@ impl From<String> for GetArtist {
         Self { id }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        api::{self, Query as _},
+        test::client::{ExpectedUrl, SingleTestClient},
+    };
+
+    #[test]
+    fn endpoint() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("artists/5dRk8JyA2Tg9wL0iiTqbVu")
+            .build()
+            .unwrap();
+
+        let client = SingleTestClient::new_raw(endpoint, "");
+
+        let endpoint = GetArtist::from("5dRk8JyA2Tg9wL0iiTqbVu");
+
+        api::ignore(endpoint).query(&client).unwrap();
+    }
+}
