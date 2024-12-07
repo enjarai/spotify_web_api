@@ -202,15 +202,27 @@ where
         mut request: http::request::Builder,
         body: Vec<u8>,
     ) -> Result<HttpResponse<Bytes>, ApiError<<Self as RestClient>::Error>> {
-        {
-            let token = self.token.read();
-            let token = token.as_ref().ok_or(AuthError::EmptyAccessToken)?;
+        let is_expired = self
+            .token
+            .read()
+            .as_ref()
+            .ok_or(AuthError::EmptyAccessToken)?
+            .is_expired();
 
-            if let Some(refresh_token) = token.refresh_token.as_ref().filter(|_| token.is_expired())
-            {
-                let new_token = self.auth.refresh_token(&self.client, refresh_token)?;
-                self.set_token(new_token);
-            }
+        let refresh_token = if is_expired {
+            self.token
+                .read()
+                .as_ref()
+                .ok_or(AuthError::EmptyAccessToken)?
+                .refresh_token
+                .clone()
+        } else {
+            None
+        };
+
+        if let Some(refresh_token) = refresh_token {
+            let new_token = self.auth.refresh_token(&self.client, &refresh_token)?;
+            self.set_token(new_token);
         }
 
         let call = || -> Result<_, RestError> {
@@ -448,15 +460,14 @@ impl Spotify<AuthCodePKCE> {
     /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
     ///   or other API errors.
     pub fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
-        let refresh_token = {
-            let token = self.token.read();
-            token
-                .as_ref()
-                .ok_or(AuthError::EmptyAccessToken)?
-                .refresh_token
-                .clone()
-                .ok_or(AuthError::EmptyRefreshToken)?
-        };
+        let refresh_token = self
+            .token
+            .read()
+            .as_ref()
+            .ok_or(AuthError::EmptyAccessToken)?
+            .refresh_token
+            .clone()
+            .ok_or(AuthError::EmptyRefreshToken)?;
 
         let token = self.auth.refresh_token(&self.client, &refresh_token)?;
         self.set_token(token);
@@ -614,14 +625,25 @@ where
     ) -> Result<HttpResponse<Bytes>, ApiError<<Self as RestClient>::Error>> {
         use futures_util::TryFutureExt;
 
-        let (refresh_token, is_expired) = {
-            let token_guard = self.token.read();
-            let token = token_guard.as_ref().ok_or(AuthError::EmptyAccessToken)?;
-            (token.refresh_token.clone(), token.is_expired())
+        let is_expired = self
+            .token
+            .read()
+            .as_ref()
+            .ok_or(AuthError::EmptyAccessToken)?
+            .is_expired();
+
+        let refresh_token = if is_expired {
+            self.token
+                .read()
+                .as_ref()
+                .ok_or(AuthError::EmptyAccessToken)?
+                .refresh_token
+                .clone()
+        } else {
+            None
         };
 
-        if refresh_token.is_some() && is_expired {
-            let refresh_token = refresh_token.ok_or(AuthError::EmptyRefreshToken)?;
+        if let Some(refresh_token) = refresh_token {
             let new_token = self
                 .auth
                 .refresh_token_async(&self.client, &refresh_token)
@@ -867,15 +889,14 @@ impl AsyncSpotify<AuthCodePKCE> {
     /// * `Err(ApiError<RestError>)` - If the token refresh request fails due to network issues
     ///   or other API errors.
     pub async fn refresh_token(&self) -> Result<(), ApiError<RestError>> {
-        let refresh_token = {
-            let token = self.token.read();
-            token
-                .as_ref()
-                .ok_or(AuthError::EmptyAccessToken)?
-                .refresh_token
-                .clone()
-                .ok_or(AuthError::EmptyRefreshToken)?
-        };
+        let refresh_token = self
+            .token
+            .read()
+            .as_ref()
+            .ok_or(AuthError::EmptyAccessToken)?
+            .refresh_token
+            .clone()
+            .ok_or(AuthError::EmptyRefreshToken)?;
 
         let token = self
             .auth
