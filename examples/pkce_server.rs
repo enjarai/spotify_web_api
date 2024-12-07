@@ -1,7 +1,7 @@
 use anyhow::{bail, Context, Result};
 use spotify_web_api::{
     api::{users::GetCurrentUserProfile, Query as _},
-    auth::{scopes, AuthCodePKCE},
+    auth::scopes,
     model::CurrentUserProfile,
     Spotify,
 };
@@ -21,7 +21,8 @@ fn main() -> Result<()> {
     let mut spotify =
         Spotify::with_authorization_code_pkce(client_id, redirect_uri, scopes::user_details())?;
 
-    let callback_url = authenticate_user(&mut spotify)?;
+    let user_auth_url = spotify.user_authorization_url();
+    let callback_url = authenticate_user(&user_auth_url)?;
 
     spotify.request_token_from_redirect_url(&callback_url)?;
 
@@ -32,11 +33,10 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn authenticate_user(spotify: &mut Spotify<AuthCodePKCE>) -> Result<String> {
+fn authenticate_user(user_auth_url: &str) -> Result<String> {
     let listener = TcpListener::bind(format!("localhost:{PORT}"))?;
-    let user_auth_url = spotify.user_authorization_url();
 
-    if webbrowser::open(&user_auth_url).is_err() {
+    if webbrowser::open(user_auth_url).is_err() {
         println!(
             "Please navigate to the following URL to authorize the application:\n\n{user_auth_url}",
         );
