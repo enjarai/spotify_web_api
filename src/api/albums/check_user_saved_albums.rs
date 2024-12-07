@@ -41,7 +41,9 @@ mod tests {
             .build()
             .unwrap();
 
-        let client = SingleTestClient::new_json(endpoint, &[false, false, false]);
+        let expected_response = [false, false, false];
+
+        let client = SingleTestClient::new_json(endpoint, &expected_response);
 
         let endpoint = CheckUserSavedAlbums::builder()
             .id("382ObEPsp2rxGrnsizN5TX")
@@ -52,6 +54,6 @@ mod tests {
 
         let result: Vec<bool> = endpoint.query(&client).unwrap();
 
-        assert!(result == [false, false, false]);
+        assert_eq!(result, expected_response);
     }
 }

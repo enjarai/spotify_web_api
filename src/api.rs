@@ -9,6 +9,8 @@ pub(crate) mod query;
 
 pub mod albums;
 pub mod artists;
+pub mod categories;
+pub mod chapters;
 pub mod genres;
 pub mod markets;
 pub mod tracks;

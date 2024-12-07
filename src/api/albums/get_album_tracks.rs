@@ -27,18 +27,12 @@ impl GetAlbumTracks {
 
 impl Pageable for GetAlbumTracks {}
 
-impl From<&str> for GetAlbumTracks {
-    fn from(id: &str) -> Self {
+impl<T: Into<String>> From<T> for GetAlbumTracks {
+    fn from(id: T) -> Self {
         Self {
-            id: id.to_owned(),
+            id: id.into(),
             market: None,
         }
-    }
-}
-
-impl From<String> for GetAlbumTracks {
-    fn from(id: String) -> Self {
-        Self { id, market: None }
     }
 }
 

@@ -1,7 +1,21 @@
+mod check_if_current_user_follows_playlist;
+mod check_if_user_follows_artists_or_users;
+mod follow_artists_or_users;
+mod follow_playlist;
 mod get_current_user_profile;
+mod get_followed_artists;
 mod get_user_profile;
 mod get_user_top_items;
+mod unfollow_artists_or_users;
+mod unfollow_playlist;
 
+pub use check_if_current_user_follows_playlist::*;
+pub use check_if_user_follows_artists_or_users::*;
+pub use follow_artists_or_users::*;
+pub use follow_playlist::*;
 pub use get_current_user_profile::*;
+pub use get_followed_artists::*;
 pub use get_user_profile::*;
 pub use get_user_top_items::*;
+pub use unfollow_artists_or_users::*;
+pub use unfollow_playlist::*;

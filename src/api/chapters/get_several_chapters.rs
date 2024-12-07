@@ -1,12 +1,11 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information about an artist's top tracks by country.
+/// Get Spotify catalog information for a single album.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "artists/{id}/top-tracks")]
-pub struct GetArtistTopTracks {
-    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the artist.
-    #[builder(setter(into))]
-    id: String,
+#[endpoint(method = GET, path = "chapters")]
+pub struct GetSeveralChapters {
+    /// A list of the [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the chapters.
+    ids: Vec<String>,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -19,18 +18,17 @@ pub struct GetArtistTopTracks {
     market: Option<Market>,
 }
 
-impl GetArtistTopTracks {
-    pub fn builder() -> GetArtistTopTracksBuilder {
-        GetArtistTopTracksBuilder::default()
+#[allow(dead_code)]
+impl GetSeveralChaptersBuilder {
+    fn id(&mut self, id: impl Into<String>) -> &mut Self {
+        self.ids.get_or_insert_with(Vec::new).push(id.into());
+        self
     }
 }
 
-impl<T: Into<String>> From<T> for GetArtistTopTracks {
-    fn from(id: T) -> Self {
-        Self {
-            id: id.into(),
-            market: None,
-        }
+impl GetSeveralChapters {
+    pub fn builder() -> GetSeveralChaptersBuilder {
+        GetSeveralChaptersBuilder::default()
     }
 }
 
@@ -43,15 +41,24 @@ mod tests {
     };
 
     #[test]
-    fn test_get_artist_top_tracks_endpoint() {
+    fn test_get_several_chapters_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("artists/0TnOYISbd1XYRBk9myaseg/top-tracks")
+            .endpoint("chapters")
+            .add_query_params(&[(
+                "ids",
+                "0IsXVP0JmcB2adSE338GkK,3ZXb8FKZGU0EHALYX6uCzU,0D5wENdkdwbqlrHoaJ9g29",
+            )])
             .build()
             .unwrap();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetArtistTopTracks::from("0TnOYISbd1XYRBk9myaseg");
+        let endpoint = GetSeveralChapters::builder()
+            .id("0IsXVP0JmcB2adSE338GkK")
+            .id("3ZXb8FKZGU0EHALYX6uCzU")
+            .id("0D5wENdkdwbqlrHoaJ9g29")
+            .build()
+            .unwrap();
 
         api::ignore(endpoint).query(&client).unwrap();
     }

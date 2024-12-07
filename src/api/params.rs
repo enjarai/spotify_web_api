@@ -82,6 +82,18 @@ impl<'a> ParamValue<'a> for &'a crate::model::TimeRange {
     }
 }
 
+impl ParamValue<'static> for crate::model::FollowedArtistsType {
+    fn as_value(&self) -> Cow<'static, str> {
+        self.to_string().into()
+    }
+}
+
+impl ParamValue<'static> for crate::model::FollowType {
+    fn as_value(&self) -> Cow<'static, str> {
+        self.to_string().into()
+    }
+}
+
 /// A structure for form parameters.
 #[derive(Debug, Default, Clone)]
 pub struct FormParams<'a> {

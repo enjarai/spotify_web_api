@@ -1,20 +1,20 @@
 use crate::api::prelude::*;
 
 /// Get public profile information about a Spotify user.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "users/{id}")]
-pub struct GetUserProfile {
-    /// The user's [Spotify user ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
+#[derive(Debug, Clone, Endpoint)]
+#[endpoint(method = DELETE, path = "playlists/{id}/followers")]
+pub struct UnfollowPlaylist {
+    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     id: String,
 }
 
-impl GetUserProfile {
+impl UnfollowPlaylist {
     pub fn new(id: impl Into<String>) -> Self {
         Self::from(id)
     }
 }
 
-impl<T: Into<String>> From<T> for GetUserProfile {
+impl<T: Into<String>> From<T> for UnfollowPlaylist {
     fn from(id: T) -> Self {
         Self { id: id.into() }
     }
@@ -29,13 +29,16 @@ mod tests {
     };
 
     #[test]
-    fn test_get_user_profile_endpoint() {
+    fn test_unfollow_playlist_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("users/severino246")
+            .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/followers")
+            .method(Method::DELETE)
             .build()
             .unwrap();
+
         let client = SingleTestClient::new_raw(endpoint, "");
-        api::ignore(GetUserProfile::from("severino246"))
+
+        api::ignore(UnfollowPlaylist::from("3cEYpjA9oz9GiPac4AsH4n"))
             .query(&client)
             .unwrap();
     }

@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get a list of the albums saved in the current Spotify user's 'Your Music' library.
-#[derive(Debug, Default, Builder, Clone, Endpoint)]
+#[derive(Debug, Default, Clone, Endpoint)]
 #[endpoint(method = GET, path = "me/albums")]
 pub struct GetUserSavedAlbums {
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -11,13 +11,14 @@ pub struct GetUserSavedAlbums {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     market: Option<Market>,
 }
 
 impl GetUserSavedAlbums {
-    pub fn builder() -> GetUserSavedAlbumsBuilder {
-        GetUserSavedAlbumsBuilder::default()
+    pub fn with_market(market: Market) -> Self {
+        Self {
+            market: Some(market),
+        }
     }
 }
 

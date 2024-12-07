@@ -74,20 +74,10 @@ impl Endpoint for GetArtistAlbums {
 
 impl Pageable for GetArtistAlbums {}
 
-impl From<&str> for GetArtistAlbums {
-    fn from(id: &str) -> Self {
+impl<T: Into<String>> From<T> for GetArtistAlbums {
+    fn from(id: T) -> Self {
         Self {
-            id: id.to_owned(),
-            market: None,
-            include_groups: None,
-        }
-    }
-}
-
-impl From<String> for GetArtistAlbums {
-    fn from(id: String) -> Self {
-        Self {
-            id,
+            id: id.into(),
             market: None,
             include_groups: None,
         }

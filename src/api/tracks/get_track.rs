@@ -25,18 +25,12 @@ impl GetTrack {
     }
 }
 
-impl From<&str> for GetTrack {
-    fn from(id: &str) -> Self {
+impl<T: Into<String>> From<T> for GetTrack {
+    fn from(id: T) -> Self {
         Self {
-            id: id.to_owned(),
+            id: id.into(),
             market: None,
         }
-    }
-}
-
-impl From<String> for GetTrack {
-    fn from(id: String) -> Self {
-        Self { id, market: None }
     }
 }
 

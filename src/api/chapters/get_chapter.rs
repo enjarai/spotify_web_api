@@ -1,10 +1,11 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information about an artist's top tracks by country.
+/// Get Spotify catalog information for a single audiobook chapter.
+/// Chapters are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "artists/{id}/top-tracks")]
-pub struct GetArtistTopTracks {
-    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the artist.
+#[endpoint(method = GET, path = "chapters/{id}")]
+pub struct GetChapter {
+    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the chapter.
     #[builder(setter(into))]
     id: String,
 
@@ -19,13 +20,13 @@ pub struct GetArtistTopTracks {
     market: Option<Market>,
 }
 
-impl GetArtistTopTracks {
-    pub fn builder() -> GetArtistTopTracksBuilder {
-        GetArtistTopTracksBuilder::default()
+impl GetChapter {
+    pub fn builder() -> GetChapterBuilder {
+        GetChapterBuilder::default()
     }
 }
 
-impl<T: Into<String>> From<T> for GetArtistTopTracks {
+impl<T: Into<String>> From<T> for GetChapter {
     fn from(id: T) -> Self {
         Self {
             id: id.into(),
@@ -43,15 +44,15 @@ mod tests {
     };
 
     #[test]
-    fn test_get_artist_top_tracks_endpoint() {
+    fn test_get_chapter_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("artists/0TnOYISbd1XYRBk9myaseg/top-tracks")
+            .endpoint("chapters/0D5wENdkdwbqlrHoaJ9g29")
             .build()
             .unwrap();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetArtistTopTracks::from("0TnOYISbd1XYRBk9myaseg");
+        let endpoint = GetChapter::from("0D5wENdkdwbqlrHoaJ9g29");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

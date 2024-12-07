@@ -209,3 +209,35 @@ pub enum TopItem {
 }
 
 pub type TopItems = Page<TopItem>;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum FollowedArtistsType {
+    Artist,
+}
+
+impl std::fmt::Display for FollowedArtistsType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Artist => write!(f, "artist"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum FollowType {
+    Artist,
+    User,
+}
+
+impl std::fmt::Display for FollowType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Artist => "artist",
+            Self::User => "user",
+        };
+
+        write!(f, "{s}")
+    }
+}

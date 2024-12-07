@@ -1,29 +1,22 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single album.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "albums/{id}")]
 pub struct GetAlbum {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
-    #[builder(setter(into))]
     id: String,
 }
 
 impl GetAlbum {
-    pub fn builder() -> GetAlbumBuilder {
-        GetAlbumBuilder::default()
+    pub fn new(id: impl Into<String>) -> Self {
+        Self::from(id)
     }
 }
 
-impl From<&str> for GetAlbum {
-    fn from(id: &str) -> Self {
-        Self { id: id.to_owned() }
-    }
-}
-
-impl From<String> for GetAlbum {
-    fn from(id: String) -> Self {
-        Self { id }
+impl<T: Into<String>> From<T> for GetAlbum {
+    fn from(id: T) -> Self {
+        Self { id: id.into() }
     }
 }
 
@@ -44,7 +37,7 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetAlbum::from("0oKvU088cLhKbbVvQc9lQF");
+        let endpoint = GetAlbum::new("0oKvU088cLhKbbVvQc9lQF");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

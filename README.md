@@ -133,13 +133,13 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Categories
 
-- [ ] Get Several Browse Categories `GET` `/browse/categories` [get-categories](https://developer.spotify.com/documentation/web-api/reference/get-categories)
-- [ ] Get Single Browse Category `GET` `/browse/categories/{category_id}` [get-a-category](https://developer.spotify.com/documentation/web-api/reference/get-a-category)
+- [X] Get Several Browse Categories `GET` `/browse/categories` [get-categories](https://developer.spotify.com/documentation/web-api/reference/get-categories)
+- [X] Get Single Browse Category `GET` `/browse/categories/{category_id}` [get-a-category](https://developer.spotify.com/documentation/web-api/reference/get-a-category)
 
 ### Chapters
 
-- [ ] Get a Chapter `GET` `/chapters/{id}` [get-a-chapter](https://developer.spotify.com/documentation/web-api/reference/get-a-chapter)
-- [ ] Get Several Chapters `GET` `/chapters` [get-several-chapters](https://developer.spotify.com/documentation/web-api/reference/get-several-chapters)
+- [X] Get a Chapter `GET` `/chapters/{id}` [get-a-chapter](https://developer.spotify.com/documentation/web-api/reference/get-a-chapter)
+- [X] Get Several Chapters `GET` `/chapters` [get-several-chapters](https://developer.spotify.com/documentation/web-api/reference/get-several-chapters)
 
 ### Episodes
 
@@ -218,13 +218,13 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 - [x] Get Current User's Profile `GET` `/me` [get-current-users-profile](https://developer.spotify.com/documentation/web-api/reference/get-current-users-profile)
 - [X] Get User's Top Items `GET` `/me/top/{type}` [get-users-top-artists-and-tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks)
 - [X] Get User's Profile `GET` `/users/{user_id}` [get-users-profile](https://developer.spotify.com/documentation/web-api/reference/get-users-profile)
-- [ ] Follow Playlist `PUT` `/playlists/{playlist_id}/followers` [follow-playlist](https://developer.spotify.com/documentation/web-api/reference/follow-playlist)
-- [ ] Unfollow Playlist `DELETE` `/playlists/{playlist_id}/followers` [unfollow-playlist](https://developer.spotify.com/documentation/web-api/reference/unfollow-playlist)
-- [ ] Get Followed Artists `GET` `/me/following` [get-followed](https://developer.spotify.com/documentation/web-api/reference/get-followed)
-- [ ] Follow Artists or Users `PUT` `/me/following` [follow-artists-users](https://developer.spotify.com/documentation/web-api/reference/follow-artists-users)
-- [ ] Unfollow Artists or Users `DELETE` `/me/following` [unfollow-artists-users](https://developer.spotify.com/documentation/web-api/reference/unfollow-artists-users)
-- [ ] Check If User Follows Artists or Users `GET` `/me/following/contains` [check-current-user-follows](https://developer.spotify.com/documentation/web-api/reference/check-current-user-follows)
-- [ ] Check if Current User Follows Playlist `GET` `/playlists/{playlist_id}/followers/contains` [check-if-user-follows-playlist](https://developer.spotify.com/documentation/web-api/reference/check-if-user-follows-playlist)
+- [X] Follow Playlist `PUT` `/playlists/{playlist_id}/followers` [follow-playlist](https://developer.spotify.com/documentation/web-api/reference/follow-playlist)
+- [X] Unfollow Playlist `DELETE` `/playlists/{playlist_id}/followers` [unfollow-playlist](https://developer.spotify.com/documentation/web-api/reference/unfollow-playlist)
+- [X] Get Followed Artists `GET` `/me/following` [get-followed](https://developer.spotify.com/documentation/web-api/reference/get-followed)
+- [X] Follow Artists or Users `PUT` `/me/following` [follow-artists-users](https://developer.spotify.com/documentation/web-api/reference/follow-artists-users)
+- [X] Unfollow Artists or Users `DELETE` `/me/following` [unfollow-artists-users](https://developer.spotify.com/documentation/web-api/reference/unfollow-artists-users)
+- [X] Check If User Follows Artists or Users `GET` `/me/following/contains` [check-current-user-follows](https://developer.spotify.com/documentation/web-api/reference/check-current-user-follows)
+- [X] Check if Current User Follows Playlist `GET` `/playlists/{playlist_id}/followers/contains` [check-if-user-follows-playlist](https://developer.spotify.com/documentation/web-api/reference/check-if-user-follows-playlist)
 
 
 #### License
