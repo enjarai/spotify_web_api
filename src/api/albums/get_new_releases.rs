@@ -71,7 +71,7 @@ mod tests {
      	"#;
 
     #[test]
-    fn endpoint() {
+    fn test_get_new_releases_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("browse/new-releases")
             .build()
@@ -85,7 +85,7 @@ mod tests {
     }
 
     #[test]
-    fn paged_endpoint() {
+    fn test_get_new_releases_endpoint_paged() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("browse/new-releases")
             .paginated(true)

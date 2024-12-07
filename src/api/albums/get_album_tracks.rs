@@ -51,7 +51,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_album_tracks_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("albums/66q0q162WOFuidbucN1Jdp/tracks")
             .build()

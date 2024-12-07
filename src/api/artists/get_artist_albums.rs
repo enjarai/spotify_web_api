@@ -103,7 +103,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_artist_albums_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists/0TnOYISbd1XYRBk9myaseg/albums")
             .add_query_params(&[("include_groups", "single,appears_on")])
@@ -123,7 +123,7 @@ mod tests {
     }
 
     #[test]
-    fn no_include_groups() {
+    fn test_get_artist_albums_endpoint_with_no_include_groups() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists/0TnOYISbd1XYRBk9myaseg/albums")
             .build()

@@ -36,7 +36,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_artist_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists/5dRk8JyA2Tg9wL0iiTqbVu")
             .build()

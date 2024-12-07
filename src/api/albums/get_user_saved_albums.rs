@@ -48,7 +48,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_user_saved_albums_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("me/albums")
             .build()

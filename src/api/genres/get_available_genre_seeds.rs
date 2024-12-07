@@ -15,7 +15,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_available_genre_seeds_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("recommendations/available-genre-seeds")
             .build()
@@ -25,7 +25,7 @@ mod tests {
     }
 
     #[test]
-    fn response() {
+    fn test_get_available_genre_seeds_endpoint_with_response() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("recommendations/available-genre-seeds")
             .build()

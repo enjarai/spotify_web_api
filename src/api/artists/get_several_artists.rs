@@ -31,7 +31,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_several_artists_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists")
             .add_query_params(&[(

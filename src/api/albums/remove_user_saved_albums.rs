@@ -33,7 +33,7 @@ mod tests {
     use http::Method;
 
     #[test]
-    fn endpoint() {
+    fn test_remove_user_saved_albums_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .method(Method::DELETE)
             .endpoint("me/albums")

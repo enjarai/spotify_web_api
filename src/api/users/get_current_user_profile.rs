@@ -14,7 +14,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_current_user_profile_endpoint() {
         let endpoint = ExpectedUrl::builder().endpoint("me").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetCurrentUserProfile).query(&client).unwrap();

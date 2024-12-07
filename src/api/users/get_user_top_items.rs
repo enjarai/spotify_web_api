@@ -40,7 +40,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_user_top_items_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("me/top/tracks")
             .add_query_params(&[("time_range", "medium_term")])

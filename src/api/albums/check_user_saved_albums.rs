@@ -31,7 +31,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_check_user_saved_albums_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("me/albums/contains")
             .add_query_params(&[(

@@ -29,7 +29,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_user_profile_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("users/severino246")
             .build()

@@ -36,7 +36,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_album_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("albums/0oKvU088cLhKbbVvQc9lQF")
             .build()

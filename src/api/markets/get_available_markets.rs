@@ -15,14 +15,14 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_available_markets_endpoint() {
         let endpoint = ExpectedUrl::builder().endpoint("markets").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetAvailableMarkets).query(&client).unwrap();
     }
 
     #[test]
-    fn response() {
+    fn test_get_available_markets_endpoint_with_response() {
         let endpoint = ExpectedUrl::builder().endpoint("markets").build().unwrap();
         let client = SingleTestClient::new_raw(endpoint, r#"{"markets": ["CA", "BR", "IT"]}"#);
         let response: Markets = GetAvailableMarkets.query(&client).unwrap();

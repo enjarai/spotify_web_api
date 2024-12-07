@@ -49,7 +49,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_artist_top_tracks_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists/0TnOYISbd1XYRBk9myaseg/top-tracks")
             .build()

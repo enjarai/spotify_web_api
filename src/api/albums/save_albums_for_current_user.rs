@@ -33,7 +33,7 @@ mod tests {
     use http::Method;
 
     #[test]
-    fn endpoint() {
+    fn test_save_albums_for_current_user_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .method(Method::PUT)
             .endpoint("me/albums")

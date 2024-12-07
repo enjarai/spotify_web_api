@@ -49,7 +49,7 @@ mod tests {
     };
 
     #[test]
-    fn endpoint() {
+    fn test_get_track_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("tracks/5IoBP6aTHHBStOrbLFc5uQ")
             .build()
