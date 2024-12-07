@@ -1,19 +1,33 @@
 [package]
 name = "spotify_web_api"
-version = "0.1.0"
-authors = ["Ricky Severino"]
-edition = "2021"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 description = "A wrapper for the Spotify Web API"
 readme = "README.md"
 repository = "https://github.com/ry-sev/spotify_web_api"
-license = "MIT OR Apache-2.0"
+license.workspace = true
 keywords = ["spotify", "music", "api"]
 categories = ["api-bindings"]
 
 [lib]
 path = "src/lib.rs"
 
+[lints]
+workspace = true
+
+[workspace]
+resolver = "2"
+members = ["endpoint_derive"]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Ricky Severino"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
 [dependencies]
+endpoint_derive = { path = "endpoint_derive" }
 async-trait = "0.1.83"
 base64 = "0.22.1"
 bytes = "1.8.0"
@@ -41,15 +55,10 @@ url = "2.5.0"
 
 [dev-dependencies]
 anyhow = "1.0.93"
-tokio = { version = "1.41.1", features = [
-	"rt",
-	"rt-multi-thread",
-	"macros",
-	# "time",
-] }
+tokio = { version = "1.41.1", features = ["rt", "rt-multi-thread", "macros"] }
 webbrowser = "1.0.2"
 
-[lints.rust]
+[workspace.lints.rust]
 unsafe_code = "deny"
 elided_lifetimes_in_paths = "warn"
 semicolon_in_expressions_from_macros = "warn"
@@ -62,12 +71,12 @@ trivial_casts = "warn"
 unused_qualifications = "warn"
 unexpected_cfgs = "warn"
 
-[lints.rustdoc]
+[workspace.lints.rustdoc]
 all = "warn"
 missing_crate_level_docs = "warn"
 
 # see also clippy.toml
-[lints.clippy]
+[workspace.lints.clippy]
 as_ptr_cast_mut = "warn"
 await_holding_lock = "warn"
 bool_to_int_with_if = "warn"

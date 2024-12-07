@@ -1,17 +1,8 @@
 use crate::api::prelude::*;
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, Endpoint)]
+#[endpoint(method = GET, path = "me")]
 pub struct GetCurrentUserProfile;
-
-impl Endpoint for GetCurrentUserProfile {
-    fn method(&self) -> Method {
-        Method::GET
-    }
-
-    fn endpoint(&self) -> Cow<'static, str> {
-        "me".into()
-    }
-}
 
 #[cfg(test)]
 mod tests {

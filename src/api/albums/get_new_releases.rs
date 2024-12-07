@@ -1,19 +1,13 @@
 use crate::api::prelude::*;
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, Endpoint)]
+#[endpoint(
+	method = GET,
+	path = "browse/new-releases",
+)]
 pub struct GetNewReleases;
 
 impl Pageable for GetNewReleases {}
-
-impl Endpoint for GetNewReleases {
-    fn method(&self) -> Method {
-        Method::GET
-    }
-
-    fn endpoint(&self) -> Cow<'static, str> {
-        "browse/new-releases".into()
-    }
-}
 
 #[cfg(test)]
 mod tests {

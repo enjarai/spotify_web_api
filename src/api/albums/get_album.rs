@@ -1,7 +1,8 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single album.
-#[derive(Debug, Builder, Clone)]
+#[derive(Debug, Builder, Clone, Endpoint)]
+#[endpoint(method = GET, path = "albums/{id}")]
 pub struct GetAlbum {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
     #[builder(setter(into))]
@@ -11,16 +12,6 @@ pub struct GetAlbum {
 impl GetAlbum {
     pub fn builder() -> GetAlbumBuilder {
         GetAlbumBuilder::default()
-    }
-}
-
-impl Endpoint for GetAlbum {
-    fn method(&self) -> Method {
-        Method::GET
-    }
-
-    fn endpoint(&self) -> Cow<'static, str> {
-        format!("albums/{}", self.id).into()
     }
 }
 

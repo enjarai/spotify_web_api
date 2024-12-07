@@ -1,9 +1,11 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single album.
-#[derive(Debug, Builder, Clone)]
+#[derive(Debug, Builder, Clone, Endpoint)]
+#[endpoint(method = PUT, path = "me/albums")]
 pub struct SaveAlbumsforCurrentUser {
     /// A list of the [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
+    #[endpoint(body)]
     ids: Vec<String>,
 }
 
@@ -21,22 +23,6 @@ impl SaveAlbumsforCurrentUser {
     }
 }
 
-impl Endpoint for SaveAlbumsforCurrentUser {
-    fn method(&self) -> Method {
-        Method::PUT
-    }
-
-    fn endpoint(&self) -> Cow<'static, str> {
-        "me/albums".into()
-    }
-
-    fn body(&self) -> Result<Option<(&'static str, Vec<u8>)>, BodyError> {
-        JsonParams::into_body(&json!({
-            "ids": self.ids,
-        }))
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -44,6 +30,7 @@ mod tests {
         api::{self, Query as _},
         test::client::{ExpectedUrl, SingleTestClient},
     };
+    use http::Method;
 
     #[test]
     fn endpoint() {

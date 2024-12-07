@@ -1,7 +1,8 @@
 use crate::api::prelude::*;
 
 /// Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
-#[derive(Debug, Builder, Clone)]
+#[derive(Debug, Builder, Clone, Endpoint)]
+#[endpoint(method = "GET", path = "me/albums/contains")]
 pub struct CheckUserSavedAlbums {
     /// A list of the [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
     ids: Vec<String>,
@@ -18,22 +19,6 @@ impl CheckUserSavedAlbumsBuilder {
 impl CheckUserSavedAlbums {
     pub fn builder() -> CheckUserSavedAlbumsBuilder {
         CheckUserSavedAlbumsBuilder::default()
-    }
-}
-
-impl Endpoint for CheckUserSavedAlbums {
-    fn method(&self) -> Method {
-        Method::GET
-    }
-
-    fn endpoint(&self) -> Cow<'static, str> {
-        "me/albums/contains".into()
-    }
-
-    fn parameters(&self) -> QueryParams<'_> {
-        let mut params = QueryParams::default();
-        params.push("ids", &self.ids.join(","));
-        params
     }
 }
 
