@@ -8,7 +8,6 @@ use std::env;
 struct Track {
     name: String,
     artists: Vec<Artist>,
-    preview_url: Option<String>,
 }
 
 #[derive(serde::Deserialize)]
@@ -33,10 +32,7 @@ fn main() -> anyhow::Result<()> {
         .collect::<Vec<&str>>()
         .join(", ");
 
-    println!("\n{} - {}", track.name, artist_names);
-    if let Some(preview_url) = track.preview_url {
-        println!("\n30 second preview: {preview_url}\n");
-    }
+    println!("\n{} - {}\n", track.name, artist_names);
 
     Ok(())
 }

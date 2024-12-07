@@ -7,7 +7,7 @@ use std::{borrow::Cow, env};
 
 #[derive(serde::Deserialize)]
 struct Track {
-    preview_url: Option<String>,
+    name: String,
 }
 
 struct TrackID<'a>(&'a str);
@@ -32,9 +32,7 @@ fn main() -> anyhow::Result<()> {
 
     let track: Track = TrackID("4PTG3Z6ehGkBFwjybzWkR8").query(&spotify)?;
 
-    if let Some(preview_url) = track.preview_url {
-        println!("\n{preview_url}\n");
-    }
+    println!("\n{}\n", track.name);
 
     Ok(())
 }
