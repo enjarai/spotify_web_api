@@ -55,6 +55,7 @@ url = "2.5.0"
 
 [dev-dependencies]
 anyhow = "1.0.93"
+dotenv = "0.15.0"
 tokio = { version = "1.41.1", features = ["rt", "rt-multi-thread", "macros"] }
 webbrowser = "1.0.2"
 
