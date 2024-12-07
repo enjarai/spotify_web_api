@@ -79,6 +79,8 @@ pub struct Track {
     pub popularity: u8,
 
     /// A link to a 30 second preview (MP3 format) of the track.
+    #[deprecated]
+    #[serde(default)]
     pub preview_url: Option<String>,
 
     /// The number of the track. If an album has several discs, the track number is the number on the specified disc.
@@ -144,6 +146,8 @@ pub struct SimplifiedTrack {
     pub name: String,
 
     /// A link to a 30 second preview (MP3 format) of the track.
+    #[deprecated]
+    #[serde(default)]
     pub preview_url: Option<String>,
 
     /// The number of the track. If an album has several discs, the track number is the number on the specified disc.

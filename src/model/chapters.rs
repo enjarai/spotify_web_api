@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Chapter {
     /// A URL to a 30 second preview (MP3 format) of the chapter. None if not available.
+    #[deprecated]
+    #[serde(default)]
     pub audio_preview_url: Option<String>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
@@ -82,6 +84,8 @@ pub struct Chapter {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SimplifiedChapter {
     /// A URL to a 30 second preview (MP3 format) of the chapter. None if not available.
+    #[deprecated]
+    #[serde(default)]
     pub audio_preview_url: Option<String>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.

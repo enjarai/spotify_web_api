@@ -5,7 +5,7 @@ use super::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum AlbumType {
     #[serde(alias = "ALBUM")]
     Album,
@@ -13,6 +13,31 @@ pub enum AlbumType {
     Single,
     #[serde(alias = "COMPILATION")]
     Compilation,
+    #[serde(alias = "APPEARS_ON")]
+    AppearsOn,
+}
+
+impl std::fmt::Display for AlbumType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Album => "album",
+            Self::Single => "single",
+            Self::Compilation => "compilation",
+            Self::AppearsOn => "appears_on",
+        };
+        write!(f, "{s}")
+    }
+}
+
+impl AlbumType {
+    pub fn all() -> &'static [Self] {
+        &[
+            Self::Album,
+            Self::Single,
+            Self::Compilation,
+            Self::AppearsOn,
+        ]
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -77,6 +102,8 @@ pub struct Album {
     pub external_ids: ExternalIds,
 
     /// A list of the genres the album is associated with. If not yet classified, the array is empty.
+    #[deprecated = "This field is always empty"]
+    #[serde(default)]
     pub genres: Vec<String>,
 
     /// The label associated with the album.
@@ -84,6 +111,10 @@ pub struct Album {
 
     /// The popularity of the album. The value will be between 0 and 100, with 100 being the most popular.
     pub popularity: u8,
+
+    /// This field describes the relationship between the artist and the album.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub album_group: Option<AlbumType>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

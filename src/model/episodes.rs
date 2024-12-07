@@ -6,6 +6,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Episode {
     /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
+    #[deprecated]
+    #[serde(default)]
     pub audio_preview_url: Option<String>,
 
     /// A description of the episode. HTML tags are stripped away from this field,
@@ -81,6 +83,7 @@ pub struct Episode {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SimplifiedEpisode {
     /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
+    #[deprecated]
     pub audio_preview_url: Option<String>,
 
     /// A description of the episode. HTML tags are stripped away from this field,
