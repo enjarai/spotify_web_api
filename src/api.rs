@@ -22,31 +22,9 @@ pub use query::{AsyncQuery, Query};
 
 mod prelude {
     pub use super::Pageable;
-    pub use crate::model::Market;
+    pub use crate::{api::QueryParams, model::Market};
     pub use derive_builder::Builder;
     pub use endpoint_derive::Endpoint;
+    pub use http::Method;
+    pub use std::borrow::Cow;
 }
-
-// pub mod foo {
-//     use crate::model::Market;
-//     use endpoint_derive::Endpoint;
-
-//     #[derive(Endpoint)]
-//     #[endpoint(method = GET, path = "/test/{a}")]
-//     pub struct TestEndpoint {
-//         a: String,
-
-//         b: Option<Market>,
-
-//         c: Vec<String>,
-
-//         #[endpoint(body)]
-//         d: String,
-
-//         #[endpoint(body)]
-//         e: String,
-
-//         #[endpoint(body)]
-//         f: Option<String>,
-//     }
-// }
