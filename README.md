@@ -152,11 +152,11 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Genres
 
-- [ ] Get Available Genre Seeds `GET` `/recommendations/available-genre-seeds` [get-recommendation-genres](https://developer.spotify.com/documentation/web-api/reference/get-recommendation-genres)
+- [X] Get Available Genre Seeds `GET` `/recommendations/available-genre-seeds` [get-recommendation-genres](https://developer.spotify.com/documentation/web-api/reference/get-recommendation-genres)
 
 ### Markets
 
-- [ ] Get Available Markets `GET` `/markets` [get-available-markets](https://developer.spotify.com/documentation/web-api/reference/get-available-markets)
+- [X] Get Available Markets `GET` `/markets` [get-available-markets](https://developer.spotify.com/documentation/web-api/reference/get-available-markets)
 
 ### Player
 
@@ -216,8 +216,8 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 ### Users
 
 - [x] Get Current User's Profile `GET` `/me` [get-current-users-profile](https://developer.spotify.com/documentation/web-api/reference/get-current-users-profile)
-- [ ] Get User's Top Items `GET` `/me/top/{type}` [get-users-top-artists-and-tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks)
-- [ ] Get User's Profile `GET` `/users/{user_id}` [get-users-profile](https://developer.spotify.com/documentation/web-api/reference/get-users-profile)
+- [X] Get User's Top Items `GET` `/me/top/{type}` [get-users-top-artists-and-tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks)
+- [X] Get User's Profile `GET` `/users/{user_id}` [get-users-profile](https://developer.spotify.com/documentation/web-api/reference/get-users-profile)
 - [ ] Follow Playlist `PUT` `/playlists/{playlist_id}/followers` [follow-playlist](https://developer.spotify.com/documentation/web-api/reference/follow-playlist)
 - [ ] Unfollow Playlist `DELETE` `/playlists/{playlist_id}/followers` [unfollow-playlist](https://developer.spotify.com/documentation/web-api/reference/unfollow-playlist)
 - [ ] Get Followed Artists `GET` `/me/following` [get-followed](https://developer.spotify.com/documentation/web-api/reference/get-followed)

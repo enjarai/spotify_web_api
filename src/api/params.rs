@@ -70,6 +70,18 @@ impl ParamValue<'static> for DateTime<Utc> {
     }
 }
 
+impl<'a> ParamValue<'a> for &'a crate::model::AlbumType {
+    fn as_value(&self) -> Cow<'a, str> {
+        self.to_string().into()
+    }
+}
+
+impl<'a> ParamValue<'a> for &'a crate::model::TimeRange {
+    fn as_value(&self) -> Cow<'a, str> {
+        self.to_string().into()
+    }
+}
+
 /// A structure for form parameters.
 #[derive(Debug, Default, Clone)]
 pub struct FormParams<'a> {

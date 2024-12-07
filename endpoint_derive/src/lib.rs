@@ -74,9 +74,16 @@ impl ToTokens for EndpointReceiver {
 
             if !field.body {
                 if type_is_option(&field.ty) {
-                    query_params.push(quote! {
-                        params.push_opt(#field_name_str, self.#field_name.as_ref());
-                    });
+                    if field_name_str.eq("type_") || field_name_str.eq("_type") {
+                        let new_name = "type";
+                        query_params.push(quote! {
+                            params.push_opt(#new_name, self.#field_name.as_ref());
+                        });
+                    } else {
+                        query_params.push(quote! {
+                            params.push_opt(#field_name_str, self.#field_name.as_ref());
+                        });
+                    }
                 } else if type_is_vec(&field.ty) {
                     query_params.push(quote! {
                         params.push(#field_name_str, &self.#field_name.join(","));

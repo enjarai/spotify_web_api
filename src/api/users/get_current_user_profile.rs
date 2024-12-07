@@ -1,5 +1,6 @@
 use crate::api::prelude::*;
 
+/// Get detailed profile information about the current user (including the current user's username).
 #[derive(Default, Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "me")]
 pub struct GetCurrentUserProfile;

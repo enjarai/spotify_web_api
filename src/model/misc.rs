@@ -159,3 +159,53 @@ pub enum TrackItem {
     Track(super::Track),
     Episode(super::Episode),
 }
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum TimeRange {
+    /// Calculated from ~1 year of data and including all new data as it becomes available.
+    LongTerm,
+
+    /// Approximately last 6 months.
+    #[default]
+    MediumTerm,
+
+    /// Approximately last 4 weeks
+    ShortTerm,
+}
+
+impl std::fmt::Display for TimeRange {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::LongTerm => write!(f, "long_term"),
+            Self::MediumTerm => write!(f, "medium_term"),
+            Self::ShortTerm => write!(f, "short_term"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum TopItemType {
+    Artists,
+    Tracks,
+}
+
+impl std::fmt::Display for TopItemType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Artists => write!(f, "artists"),
+            Self::Tracks => write!(f, "tracks"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum TopItem {
+    Artist(super::Artist),
+    Track(super::Track),
+}
+
+pub type TopItems = Page<TopItem>;
