@@ -119,8 +119,7 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 - [x] Get Artist `GET` `/artists/{id}` [get-an-artist](https://developer.spotify.com/documentation/web-api/reference/get-an-artist)
 - [X] Get Several Artists `GET` `/artists` [get-multiple-artists](https://developer.spotify.com/documentation/web-api/reference/get-multiple-artists)
 - [X] Get Artist's Albums `GET` `/artists/{id}/albums` [get-an-artists-albums](https://developer.spotify.com/documentation/web-api/reference/get-an-artists-albums)
-- [ ] Get Artist's Top Tracks `GET` `/artists/{id}/top-tracks` [get-an-artists-top-tracks](https://developer.spotify.com/documentation/web-api/reference/get-an-artists-top-tracks)
-- [ ] Get Artist's Related Artists `GET` `/artists/{id}/related-artists` [get-an-artists-related-artists](https://developer.spotify.com/documentation/web-api/reference/get-an-artists-related-artists)
+- [X] Get Artist's Top Tracks `GET` `/artists/{id}/top-tracks` [get-an-artists-top-tracks](https://developer.spotify.com/documentation/web-api/reference/get-an-artists-top-tracks)
 
 ### Audiobooks
 
