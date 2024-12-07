@@ -98,6 +98,10 @@ impl AuthCodePKCE {
         }
     }
 
+    pub(crate) fn set_scopes(&mut self, scopes: Option<HashSet<Scope>>) {
+        self.scopes = scopes;
+    }
+
     pub(crate) fn user_authorization_url(&mut self) -> String {
         let code_verifier = crypto::generate_code_verifier(128);
         let code_challenge = crypto::generate_code_challenge(&code_verifier);

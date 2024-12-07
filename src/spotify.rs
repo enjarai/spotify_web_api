@@ -196,21 +196,6 @@ where
         Ok(api)
     }
 
-    /// Sets the access token for the Spotify client and returns the updated instance.
-    ///
-    /// This method allows chaining by consuming the current instance, updating the
-    /// stored access token, and returning the updated instance.
-    ///
-    /// # Parameters
-    /// * `token` - The new access token to be stored in the client.
-    ///
-    /// # Returns
-    /// The updated `Spotify` instance with the new token set.
-    pub fn with_token(mut self, token: Token) -> Self {
-        self.token = Arc::new(RwLock::new(Some(token)));
-        self
-    }
-
     /// Perform a REST query with a given auth.
     fn rest_auth(
         &self,
@@ -352,6 +337,33 @@ impl Spotify<AuthCodePKCE> {
         Self::new_impl(auth)
     }
 
+    /// Sets the access token for the Spotify client and returns the updated instance.
+    ///
+    /// This method allows chaining by consuming the current instance, updating the
+    /// stored access token, and returning the updated instance.
+    ///
+    /// The scopes in the token will override the scopes in the `AuthCodePKCE`.
+    ///
+    /// # Parameters
+    /// * `token` - The new access token to be stored in the client.
+    ///
+    /// # Returns
+    /// The updated `Spotify` instance with the new token set.
+    pub fn with_token(mut self, token: Token) -> Self {
+        let mut scopes = HashSet::new();
+
+        if let Some(scope_str) = &token.scope {
+            for s in scope_str.split_whitespace() {
+                if let Ok(scope) = Scope::try_from(s) {
+                    scopes.insert(scope);
+                }
+            }
+        }
+        self.auth.set_scopes(Some(scopes));
+        self.token = Arc::new(RwLock::new(Some(token)));
+        self
+    }
+
     /// Constructs the full URL for user authorization.
     ///
     /// This method generates the state and code verifier parameters to produce the complete
@@ -486,6 +498,25 @@ impl Spotify<ClientCredentials> {
         Self::new_impl(auth)
     }
 
+    /// Sets the access token for the Spotify client and returns the updated instance.
+    ///
+    /// This method allows chaining by consuming the current instance, updating the
+    /// stored access token, and returning the updated instance.
+    ///
+    /// The `refresh_token` and `scope` fields will be set to `None` in the token.
+    ///
+    /// # Parameters
+    /// * `token` - The new access token to be stored in the client.
+    ///
+    /// # Returns
+    /// The updated `Spotify` instance with the new token set.
+    pub fn with_token(mut self, mut token: Token) -> Self {
+        token.refresh_token = None;
+        token.scope = None;
+        self.token = Arc::new(RwLock::new(Some(token)));
+        self
+    }
+
     /// Requests an access token using the configured Client Credentials flow.
     ///
     /// This method sends a request to the Spotify authorization server to obtain an access token.
@@ -573,21 +604,6 @@ where
             token: Arc::new(RwLock::new(None)),
         };
         Ok(api)
-    }
-
-    /// Sets the access token for the Spotify client and returns the updated instance.
-    ///
-    /// This method allows chaining by consuming the current instance, updating the
-    /// stored access token, and returning the updated instance.
-    ///
-    /// # Parameters
-    /// * `token` - The new access token to be stored in the client.
-    ///
-    /// # Returns
-    /// The updated `Spotify` instance with the new token set.
-    pub fn with_token(mut self, token: Token) -> Self {
-        self.token = Arc::new(RwLock::new(Some(token)));
-        self
     }
 
     /// Perform a REST query with a given auth.
@@ -737,6 +753,32 @@ impl AsyncSpotify<AuthCodePKCE> {
         Self::new_impl(auth)
     }
 
+    /// Sets the access token for the Spotify client and returns the updated instance.
+    ///
+    /// This method allows chaining by consuming the current instance, updating the
+    /// stored access token, and returning the updated instance.
+    ///
+    /// The scopes in the token will override the scopes in the `AuthCodePKCE`.
+    ///
+    /// # Parameters
+    /// * `token` - The new access token to be stored in the client.
+    ///
+    /// # Returns
+    /// The updated `Spotify` instance with the new token set.
+    pub fn with_token(mut self, token: Token) -> Self {
+        let mut scopes = HashSet::new();
+        if let Some(scope_str) = &token.scope {
+            for s in scope_str.split_whitespace() {
+                if let Ok(scope) = Scope::try_from(s) {
+                    scopes.insert(scope);
+                }
+            }
+        }
+        self.auth.set_scopes(Some(scopes));
+        self.token = Arc::new(RwLock::new(Some(token)));
+        self
+    }
+
     /// Constructs the full URL for user authorization.
     ///
     /// This method generates the state and code verifier parameters to produce the complete
@@ -877,6 +919,25 @@ impl AsyncSpotify<ClientCredentials> {
     ) -> SpotifyResult<Self> {
         let auth = ClientCredentials::new(client_id, client_secret);
         Self::new_impl(auth)
+    }
+
+    /// Sets the access token for the Spotify client and returns the updated instance.
+    ///
+    /// This method allows chaining by consuming the current instance, updating the
+    /// stored access token, and returning the updated instance.
+    ///
+    /// The `refresh_token`, and `scope` fields will be set to `None` in the token.
+    ///
+    /// # Parameters
+    /// * `token` - The new access token to be stored in the client.
+    ///
+    /// # Returns
+    /// The updated `Spotify` instance with the new token set.
+    pub fn with_token(mut self, mut token: Token) -> Self {
+        token.refresh_token = None;
+        token.scope = None;
+        self.token = Arc::new(RwLock::new(Some(token)));
+        self
     }
 
     /// Asynchronously requests an access token using the configured Client Credentials flow.
