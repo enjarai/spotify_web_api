@@ -41,7 +41,7 @@ mod tests {
     };
 
     #[test]
-    fn test_get_several_audiobooks_endpoint() {
+    fn test_get_several_episodes_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("episodes")
             .add_query_params(&[("ids", "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")])
