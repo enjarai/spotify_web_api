@@ -361,6 +361,9 @@ impl Spotify<AuthCodePKCE> {
     ///
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
+    ///
+    /// # Note:
+    /// Once the token is expired, subsequent requests will fail.
     pub fn with_token(mut self, token: Token) -> Self {
         let mut scopes = HashSet::new();
 
@@ -521,6 +524,9 @@ impl Spotify<ClientCredentials> {
     ///
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
+    ///
+    /// # Note:
+    /// Once the token is expired, subsequent requests will fail.
     pub fn with_token(mut self, mut token: Token) -> Self {
         token.refresh_token = None;
         token.scope = None;
@@ -787,6 +793,9 @@ impl AsyncSpotify<AuthCodePKCE> {
     ///
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
+    ///
+    /// # Note:
+    /// Once the token is expired, subsequent requests will fail.
     pub fn with_token(mut self, token: Token) -> Self {
         let mut scopes = HashSet::new();
         if let Some(scope_str) = &token.scope {
@@ -954,6 +963,9 @@ impl AsyncSpotify<ClientCredentials> {
     ///
     /// # Returns
     /// The updated `Spotify` instance with the new token set.
+    ///
+    /// # Note:
+    /// Once the token is expired, subsequent requests will fail.
     pub fn with_token(mut self, mut token: Token) -> Self {
         token.refresh_token = None;
         token.scope = None;
