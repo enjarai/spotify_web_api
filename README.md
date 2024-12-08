@@ -207,11 +207,11 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 ### Tracks
 
 - [x] Get Track `GET` `/tracks/{id}` [get-track](https://developer.spotify.com/documentation/web-api/reference/get-track)
-- [ ] Get Several Tracks `GET` `/tracks` [get-several-tracks](https://developer.spotify.com/documentation/web-api/reference/get-several-tracks)
-- [ ] Get User's Saved Tracks `GET` `me/tracks` [get-users-saved-tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-tracks)
-- [ ] Save Tracks for Current User `PUT` `me/tracks` [save-tracks-user](https://developer.spotify.com/documentation/web-api/reference/save-tracks-user)
-- [ ] Remove User's Saved Tracks `DELETE` `me/tracks` [remove-tracks-user](https://developer.spotify.com/documentation/web-api/reference/remove-tracks-user)
-- [ ] Check User's Saved Tracks `GET` `me/tracks/contains` [check-users-saved-tracks](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-tracks)
+- [X] Get Several Tracks `GET` `/tracks` [get-several-tracks](https://developer.spotify.com/documentation/web-api/reference/get-several-tracks)
+- [X] Get User's Saved Tracks `GET` `me/tracks` [get-users-saved-tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-tracks)
+- [X] Save Tracks for Current User `PUT` `me/tracks` [save-tracks-user](https://developer.spotify.com/documentation/web-api/reference/save-tracks-user)
+- [X] Remove User's Saved Tracks `DELETE` `me/tracks` [remove-tracks-user](https://developer.spotify.com/documentation/web-api/reference/remove-tracks-user)
+- [X] Check User's Saved Tracks `GET` `me/tracks/contains` [check-users-saved-tracks](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-tracks)
 
 ### Users
 

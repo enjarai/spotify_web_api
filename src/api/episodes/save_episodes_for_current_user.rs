@@ -7,7 +7,6 @@ use crate::api::prelude::*;
 #[endpoint(method = PUT, path = "me/episodes")]
 pub struct SaveEpisodesforCurrentUser {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the episodes.
-    #[endpoint(body)]
     ids: Vec<String>,
 }
 
@@ -39,8 +38,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .method(Method::PUT)
             .endpoint("me/episodes")
-            .content_type("application/json")
-            .body_str(r#"{"ids":["77o6BIVlYM3msb4MMIL1jH","0Q86acNRm6V9GYx55SXKwf"]}"#)
+            .add_query_params(&[("ids", "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")])
             .build()
             .unwrap();
 

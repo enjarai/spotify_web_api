@@ -5,7 +5,6 @@ use crate::api::prelude::*;
 #[endpoint(method = DELETE, path = "me/albums")]
 pub struct RemoveUserSavedAlbums {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
-    #[endpoint(body)]
     ids: Vec<String>,
 }
 
@@ -37,8 +36,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .method(Method::DELETE)
             .endpoint("me/albums")
-            .content_type("application/json")
-            .body_str(r#"{"ids":["7F50uh7oGitmAEScRKV6pD","27XW2QTeqZGOKlm2Dt0PvN"]}"#)
+            .add_query_params(&[("ids", "7F50uh7oGitmAEScRKV6pD,27XW2QTeqZGOKlm2Dt0PvN")])
             .build()
             .unwrap();
 
