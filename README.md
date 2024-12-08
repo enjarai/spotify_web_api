@@ -196,13 +196,13 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Shows
 
-- [ ] Get Show `GET` `/shows/{id}` [get-a-show](https://developer.spotify.com/documentation/web-api/reference/get-a-show)
-- [ ] Get Several Shows `GET` `/shows` [get-multiple-shows](https://developer.spotify.com/documentation/web-api/reference/get-multiple-shows)
-- [ ] Get Show Episodes `GET` `/shows/{id}/episodes` [get-a-shows-episodes](https://developer.spotify.com/documentation/web-api/reference/get-a-shows-episodes)
-- [ ] Get User's Saved Shows `GET` `me/shows` [get-users-saved-shows](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-shows)
-- [ ] Save Shows for Current User `PUT` `me/shows` [save-shows-user](https://developer.spotify.com/documentation/web-api/reference/save-shows-user)
-- [ ] Remove User's Saved Shows `DELETE` `me/shows` [remove-shows-user](https://developer.spotify.com/documentation/web-api/reference/remove-shows-user)
-- [ ] Check User's Saved Shows `GET` `me/shows/contains` [check-users-saved-shows](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-shows)
+- [X] Get Show `GET` `/shows/{id}` [get-a-show](https://developer.spotify.com/documentation/web-api/reference/get-a-show)
+- [X] Get Several Shows `GET` `/shows` [get-multiple-shows](https://developer.spotify.com/documentation/web-api/reference/get-multiple-shows)
+- [X] Get Show Episodes `GET` `/shows/{id}/episodes` [get-a-shows-episodes](https://developer.spotify.com/documentation/web-api/reference/get-a-shows-episodes)
+- [X] Get User's Saved Shows `GET` `me/shows` [get-users-saved-shows](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-shows)
+- [X] Save Shows for Current User `PUT` `me/shows` [save-shows-user](https://developer.spotify.com/documentation/web-api/reference/save-shows-user)
+- [X] Remove User's Saved Shows `DELETE` `me/shows` [remove-shows-user](https://developer.spotify.com/documentation/web-api/reference/remove-shows-user)
+- [X] Check User's Saved Shows `GET` `me/shows/contains` [check-users-saved-shows](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-shows)
 
 ### Tracks
 
