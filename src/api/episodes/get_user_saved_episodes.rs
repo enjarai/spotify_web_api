@@ -1,12 +1,11 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information for multiple albums identified by their Spotify IDs.
-#[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "albums")]
-pub struct GetSeveralAlbums {
-    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
-    ids: Vec<String>,
-
+/// Get a list of the episodes saved in the current Spotify user's library.
+///
+/// This API endpoint is in beta and could change without warning. Please share any feedback that you have, or issues that you discover, in the [Spotify developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
+#[derive(Default, Builder, Debug, Clone, Endpoint)]
+#[endpoint(method = GET, path = "me/episodes")]
+pub struct GetUserSavedEpisodes {
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
     /// If a valid user access token is specified in the request header, the country associated with the user account will take priority over this parameter.
@@ -18,19 +17,13 @@ pub struct GetSeveralAlbums {
     market: Option<Market>,
 }
 
-#[allow(dead_code)]
-impl GetSeveralAlbumsBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
+impl GetUserSavedEpisodes {
+    pub fn builder() -> GetUserSavedEpisodesBuilder {
+        GetUserSavedEpisodesBuilder::default()
     }
 }
 
-impl GetSeveralAlbums {
-    pub fn builder() -> GetSeveralAlbumsBuilder {
-        GetSeveralAlbumsBuilder::default()
-    }
-}
+impl Pageable for GetUserSavedEpisodes {}
 
 #[cfg(test)]
 mod tests {
@@ -41,25 +34,13 @@ mod tests {
     };
 
     #[test]
-    fn test_get_several_albums_endpoint() {
+    fn test_get_user_saved_episode_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("albums")
-            .add_query_params(&[(
-                "ids",
-                "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc",
-            )])
+            .endpoint("me/episodes")
             .build()
             .unwrap();
-
         let client = SingleTestClient::new_raw(endpoint, "");
-
-        let endpoint = GetSeveralAlbums::builder()
-            .id("382ObEPsp2rxGrnsizN5TX")
-            .id("1A2GTWGtFfWp7KSQTwWOyo")
-            .id("2noRn2Aes5aoNVsU6iWThc")
-            .build()
-            .unwrap();
-
+        let endpoint = GetUserSavedEpisodes::default();
         api::ignore(endpoint).query(&client).unwrap();
     }
 }

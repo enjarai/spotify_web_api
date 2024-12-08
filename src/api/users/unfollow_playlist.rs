@@ -1,6 +1,6 @@
 use crate::api::prelude::*;
 
-/// Get public profile information about a Spotify user.
+/// Remove the current user as a follower of a playlist.
 #[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = DELETE, path = "playlists/{id}/followers")]
 pub struct UnfollowPlaylist {

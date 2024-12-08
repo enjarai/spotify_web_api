@@ -1,10 +1,10 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information for a single album.
+/// Save one or more albums to the current user's 'Your Music' library.
 #[derive(Debug, Builder, Clone, Endpoint)]
 #[endpoint(method = PUT, path = "me/albums")]
 pub struct SaveAlbumsforCurrentUser {
-    /// A list of the [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
+    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
     #[endpoint(body)]
     ids: Vec<String>,
 }

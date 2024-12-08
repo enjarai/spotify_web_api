@@ -1,5 +1,6 @@
 use crate::api::prelude::*;
 
+/// Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
 #[derive(Debug, Builder, Clone, Endpoint)]
 #[endpoint(method = GET, path = "browse/categories/{id}")]
 pub struct GetSingleBrowseCategory {

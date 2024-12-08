@@ -1,11 +1,13 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information for multiple albums identified by their Spotify IDs.
+/// Get Spotify catalog information about an audiobook's chapters.
+/// Audiobooks are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "albums")]
-pub struct GetSeveralAlbums {
-    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
-    ids: Vec<String>,
+#[endpoint(method = GET, path = "audiobooks/{id}/chapters")]
+pub struct GetAudiobookChapters {
+    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobook.
+    #[builder(setter(into))]
+    id: String,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -18,17 +20,20 @@ pub struct GetSeveralAlbums {
     market: Option<Market>,
 }
 
-#[allow(dead_code)]
-impl GetSeveralAlbumsBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
+impl GetAudiobookChapters {
+    pub fn builder() -> GetAudiobookChaptersBuilder {
+        GetAudiobookChaptersBuilder::default()
     }
 }
 
-impl GetSeveralAlbums {
-    pub fn builder() -> GetSeveralAlbumsBuilder {
-        GetSeveralAlbumsBuilder::default()
+impl Pageable for GetAudiobookChapters {}
+
+impl<T: Into<String>> From<T> for GetAudiobookChapters {
+    fn from(id: T) -> Self {
+        Self {
+            id: id.into(),
+            market: None,
+        }
     }
 }
 
@@ -41,24 +46,15 @@ mod tests {
     };
 
     #[test]
-    fn test_get_several_albums_endpoint() {
+    fn test_get_audiobook_chapters_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("albums")
-            .add_query_params(&[(
-                "ids",
-                "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc",
-            )])
+            .endpoint("audiobooks/7iHfbu1YPACw6oZPAFJtqe/chapters")
             .build()
             .unwrap();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralAlbums::builder()
-            .id("382ObEPsp2rxGrnsizN5TX")
-            .id("1A2GTWGtFfWp7KSQTwWOyo")
-            .id("2noRn2Aes5aoNVsU6iWThc")
-            .build()
-            .unwrap();
+        let endpoint = GetAudiobookChapters::from("7iHfbu1YPACw6oZPAFJtqe");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

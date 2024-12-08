@@ -1,24 +1,24 @@
 use crate::api::prelude::*;
 
-/// Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
+/// Check if one or more audiobooks are already saved in the current Spotify user's library.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/albums/contains")]
-pub struct CheckUserSavedAlbums {
-    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
+#[endpoint(method = GET, path = "me/audiobooks/contains")]
+pub struct CheckUserSavedAudiobooks {
+    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
     ids: Vec<String>,
 }
 
 #[allow(dead_code)]
-impl CheckUserSavedAlbumsBuilder {
+impl CheckUserSavedAudiobooksBuilder {
     fn id(&mut self, id: impl Into<String>) -> &mut Self {
         self.ids.get_or_insert_with(Vec::new).push(id.into());
         self
     }
 }
 
-impl CheckUserSavedAlbums {
-    pub fn builder() -> CheckUserSavedAlbumsBuilder {
-        CheckUserSavedAlbumsBuilder::default()
+impl CheckUserSavedAudiobooks {
+    pub fn builder() -> CheckUserSavedAudiobooksBuilder {
+        CheckUserSavedAudiobooksBuilder::default()
     }
 }
 
@@ -31,12 +31,12 @@ mod tests {
     };
 
     #[test]
-    fn test_check_user_saved_albums_endpoint() {
+    fn test_check_user_saved_audiobooks_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("me/albums/contains")
+            .endpoint("me/audiobooks/contains")
             .add_query_params(&[(
                 "ids",
-                "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc",
+                "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe",
             )])
             .build()
             .unwrap();
@@ -45,10 +45,10 @@ mod tests {
 
         let client = SingleTestClient::new_json(endpoint, &expected_response);
 
-        let endpoint = CheckUserSavedAlbums::builder()
-            .id("382ObEPsp2rxGrnsizN5TX")
-            .id("1A2GTWGtFfWp7KSQTwWOyo")
-            .id("2noRn2Aes5aoNVsU6iWThc")
+        let endpoint = CheckUserSavedAudiobooks::builder()
+            .id("18yVqkdbdRvS24c0Ilj2ci")
+            .id("1HGw3J3NxZO1TP1BTtVhpZ")
+            .id("7iHfbu1YPACw6oZPAFJtqe")
             .build()
             .unwrap();
 

@@ -1,11 +1,12 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information for multiple albums identified by their Spotify IDs.
+/// Get Spotify catalog information for a single episode identified by its unique Spotify ID.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "albums")]
-pub struct GetSeveralAlbums {
-    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
-    ids: Vec<String>,
+#[endpoint(method = GET, path = "episodes/{id}")]
+pub struct GetEpisode {
+    /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the episode.
+    #[builder(setter(into))]
+    id: String,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -18,17 +19,18 @@ pub struct GetSeveralAlbums {
     market: Option<Market>,
 }
 
-#[allow(dead_code)]
-impl GetSeveralAlbumsBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
+impl GetEpisode {
+    pub fn builder() -> GetEpisodeBuilder {
+        GetEpisodeBuilder::default()
     }
 }
 
-impl GetSeveralAlbums {
-    pub fn builder() -> GetSeveralAlbumsBuilder {
-        GetSeveralAlbumsBuilder::default()
+impl<T: Into<String>> From<T> for GetEpisode {
+    fn from(id: T) -> Self {
+        Self {
+            id: id.into(),
+            market: None,
+        }
     }
 }
 
@@ -41,24 +43,15 @@ mod tests {
     };
 
     #[test]
-    fn test_get_several_albums_endpoint() {
+    fn test_get_episode_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("albums")
-            .add_query_params(&[(
-                "ids",
-                "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc",
-            )])
+            .endpoint("episodes/512ojhOuo1ktJprKbVcKyQ")
             .build()
             .unwrap();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralAlbums::builder()
-            .id("382ObEPsp2rxGrnsizN5TX")
-            .id("1A2GTWGtFfWp7KSQTwWOyo")
-            .id("2noRn2Aes5aoNVsU6iWThc")
-            .build()
-            .unwrap();
+        let endpoint = GetEpisode::from("512ojhOuo1ktJprKbVcKyQ");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

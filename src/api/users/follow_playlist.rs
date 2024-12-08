@@ -1,6 +1,6 @@
 use crate::api::prelude::*;
 
-/// Get public profile information about a Spotify user.
+/// Add the current user as a follower of a playlist.
 #[derive(Debug, Builder, Clone, Endpoint)]
 #[endpoint(method = PUT, path = "playlists/{id}/followers")]
 pub struct FollowPlaylist {

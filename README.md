@@ -123,13 +123,13 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Audiobooks
 
-- [ ] Get an Audiobook `GET` `/audiobooks/{id}` [get-an-audiobook](https://developer.spotify.com/documentation/web-api/reference/get-an-audiobook)
-- [ ] Get Several Audiobooks `GET` `/audiobooks` [get-multiple-audiobooks](https://developer.spotify.com/documentation/web-api/reference/get-multiple-audiobooks)
-- [ ] Get Audiobook Chapters `GET` `/audiobooks/{id}/chapters` [get-audiobook-chapters](https://developer.spotify.com/documentation/web-api/reference/get-audiobook-chapters)
-- [ ] Get User's Saved Audiobooks `GET` `me/audiobooks` [get-users-saved-audiobooks](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-audiobooks)
-- [ ] Save Audiobooks for Current User `PUT` `me/audiobooks` [save-audiobooks-user](https://developer.spotify.com/documentation/web-api/reference/save-audiobooks-user)
-- [ ] Remove User's Saved Audiobooks `DELETE` `me/audiobooks` [remove-audiobooks-user](https://developer.spotify.com/documentation/web-api/reference/remove-audiobooks-user)
-- [ ] Check User's Saved Audiobooks `GET` `me/audiobooks/contains` [check-users-saved-audiobooks](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-audiobooks)
+- [X] Get an Audiobook `GET` `/audiobooks/{id}` [get-an-audiobook](https://developer.spotify.com/documentation/web-api/reference/get-an-audiobook)
+- [X] Get Several Audiobooks `GET` `/audiobooks` [get-multiple-audiobooks](https://developer.spotify.com/documentation/web-api/reference/get-multiple-audiobooks)
+- [X] Get Audiobook Chapters `GET` `/audiobooks/{id}/chapters` [get-audiobook-chapters](https://developer.spotify.com/documentation/web-api/reference/get-audiobook-chapters)
+- [X] Get User's Saved Audiobooks `GET` `me/audiobooks` [get-users-saved-audiobooks](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-audiobooks)
+- [X] Save Audiobooks for Current User `PUT` `me/audiobooks` [save-audiobooks-user](https://developer.spotify.com/documentation/web-api/reference/save-audiobooks-user)
+- [X] Remove User's Saved Audiobooks `DELETE` `me/audiobooks` [remove-audiobooks-user](https://developer.spotify.com/documentation/web-api/reference/remove-audiobooks-user)
+- [X] Check User's Saved Audiobooks `GET` `me/audiobooks/contains` [check-users-saved-audiobooks](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-audiobooks)
 
 ### Categories
 
@@ -143,12 +143,12 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Episodes
 
-- [ ] Get Episode `GET` `/episodes/{id}` [get-an-episode](https://developer.spotify.com/documentation/web-api/reference/get-an-episode)
-- [ ] Get Several Episodes `GET` `/episodes` [get-multiple-episodes](https://developer.spotify.com/documentation/web-api/reference/get-multiple-episodes)
-- [ ] Get User's Saved Episodes `GET` `me/episodes` [get-users-saved-episodes](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-episodes)
-- [ ] Save Episodes for Current User `PUT` `me/episodes` [save-episodes-user](https://developer.spotify.com/documentation/web-api/reference/save-episodes-user)
-- [ ] Remove User's Saved Episodes `DELETE` `me/episodes` [remove-episodes-user](https://developer.spotify.com/documentation/web-api/reference/remove-episodes-user)
-- [ ] Check User's Saved Episodes `GET` `me/episodes/contains` [check-users-saved-episodes](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-episodes)
+- [X] Get Episode `GET` `/episodes/{id}` [get-an-episode](https://developer.spotify.com/documentation/web-api/reference/get-an-episode)
+- [X] Get Several Episodes `GET` `/episodes` [get-multiple-episodes](https://developer.spotify.com/documentation/web-api/reference/get-multiple-episodes)
+- [X] Get User's Saved Episodes `GET` `me/episodes` [get-users-saved-episodes](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-episodes)
+- [X] Save Episodes for Current User `PUT` `me/episodes` [save-episodes-user](https://developer.spotify.com/documentation/web-api/reference/save-episodes-user)
+- [X] Remove User's Saved Episodes `DELETE` `me/episodes` [remove-episodes-user](https://developer.spotify.com/documentation/web-api/reference/remove-episodes-user)
+- [X] Check User's Saved Episodes `GET` `me/episodes/contains` [check-users-saved-episodes](https://developer.spotify.com/documentation/web-api/reference/check-users-saved-episodes)
 
 ### Genres
 

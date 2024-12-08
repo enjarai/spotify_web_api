@@ -1,11 +1,10 @@
 use crate::api::prelude::*;
 
-/// Get Spotify catalog information for several audiobook chapters identified by their Spotify IDs.
-/// Chapters are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
+/// Get Spotify catalog information for several episodes based on their Spotify IDs.
 #[derive(Debug, Builder, Clone, Endpoint)]
-#[endpoint(method = GET, path = "chapters")]
-pub struct GetSeveralChapters {
-    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the chapters.
+#[endpoint(method = GET, path = "episodes")]
+pub struct GetSeveralEpisodes {
+    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the episodes.
     ids: Vec<String>,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -20,16 +19,16 @@ pub struct GetSeveralChapters {
 }
 
 #[allow(dead_code)]
-impl GetSeveralChaptersBuilder {
+impl GetSeveralEpisodesBuilder {
     fn id(&mut self, id: impl Into<String>) -> &mut Self {
         self.ids.get_or_insert_with(Vec::new).push(id.into());
         self
     }
 }
 
-impl GetSeveralChapters {
-    pub fn builder() -> GetSeveralChaptersBuilder {
-        GetSeveralChaptersBuilder::default()
+impl GetSeveralEpisodes {
+    pub fn builder() -> GetSeveralEpisodesBuilder {
+        GetSeveralEpisodesBuilder::default()
     }
 }
 
@@ -42,22 +41,18 @@ mod tests {
     };
 
     #[test]
-    fn test_get_several_chapters_endpoint() {
+    fn test_get_several_audiobooks_endpoint() {
         let endpoint = ExpectedUrl::builder()
-            .endpoint("chapters")
-            .add_query_params(&[(
-                "ids",
-                "0IsXVP0JmcB2adSE338GkK,3ZXb8FKZGU0EHALYX6uCzU,0D5wENdkdwbqlrHoaJ9g29",
-            )])
+            .endpoint("episodes")
+            .add_query_params(&[("ids", "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")])
             .build()
             .unwrap();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralChapters::builder()
-            .id("0IsXVP0JmcB2adSE338GkK")
-            .id("3ZXb8FKZGU0EHALYX6uCzU")
-            .id("0D5wENdkdwbqlrHoaJ9g29")
+        let endpoint = GetSeveralEpisodes::builder()
+            .id("77o6BIVlYM3msb4MMIL1jH")
+            .id("0Q86acNRm6V9GYx55SXKwf")
             .build()
             .unwrap();
 

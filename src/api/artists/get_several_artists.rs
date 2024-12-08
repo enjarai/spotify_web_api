@@ -4,7 +4,7 @@ use crate::api::prelude::*;
 #[derive(Debug, Builder, Clone, Endpoint)]
 #[endpoint(method = GET, path = "artists")]
 pub struct GetSeveralArtists {
-    /// A list of the [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the artists.
+    /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the artists.
     ids: Vec<String>,
 }
 
