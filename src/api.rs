@@ -15,6 +15,7 @@ pub mod chapters;
 pub mod episodes;
 pub mod genres;
 pub mod markets;
+pub mod shows;
 pub mod tracks;
 pub mod users;
 
