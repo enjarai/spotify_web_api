@@ -19,9 +19,8 @@ pub struct GetSeveralChapters {
     market: Option<Market>,
 }
 
-#[allow(dead_code)]
 impl GetSeveralChaptersBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
+    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
         self.ids.get_or_insert_with(Vec::new).push(id.into());
         self
     }

@@ -1,4 +1,4 @@
-use super::{Cursors, ExternalUrls, ItemType, Track, TrackItem};
+use super::{ContextType, Cursors, ExternalUrls, ItemType, Track, TrackItem};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -206,6 +206,18 @@ pub struct Queue {
 
     /// The tracks or episodes in the queue.
     pub queue: Vec<TrackItem>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Offset {
+    Position(u32),
+    Uri(ContextType),
+}
+
+impl From<u32> for Offset {
+    fn from(position: u32) -> Self {
+        Self::Position(position)
+    }
 }
 
 #[cfg(test)]

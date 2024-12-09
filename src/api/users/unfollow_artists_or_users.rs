@@ -5,7 +5,6 @@ use crate::{api::prelude::*, model::FollowType};
 #[endpoint(method = DELETE, path = "me/following")]
 pub struct UnfollowArtistsOrUsers {
     /// The ID type.
-    #[builder(setter(into))]
     pub type_: FollowType,
 
     /// A list of the artist or the user [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
@@ -14,9 +13,8 @@ pub struct UnfollowArtistsOrUsers {
     pub ids: Vec<String>,
 }
 
-#[allow(dead_code)]
 impl UnfollowArtistsOrUsersBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
+    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
         self.ids.get_or_insert_with(Vec::new).push(id.into());
         self
     }

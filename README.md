@@ -160,20 +160,20 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Player
 
-- [ ] Get Playback State `GET` `/me/player` [get-information-about-the-users-current-playback](https://developer.spotify.com/documentation/web-api/reference/get-information-about-the-users-current-playback)
-- [ ] Transfer Playback `PUT` `/me/player` [transfer-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/transfer-a-users-playback)
-- [ ] Get Available Devices `GET` `/me/player/devices` [get-a-users-available-devices](https://developer.spotify.com/documentation/web-api/reference/get-a-users-available-devices)
-- [ ] Get Currently Playing Track `GET` `/me/player/currently-playing` [get-the-users-currently-playing-track](https://developer.spotify.com/documentation/web-api/reference/get-the-users-currently-playing-track)
-- [ ] Start/Resume Playback `PUT` `/me/player/play` [start-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/start-a-users-playback)
-- [ ] Pause Playback `PUT` `/me/player/pause` [pause-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/pause-a-users-playback)
-- [ ] Skip To Next `POST` `/me/player/next` [skip-users-playback-to-next-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-next-track)
-- [ ] Skip To Previous `POST` `/me/player/previous` [skip-users-playback-to-previous-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-previous-track)
-- [ ] Seek To Position `PUT` `/me/player/seek` [seek-to-position-in-currently-playing-track](https://developer.spotify.com/documentation/web-api/reference/seek-to-position-in-currently-playing-track)
+- [X] Get Playback State `GET` `/me/player` [get-information-about-the-users-current-playback](https://developer.spotify.com/documentation/web-api/reference/get-information-about-the-users-current-playback)
+- [X] Transfer Playback `PUT` `/me/player` [transfer-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/transfer-a-users-playback)
+- [X] Get Available Devices `GET` `/me/player/devices` [get-a-users-available-devices](https://developer.spotify.com/documentation/web-api/reference/get-a-users-available-devices)
+- [X] Get Currently Playing Track `GET` `/me/player/currently-playing` [get-the-users-currently-playing-track](https://developer.spotify.com/documentation/web-api/reference/get-the-users-currently-playing-track)
+- [X] Start/Resume Playback `PUT` `/me/player/play` [start-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/start-a-users-playback)
+- [X] Pause Playback `PUT` `/me/player/pause` [pause-a-users-playback](https://developer.spotify.com/documentation/web-api/reference/pause-a-users-playback)
+- [X] Skip To Next `POST` `/me/player/next` [skip-users-playback-to-next-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-next-track)
+- [X] Skip To Previous `POST` `/me/player/previous` [skip-users-playback-to-previous-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-previous-track)
+- [X] Seek To Position `PUT` `/me/player/seek` [seek-to-position-in-currently-playing-track](https://developer.spotify.com/documentation/web-api/reference/seek-to-position-in-currently-playing-track)
 - [ ] Set Repeat Mode `PUT` `/me/player/repeat` [set-repeat-mode-on-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-repeat-mode-on-users-playback)
 - [ ] Set Playback Volume `PUT` `/me/player/volume` [set-volume-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-volume-for-users-playback)
 - [ ] Toggle Playback Shuffle `PUT` `/me/player/shuffle` [toggle-shuffle-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/toggle-shuffle-for-users-playback)
 - [ ] Get Recently Played Tracks `GET` `/me/player/recently-played` [get-recently-played](https://developer.spotify.com/documentation/web-api/reference/get-recently-played)
-- [ ] Get the User's Queue `GET` `/me/player/queue` [get-queue](https://developer.spotify.com/documentation/web-api/reference/get-queue)
+- [X] Get the User's Queue `GET` `/me/player/queue` [get-queue](https://developer.spotify.com/documentation/web-api/reference/get-queue)
 - [ ] Add Item to Playback Queue `POST` `/me/player/queue` [add-to-queue](https://developer.spotify.com/documentation/web-api/reference/add-to-queue)
 
 ### Playlists
@@ -192,7 +192,7 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Search
 
-- [ ] Search for Item `GET` `/search` [search](https://developer.spotify.com/documentation/web-api/reference/search)
+- [X] Search for Item `GET` `/search` [search](https://developer.spotify.com/documentation/web-api/reference/search)
 
 ### Shows
 

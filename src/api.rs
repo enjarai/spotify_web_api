@@ -12,9 +12,12 @@ pub mod artists;
 pub mod audiobooks;
 pub mod categories;
 pub mod chapters;
+pub mod common;
 pub mod episodes;
 pub mod genres;
 pub mod markets;
+pub mod player;
+pub mod search;
 pub mod shows;
 pub mod tracks;
 pub mod users;
@@ -29,7 +32,10 @@ pub use query::{AsyncQuery, Query};
 
 mod prelude {
     pub use super::Pageable;
-    pub use crate::{api::QueryParams, model::Market};
+    pub use crate::{
+        api::{BodyError, JsonParams, QueryParams},
+        model::Market,
+    };
     pub use derive_builder::Builder;
     pub use endpoint_derive::Endpoint;
     pub use http::Method;

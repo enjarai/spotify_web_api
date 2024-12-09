@@ -29,6 +29,34 @@ pub struct SearchResults {
     pub audiobooks: Option<Page<SimplifiedAudiobook>>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum SearchType {
+    Album,
+    Artist,
+    Playlist,
+    Track,
+    Show,
+    Episode,
+    Audiobook,
+}
+
+impl std::fmt::Display for SearchType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Album => "album",
+            Self::Artist => "artist",
+            Self::Playlist => "playlist",
+            Self::Track => "track",
+            Self::Show => "show",
+            Self::Episode => "episode",
+            Self::Audiobook => "audiobook",
+        };
+
+        write!(f, "{s}")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

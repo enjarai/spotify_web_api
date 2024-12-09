@@ -5,7 +5,6 @@ use crate::{api::prelude::*, model::FollowType};
 #[endpoint(method = GET, path = "me/following/contains")]
 pub struct CheckIfUserFollowsArtistsOrUsers {
     /// The ID type.
-    #[builder(setter(into))]
     pub type_: FollowType,
 
     /// A list of the artist or the user [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
@@ -13,9 +12,8 @@ pub struct CheckIfUserFollowsArtistsOrUsers {
     pub ids: Vec<String>,
 }
 
-#[allow(dead_code)]
 impl CheckIfUserFollowsArtistsOrUsersBuilder {
-    fn id(&mut self, id: impl Into<String>) -> &mut Self {
+    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
         self.ids.get_or_insert_with(Vec::new).push(id.into());
         self
     }

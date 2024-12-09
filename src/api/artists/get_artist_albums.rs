@@ -25,9 +25,8 @@ pub struct GetArtistAlbums {
     market: Option<Market>,
 }
 
-#[allow(dead_code)]
 impl GetArtistAlbumsBuilder {
-    fn include_group(&mut self, include_group: AlbumType) -> &mut Self {
+    pub fn include_group(&mut self, include_group: AlbumType) -> &mut Self {
         match self.include_groups {
             Some(ref mut include_groups) => include_groups
                 .get_or_insert_with(Vec::new)

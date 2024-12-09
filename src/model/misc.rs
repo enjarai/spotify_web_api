@@ -16,6 +16,26 @@ pub enum ItemType {
     Collection,
 }
 
+impl std::fmt::Display for ItemType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::User => "user",
+            Self::Album => "album",
+            Self::Artist => "artist",
+            Self::Playlist => "playlist",
+            Self::Track => "track",
+            Self::Show => "show",
+            Self::Episode => "episode",
+            Self::Audiobook => "audiobook",
+            Self::Unknown => "unknown",
+            Self::Chapter => "chapter",
+            Self::Collection => "collection",
+        };
+
+        write!(f, "{s}")
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Image {
     /// The source URL of the image.
@@ -236,6 +256,40 @@ impl std::fmt::Display for FollowType {
         let s = match self {
             Self::Artist => "artist",
             Self::User => "user",
+        };
+
+        write!(f, "{s}")
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum IncludeExternalType {
+    Audio,
+}
+
+impl std::fmt::Display for IncludeExternalType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Audio => "audio",
+        };
+
+        write!(f, "{s}")
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum AdditionalType {
+    Track,
+    Episode,
+}
+
+impl std::fmt::Display for AdditionalType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Track => "track",
+            Self::Episode => "episode",
         };
 
         write!(f, "{s}")
