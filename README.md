@@ -178,16 +178,16 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 
 ### Playlists
 
-- [ ] Get Playlist `GET` `/playlists/{playlist_id}` [get-playlist](https://developer.spotify.com/documentation/web-api/reference/get-playlist)
-- [ ] Change Playlist Details `PUT` `/playlists/{playlist_id}` [change-playlist-details](https://developer.spotify.com/documentation/web-api/reference/change-playlist-details)
-- [ ] Get Playlist Items `GET` `/playlists/{playlist_id}/tracks` [get-playlists-tracks](https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks)
+- [X] Get Playlist `GET` `/playlists/{playlist_id}` [get-playlist](https://developer.spotify.com/documentation/web-api/reference/get-playlist)
+- [X] Change Playlist Details `PUT` `/playlists/{playlist_id}` [change-playlist-details](https://developer.spotify.com/documentation/web-api/reference/change-playlist-details)
+- [X] Get Playlist Items `GET` `/playlists/{playlist_id}/tracks` [get-playlists-tracks](https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks)
 - [ ] Update Playlist Items `PUT` `/playlists/{playlist_id}/tracks` [reorder-or-replace-playlists-tracks](https://developer.spotify.com/documentation/web-api/reference/reorder-or-replace-playlists-tracks)
 - [ ] Add Items to Playlist `POST` `/playlists/{playlist_id}/tracks` [add-tracks-to-playlist](https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist)
 - [ ] Remove Playlist Items `DELETE` `/playlists/{playlist_id}/tracks` [remove-tracks-playlist](https://developer.spotify.com/documentation/web-api/reference/remove-tracks-playlist)
-- [ ] Get Current User's Playlists `GET` `/me/playlists` [get-a-list-of-current-users-playlists](https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists)
-- [ ] Get User's Playlists `GET` `/users/{user_id}/playlists` [get-list-users-playlists](https://developer.spotify.com/documentation/web-api/reference/get-list-users-playlists)
+- [X] Get Current User's Playlists `GET` `/me/playlists` [get-a-list-of-current-users-playlists](https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists)
+- [X] Get User's Playlists `GET` `/users/{user_id}/playlists` [get-list-users-playlists](https://developer.spotify.com/documentation/web-api/reference/get-list-users-playlists)
 - [ ] Create Playlist `POST` `/users/{user_id}/playlists` [create-playlist](https://developer.spotify.com/documentation/web-api/reference/create-playlist)
-- [ ] Get Playlist Cover Image `GET` `/playlists/{playlist_id}/images` [get-playlist-cover](https://developer.spotify.com/documentation/web-api/reference/get-playlist-cover)
+- [X] Get Playlist Cover Image `GET` `/playlists/{playlist_id}/images` [get-playlist-cover](https://developer.spotify.com/documentation/web-api/reference/get-playlist-cover)
 - [ ] Add Custom Playlist Cover Image `PUT` `/playlists/{playlist_id}/images` [upload-custom-playlist-cover](https://developer.spotify.com/documentation/web-api/reference/upload-custom-playlist-cover)
 
 ### Search

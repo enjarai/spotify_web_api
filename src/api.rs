@@ -17,6 +17,7 @@ pub mod episodes;
 pub mod genres;
 pub mod markets;
 pub mod player;
+pub mod playlists;
 pub mod search;
 pub mod shows;
 pub mod tracks;
