@@ -1,4 +1,4 @@
-use super::{ContextType, Cursors, ExternalUrls, ItemType, Track, TrackItem};
+use super::{ContextType, Cursors, EpisodeId, ExternalUrls, ItemType, Track, TrackId, TrackItem};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -43,6 +43,17 @@ pub enum RepeatState {
     Track,
     Context,
     Off,
+}
+
+impl std::fmt::Display for RepeatState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Track => "track",
+            Self::Context => "context",
+            Self::Off => "off",
+        };
+        write!(f, "{s}")
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -217,6 +228,40 @@ pub enum Offset {
 impl From<u32> for Offset {
     fn from(position: u32) -> Self {
         Self::Position(position)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum QueryRange {
+    Before(i64),
+    After(i64),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum QueueItem {
+    Track(TrackId),
+    Episode(EpisodeId),
+}
+
+impl From<TrackId> for QueueItem {
+    fn from(track: TrackId) -> Self {
+        Self::Track(track)
+    }
+}
+
+impl From<EpisodeId> for QueueItem {
+    fn from(episode: EpisodeId) -> Self {
+        Self::Episode(episode)
+    }
+}
+
+impl std::fmt::Display for QueueItem {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Track(track) => track.uri(),
+            Self::Episode(episode) => episode.uri(),
+        };
+        write!(f, "{s}")
     }
 }
 

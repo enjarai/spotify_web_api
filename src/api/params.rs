@@ -51,6 +51,12 @@ impl<'a, 'b: 'a> ParamValue<'a> for &'b Cow<'a, str> {
     }
 }
 
+impl ParamValue<'static> for u8 {
+    fn as_value(&self) -> Cow<'static, str> {
+        self.to_string().into()
+    }
+}
+
 impl ParamValue<'static> for u32 {
     fn as_value(&self) -> Cow<'static, str> {
         self.to_string().into()
@@ -58,6 +64,12 @@ impl ParamValue<'static> for u32 {
 }
 
 impl ParamValue<'static> for u64 {
+    fn as_value(&self) -> Cow<'static, str> {
+        self.to_string().into()
+    }
+}
+
+impl ParamValue<'static> for i64 {
     fn as_value(&self) -> Cow<'static, str> {
         self.to_string().into()
     }
@@ -102,6 +114,18 @@ impl ParamValue<'static> for crate::model::FollowType {
 
 impl<'a> ParamValue<'a> for &'a crate::model::IncludeExternalType {
     fn as_value(&self) -> Cow<'a, str> {
+        self.to_string().into()
+    }
+}
+
+impl ParamValue<'static> for crate::model::RepeatState {
+    fn as_value(&self) -> Cow<'static, str> {
+        self.to_string().into()
+    }
+}
+
+impl ParamValue<'static> for crate::model::QueueItem {
+    fn as_value(&self) -> Cow<'static, str> {
         self.to_string().into()
     }
 }

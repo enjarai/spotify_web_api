@@ -169,12 +169,12 @@ Format: `[x]` `[Title]` `[Method]` `[Endpoint]` `[Spotify Docs]`
 - [X] Skip To Next `POST` `/me/player/next` [skip-users-playback-to-next-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-next-track)
 - [X] Skip To Previous `POST` `/me/player/previous` [skip-users-playback-to-previous-track](https://developer.spotify.com/documentation/web-api/reference/skip-users-playback-to-previous-track)
 - [X] Seek To Position `PUT` `/me/player/seek` [seek-to-position-in-currently-playing-track](https://developer.spotify.com/documentation/web-api/reference/seek-to-position-in-currently-playing-track)
-- [ ] Set Repeat Mode `PUT` `/me/player/repeat` [set-repeat-mode-on-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-repeat-mode-on-users-playback)
-- [ ] Set Playback Volume `PUT` `/me/player/volume` [set-volume-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-volume-for-users-playback)
-- [ ] Toggle Playback Shuffle `PUT` `/me/player/shuffle` [toggle-shuffle-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/toggle-shuffle-for-users-playback)
-- [ ] Get Recently Played Tracks `GET` `/me/player/recently-played` [get-recently-played](https://developer.spotify.com/documentation/web-api/reference/get-recently-played)
+- [X] Set Repeat Mode `PUT` `/me/player/repeat` [set-repeat-mode-on-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-repeat-mode-on-users-playback)
+- [X] Set Playback Volume `PUT` `/me/player/volume` [set-volume-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/set-volume-for-users-playback)
+- [X] Toggle Playback Shuffle `PUT` `/me/player/shuffle` [toggle-shuffle-for-users-playback](https://developer.spotify.com/documentation/web-api/reference/toggle-shuffle-for-users-playback)
+- [X] Get Recently Played Tracks `GET` `/me/player/recently-played` [get-recently-played](https://developer.spotify.com/documentation/web-api/reference/get-recently-played)
 - [X] Get the User's Queue `GET` `/me/player/queue` [get-queue](https://developer.spotify.com/documentation/web-api/reference/get-queue)
-- [ ] Add Item to Playback Queue `POST` `/me/player/queue` [add-to-queue](https://developer.spotify.com/documentation/web-api/reference/add-to-queue)
+- [X] Add Item to Playback Queue `POST` `/me/player/queue` [add-to-queue](https://developer.spotify.com/documentation/web-api/reference/add-to-queue)
 
 ### Playlists
 
