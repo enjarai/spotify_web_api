@@ -1,13 +1,21 @@
-mod change_plalyist_details;
+mod add_items_to_playlist;
+mod change_playlist_details;
+mod create_playlist;
 mod get_current_user_playlists;
 mod get_playlist;
 mod get_playlist_cover_image;
 mod get_playlist_items;
 mod get_user_playlists;
+mod remove_playlist_items;
+mod update_playlist_items;
 
-pub use change_plalyist_details::*;
+pub use add_items_to_playlist::*;
+pub use change_playlist_details::*;
+pub use create_playlist::*;
 pub use get_current_user_playlists::*;
 pub use get_playlist::*;
 pub use get_playlist_cover_image::*;
 pub use get_playlist_items::*;
 pub use get_user_playlists::*;
+pub use remove_playlist_items::*;
+pub use update_playlist_items::*;

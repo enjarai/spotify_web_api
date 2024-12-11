@@ -1,4 +1,4 @@
-use crate::{api::prelude::*, model::QueueItem};
+use crate::{api::prelude::*, model::PlaylistItem};
 
 /// Add an item to the end of the user's current playback queue.
 /// This API only works for users who have Spotify Premium.
@@ -11,7 +11,7 @@ pub struct AddItemToPlaybackQueue {
     device_id: Option<String>,
 
     /// The uri of the item to add to the queue. Must be a track or an episode uri.
-    uri: QueueItem,
+    uri: PlaylistItem,
 }
 
 impl AddItemToPlaybackQueue {
@@ -20,8 +20,8 @@ impl AddItemToPlaybackQueue {
     }
 }
 
-impl From<QueueItem> for AddItemToPlaybackQueue {
-    fn from(uri: QueueItem) -> Self {
+impl From<PlaylistItem> for AddItemToPlaybackQueue {
+    fn from(uri: PlaylistItem) -> Self {
         Self {
             device_id: None,
             uri,
@@ -48,7 +48,7 @@ mod tests {
             .unwrap();
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let item: QueueItem = TrackId::from_id("4iV5W9uYEdYUVa79Axb7Rh").unwrap().into();
+        let item: PlaylistItem = TrackId::from_id("4iV5W9uYEdYUVa79Axb7Rh").unwrap().into();
 
         api::ignore(AddItemToPlaybackQueue::from(item))
             .query(&client)

@@ -238,24 +238,24 @@ pub enum QueryRange {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum QueueItem {
+pub enum PlaylistItem {
     Track(TrackId),
     Episode(EpisodeId),
 }
 
-impl From<TrackId> for QueueItem {
+impl From<TrackId> for PlaylistItem {
     fn from(track: TrackId) -> Self {
         Self::Track(track)
     }
 }
 
-impl From<EpisodeId> for QueueItem {
+impl From<EpisodeId> for PlaylistItem {
     fn from(episode: EpisodeId) -> Self {
         Self::Episode(episode)
     }
 }
 
-impl std::fmt::Display for QueueItem {
+impl std::fmt::Display for PlaylistItem {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
             Self::Track(track) => track.uri(),

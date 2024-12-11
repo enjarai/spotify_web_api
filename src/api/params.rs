@@ -124,7 +124,7 @@ impl ParamValue<'static> for crate::model::RepeatState {
     }
 }
 
-impl ParamValue<'static> for crate::model::QueueItem {
+impl ParamValue<'static> for crate::model::PlaylistItem {
     fn as_value(&self) -> Cow<'static, str> {
         self.to_string().into()
     }
