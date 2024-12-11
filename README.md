@@ -71,7 +71,7 @@ async fn main() -> anyhow::Result<()> {
 }
 ```
 
-### Which OAuth flow should I use?
+### Which OAuth flow should I use? ([source](https://developer.spotify.com/documentation/web-api/concepts/authorization))
 
 Choosing one flow over the rest depends on the application you are building:
 
