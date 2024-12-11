@@ -5,6 +5,7 @@ mod ignore;
 mod paged;
 mod params;
 
+pub mod common;
 pub(crate) mod query;
 
 pub mod albums;
@@ -12,7 +13,6 @@ pub mod artists;
 pub mod audiobooks;
 pub mod categories;
 pub mod chapters;
-pub mod common;
 pub mod episodes;
 pub mod genres;
 pub mod markets;
@@ -22,12 +22,12 @@ pub mod shows;
 pub mod tracks;
 pub mod users;
 
-pub use client::{AsyncClient, Client, RestClient};
-pub use endpoint::{Endpoint, UrlBase};
-pub use error::{ApiError, BodyError};
-pub use ignore::{ignore, Ignore};
+pub use client::*;
+pub use endpoint::*;
+pub use error::*;
+pub use ignore::*;
 pub use paged::*;
-pub use params::{FormParams, JsonParams, ParamValue, QueryParams};
+pub use params::*;
 pub use query::{AsyncQuery, Query};
 
 mod prelude {
