@@ -15,6 +15,12 @@ Since this library is not yet published on [crates.io](https://crates.io), you c
 spotify_web_api = { git = "https://github.com/ry-sev/spotify_web_api.git" }
 ```
 
+or run the command
+
+```bash
+cargo add --git "https://github.com/ry-sev/spotify_web_api.git"
+```
+
 ## Examples
 
 There are more examples in the [examples](https://github.com/ry-sev/spotify_web_api/tree/main/examples) folder.
