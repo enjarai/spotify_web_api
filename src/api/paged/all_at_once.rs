@@ -52,8 +52,7 @@ where
 #[async_trait]
 impl<E, T, C> AsyncQuery<Vec<T>, C> for Paged<E>
 where
-    E: Endpoint + Sync,
-    E: Pageable,
+    E: Endpoint + Pageable + Sync,
     T: DeserializeOwned + Send + 'static,
     C: AsyncClient + Sync,
 {
@@ -71,12 +70,17 @@ where
         let body = self.endpoint.body()?;
         let mut next_url = None;
 
+        let offset = match self.pagination {
+            Pagination::Page { offset, .. } => offset,
+            _ => 0,
+        };
+
         loop {
             let page_url = next_url.take().unwrap_or_else(|| {
                 let mut page_url = url.clone();
                 {
                     let mut pairs = page_url.query_pairs_mut();
-                    pairs.append_pair("offset", "0");
+                    pairs.append_pair("offset", &offset.to_string());
                     pairs.append_pair("limit", &self.pagination.limit().to_string());
                 }
                 page_url
@@ -179,6 +183,29 @@ mod tests {
 
         for (i, value) in res.iter().enumerate() {
             assert_eq!(value.value, i as u8);
+        }
+    }
+
+    #[tokio::test]
+    async fn pagination_limit_and_offset_async() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .paginated(true)
+            .build()
+            .unwrap();
+
+        let client =
+            PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
+
+        let res: Vec<DummyResult> = paged_with_limit_and_offset(Dummy, 5, 15)
+            .query_async(&client)
+            .await
+            .unwrap();
+
+        assert_eq!(res.len(), 5);
+
+        for (i, value) in res.iter().enumerate() {
+            assert_eq!(value.value, (i + 15) as u8);
         }
     }
 
