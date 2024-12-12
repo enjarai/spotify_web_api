@@ -11,7 +11,6 @@ A wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/
 Since this library is not yet published on [crates.io](https://crates.io), you can add it to your project by referencing the GitHub repository in your `Cargo.toml` file:
 
 ```toml
-[dependencies]
 spotify_web_api = { git = "https://github.com/ry-sev/spotify_web_api.git" }
 ```
 
