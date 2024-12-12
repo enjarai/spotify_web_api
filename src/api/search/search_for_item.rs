@@ -43,8 +43,6 @@ impl SearchForItem {
     }
 }
 
-impl Pageable for SearchForItem {}
-
 impl Endpoint for SearchForItem {
     fn method(&self) -> Method {
         Method::GET

@@ -33,8 +33,6 @@ impl Default for GetFollowedArtists {
     }
 }
 
-impl Pageable for GetFollowedArtists {}
-
 #[cfg(test)]
 mod tests {
     use super::*;

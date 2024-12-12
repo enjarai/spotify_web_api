@@ -8,15 +8,13 @@ use crate::api::prelude::*;
 )]
 pub struct GetNewReleases;
 
-impl Pageable for GetNewReleases {}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::{
-        api::{self, Query as _},
-        model::{NewReleases, SimplifiedAlbum},
-        test::client::{ExpectedUrl, PagedTestClient, SingleTestClient},
+        api::Query as _,
+        model::NewReleases,
+        test::client::{ExpectedUrl, SingleTestClient},
     };
 
     const RESPONSE: &str = r#"
@@ -83,21 +81,5 @@ mod tests {
         let new_releases: NewReleases = GetNewReleases.query(&client).unwrap();
 
         assert!(new_releases.albums.total == 1);
-    }
-
-    #[test]
-    fn test_get_new_releases_endpoint_paged() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("browse/new-releases")
-            .paginated(true)
-            .build()
-            .unwrap();
-
-        let page: NewReleases = serde_json::from_str(RESPONSE).unwrap();
-        let client = PagedTestClient::new_raw(endpoint, page.albums.items);
-
-        let albums: Vec<SimplifiedAlbum> = api::paged_all(GetNewReleases).query(&client).unwrap();
-
-        assert!(albums.len() == 1);
     }
 }
