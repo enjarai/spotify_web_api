@@ -1,5 +1,5 @@
 use self::query::{AsyncQuery, Query};
-use super::{Pageable, Paged};
+use super::{Pageable, Paged, Pagination};
 use crate::{
     api::{query, ApiError, AsyncClient, Client, Endpoint, RestClient},
     model::Page,
@@ -36,6 +36,7 @@ impl PageCursor {
 }
 
 struct PageState {
+    offset: usize,
     total: usize,
     next_page: PageCursor,
 }
@@ -50,7 +51,13 @@ where
     E: Pageable,
 {
     fn new(paged: Paged<E>) -> Self {
+        let offset = match paged.pagination {
+            Pagination::Page { offset, .. } => offset,
+            _ => 0,
+        };
+
         let page_state = PageState {
+            offset,
             total: 0,
             next_page: PageCursor::First,
         };
@@ -88,6 +95,7 @@ where
     {
         let page_state = self.page_state.read();
         let next_page = &page_state.next_page;
+        let offset = page_state.offset;
 
         if next_page.is_done() {
             return Ok(None);
@@ -105,7 +113,7 @@ where
             self.paged.endpoint.parameters().add_to_url(&mut url);
 
             url.query_pairs_mut()
-                .append_pair("offset", "0")
+                .append_pair("offset", &offset.to_string())
                 .append_pair("limit", &self.paged.pagination.limit().to_string());
 
             url
@@ -358,6 +366,29 @@ mod tests {
 
         for (i, value) in res.iter().enumerate() {
             assert_eq!(value.value, i as u8);
+        }
+    }
+
+    #[test]
+    fn pagination_limit_and_offset() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .paginated(true)
+            .build()
+            .unwrap();
+
+        let client =
+            PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
+
+        let res: Vec<DummyResult> = api::paged_with_limit_and_offset(Dummy, 5, 15)
+            .iter(&client)
+            .collect::<Result<Vec<_>, _>>()
+            .unwrap();
+
+        assert_eq!(res.len(), 5);
+
+        for (i, value) in res.iter().enumerate() {
+            assert_eq!(value.value, (i + 15) as u8);
         }
     }
 

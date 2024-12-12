@@ -6,13 +6,17 @@ pub enum Pagination {
     #[default]
     All,
     Limit(usize),
+    Page {
+        limit: usize,
+        offset: usize,
+    },
 }
 
 impl Pagination {
     pub(crate) fn limit(self) -> usize {
         match self {
             Self::All => MAX_LIMIT,
-            Self::Limit(limit) => limit.min(MAX_LIMIT),
+            Self::Limit(limit) | Self::Page { limit, .. } => limit.min(MAX_LIMIT),
         }
     }
 
@@ -23,6 +27,10 @@ impl Pagination {
 
         if let Self::Limit(limit) = self {
             return limit <= num_results;
+        }
+
+        if let Self::Page { limit, offset } = self {
+            return offset + limit >= num_results;
         }
 
         false

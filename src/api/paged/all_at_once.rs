@@ -34,6 +34,10 @@ pub fn paged_with_limit<E>(endpoint: E, limit: usize) -> Paged<E> {
     paged(endpoint, Pagination::Limit(limit))
 }
 
+pub fn paged_with_limit_and_offset<E>(endpoint: E, limit: usize, offset: usize) -> Paged<E> {
+    paged(endpoint, Pagination::Page { limit, offset })
+}
+
 impl<E, T, C> Query<Vec<T>, C> for Paged<E>
 where
     E: Endpoint + Pageable,
