@@ -8,6 +8,7 @@ pub struct GetFollowedArtists {
     type_: FollowedArtistsType,
 
     /// The last artist ID retrieved from the previous request.
+    #[builder(setter(into, strip_option), default)]
     after: Option<String>,
 }
 
@@ -16,10 +17,10 @@ impl GetFollowedArtists {
         GetFollowedArtistsBuilder::default()
     }
 
-    pub fn with_after(after: impl Into<String>) -> Self {
+    pub fn with_after(after: Option<impl Into<String>>) -> Self {
         Self {
             type_: FollowedArtistsType::Artist,
-            after: Some(after.into()),
+            after: after.map(Into::into),
         }
     }
 }
@@ -67,8 +68,10 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        api::ignore(GetFollowedArtists::with_after("2CIMQHirSU0MQqyYHq0eOx"))
-            .query(&client)
-            .unwrap();
+        api::ignore(GetFollowedArtists::with_after(Some(
+            "2CIMQHirSU0MQqyYHq0eOx",
+        )))
+        .query(&client)
+        .unwrap();
     }
 }
