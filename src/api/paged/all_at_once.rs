@@ -1,4 +1,4 @@
-use super::{Pageable, Pagination};
+use super::{Pageable, Pagination, MAX_LIMIT};
 use crate::{
     api::{query, ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query},
     model::Page,
@@ -30,12 +30,23 @@ pub fn paged_all<E>(endpoint: E) -> Paged<E> {
 }
 
 /// Collect a limited amount of data from a paged endpoint.
+///
+/// If the limit is greater than the maximum limit of 50, the maximum limit will be used.
 pub fn paged_with_limit<E>(endpoint: E, limit: usize) -> Paged<E> {
-    paged(endpoint, Pagination::Limit(limit))
+    paged(endpoint, Pagination::Limit(limit.min(MAX_LIMIT)))
 }
 
+/// Collect a limited amount of data from a paged endpoint starting at an offset.
+///
+/// If the limit is greater than the maximum limit of 50, the maximum limit will be used.
 pub fn paged_with_limit_and_offset<E>(endpoint: E, limit: usize, offset: usize) -> Paged<E> {
-    paged(endpoint, Pagination::Page { limit, offset })
+    paged(
+        endpoint,
+        Pagination::Page {
+            limit: limit.min(MAX_LIMIT),
+            offset,
+        },
+    )
 }
 
 impl<E, T, C> Query<Vec<T>, C> for Paged<E>
@@ -180,6 +191,29 @@ mod tests {
             .unwrap();
 
         assert_eq!(res.len(), 3);
+
+        for (i, value) in res.iter().enumerate() {
+            assert_eq!(value.value, i as u8);
+        }
+    }
+
+    #[tokio::test]
+    async fn pagination_invalid_limit_async() {
+        let endpoint = ExpectedUrl::builder()
+            .endpoint("paged_dummy")
+            .paginated(true)
+            .build()
+            .unwrap();
+
+        let client =
+            PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
+
+        let res: Vec<DummyResult> = paged(Dummy, Pagination::Limit(100))
+            .query_async(&client)
+            .await
+            .unwrap();
+
+        assert_eq!(res.len(), 50);
 
         for (i, value) in res.iter().enumerate() {
             assert_eq!(value.value, i as u8);

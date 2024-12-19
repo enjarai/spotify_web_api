@@ -1,4 +1,4 @@
-const MAX_LIMIT: usize = 50;
+pub(crate) const MAX_LIMIT: usize = 50;
 
 /// Pagination options for Spotify.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
@@ -21,19 +21,11 @@ impl Pagination {
     }
 
     pub(crate) fn is_last_page(self, last_page_size: usize, num_results: usize) -> bool {
-        if last_page_size < self.limit() {
-            return true;
+        match self {
+            Self::All => last_page_size < MAX_LIMIT,
+            Self::Limit(limit) => limit <= num_results || limit > MAX_LIMIT,
+            Self::Page { limit, offset } => last_page_size < limit || offset + limit >= num_results,
         }
-
-        if let Self::Limit(limit) = self {
-            return limit <= num_results;
-        }
-
-        if let Self::Page { limit, offset } = self {
-            return offset + limit >= num_results;
-        }
-
-        false
     }
 }
 

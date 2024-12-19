@@ -306,11 +306,12 @@ where
         assert_eq!(*request.method(), Method::GET);
 
         let previous = if offset > 0 {
+            let previous_offset = if limit > offset { 0 } else { offset - limit };
             Some(
                 url.clone()
                     .query_pairs_mut()
                     .clear()
-                    .append_pair("offset", (offset - limit).to_string().as_str())
+                    .append_pair("offset", previous_offset.to_string().as_str())
                     .append_pair("limit", limit.to_string().as_str())
                     .finish()
                     .to_string(),
