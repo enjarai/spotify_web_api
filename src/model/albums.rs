@@ -38,6 +38,15 @@ impl AlbumType {
             Self::AppearsOn,
         ]
     }
+
+    pub fn snake_case(&self) -> &'static str {
+        match self {
+            Self::Album => "album",
+            Self::Single => "single",
+            Self::Compilation => "compilation",
+            Self::AppearsOn => "appears_on",
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

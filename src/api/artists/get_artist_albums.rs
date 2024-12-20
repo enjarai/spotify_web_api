@@ -59,7 +59,7 @@ impl Endpoint for GetArtistAlbums {
         let mut params = QueryParams::default();
         let include_groups_str = self.include_groups.as_ref().map(|ids| {
             ids.iter()
-                .map(|id| id.to_string())
+                .map(|id| id.snake_case())
                 .collect::<Vec<_>>()
                 .join(",")
         });
