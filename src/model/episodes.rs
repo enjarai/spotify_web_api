@@ -18,7 +18,7 @@ pub struct Episode {
     pub html_description: String,
 
     /// The episode length in milliseconds.
-    pub duration_ms: u32,
+    pub duration_ms: u64,
 
     /// Whether or not the episode has explicit content (true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,
@@ -94,7 +94,7 @@ pub struct SimplifiedEpisode {
     pub html_description: String,
 
     /// The episode length in milliseconds.
-    pub duration_ms: u32,
+    pub duration_ms: u64,
 
     /// Whether or not the episode has explicit content (true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,
