@@ -180,6 +180,64 @@ pub enum TrackItem {
     Episode(super::Episode),
 }
 
+impl TrackItem {
+    pub fn id(&self) -> &str {
+        match &self {
+            Self::Track(track) => track.id.as_str(),
+            Self::Episode(episode) => episode.id.as_str(),
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        match &self {
+            Self::Track(track) => track.name.as_str(),
+            Self::Episode(episode) => episode.name.as_str(),
+        }
+    }
+
+    pub fn is_playable(&self) -> bool {
+        match &self {
+            Self::Track(track) => track.is_playable.unwrap_or(false),
+            Self::Episode(episode) => episode.is_playable,
+        }
+    }
+
+    pub fn duration_ms(&self) -> u64 {
+        match &self {
+            Self::Track(track) => track.duration_ms,
+            Self::Episode(episode) => episode.duration_ms,
+        }
+    }
+
+    pub fn external_url(&self) -> &str {
+        match &self {
+            Self::Track(track) => track.external_urls.spotify.as_str(),
+            Self::Episode(episode) => episode.external_urls.spotify.as_str(),
+        }
+    }
+
+    pub fn href(&self) -> &str {
+        match &self {
+            Self::Track(track) => track.href.as_str(),
+            Self::Episode(episode) => episode.href.as_str(),
+        }
+    }
+
+    pub fn restrictions(&self) -> Option<&Restrictions> {
+        match &self {
+            Self::Track(track) => track.restrictions.as_ref(),
+            Self::Episode(episode) => episode.restrictions.as_ref(),
+        }
+    }
+
+    pub fn explicit(&self) -> bool {
+        match &self {
+            Self::Track(track) => track.explicit,
+            Self::Episode(episode) => episode.explicit,
+        }
+    }
+}
+
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum TimeRange {
