@@ -36,6 +36,7 @@ pub struct Track {
     pub artists: Vec<SimplifiedArtist>,
 
     /// A list of the countries in which the track can be played, identified by their ISO 3166-1 alpha-2 code.
+    #[cfg(feature = "markets")]
     pub available_markets: Vec<Market>,
 
     /// The disc number (usually 1 unless the album consists of more than one disc).
@@ -109,6 +110,7 @@ pub struct SimplifiedTrack {
     pub artists: Vec<SimplifiedArtist>,
 
     /// A list of the countries in which the track can be played, identified by their ISO 3166-1 alpha-2 code.
+    #[cfg(feature = "markets")]
     pub available_markets: Vec<Market>,
 
     /// The disc number (usually 1 unless the album consists of more than one disc).

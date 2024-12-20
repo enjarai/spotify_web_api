@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Show {
     /// A list of the countries in which the show can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[cfg(feature = "markets")]
     pub available_markets: Vec<Market>,
 
     /// The copyright statements of the show.
@@ -65,6 +66,7 @@ pub struct Show {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SimplifiedShow {
     /// A list of the countries in which the show can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[cfg(feature = "markets")]
     pub available_markets: Vec<Market>,
 
     /// The copyright statements of the show.

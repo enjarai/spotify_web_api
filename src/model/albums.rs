@@ -1,5 +1,5 @@
 use super::{
-    Copyright, ExternalIds, ExternalUrls, Image, ItemType, Page, ReleaseDatePrecision,
+    Copyright, ExternalIds, ExternalUrls, Image, ItemType, Market, Page, ReleaseDatePrecision,
     Restrictions, SimplifiedArtist, SimplifiedTrack,
 };
 use serde::{Deserialize, Serialize};
@@ -50,7 +50,8 @@ pub struct Album {
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
-    pub available_markets: Vec<String>,
+    #[cfg(feature = "markets")]
+    pub available_markets: Vec<Market>,
 
     /// Known external URLs for this album.
     pub external_urls: ExternalUrls,
@@ -127,7 +128,8 @@ pub struct SimplifiedAlbum {
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
-    pub available_markets: Vec<String>,
+    #[cfg(feature = "markets")]
+    pub available_markets: Vec<Market>,
 
     /// Known external URLs for this album.
     pub external_urls: ExternalUrls,
