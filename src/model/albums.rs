@@ -20,10 +20,10 @@ pub enum AlbumType {
 impl std::fmt::Display for AlbumType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
-            Self::Album => "album",
-            Self::Single => "single",
-            Self::Compilation => "compilation",
-            Self::AppearsOn => "appears_on",
+            Self::Album => "Album",
+            Self::Single => "Single",
+            Self::Compilation => "Compilation",
+            Self::AppearsOn => "Appears on",
         };
         write!(f, "{s}")
     }
