@@ -306,7 +306,11 @@ where
         assert_eq!(*request.method(), Method::GET);
 
         let previous = if offset > 0 {
-            let previous_offset = if limit > offset { 0 } else { offset - limit };
+            let previous_offset = if limit > offset {
+                0
+            } else {
+                offset.saturating_sub(limit)
+            };
             Some(
                 url.clone()
                     .query_pairs_mut()
