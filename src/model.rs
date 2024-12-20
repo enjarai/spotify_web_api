@@ -6,10 +6,7 @@ pub mod chapters;
 pub mod episodes;
 pub mod genres;
 pub mod id;
-
-#[cfg(feature = "markets")]
 pub mod markets;
-
 pub mod misc;
 pub mod player;
 pub mod playlists;
