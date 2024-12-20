@@ -9,6 +9,16 @@ pub enum SubscriptionType {
     Premium,
 }
 
+impl std::fmt::Display for SubscriptionType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Free => "Free",
+            Self::Premium => "Premium",
+        };
+        write!(f, "{s}")
+    }
+}
+
 /// The user's explicit content settings. This field is only available when the current user has granted access to the user-read-private scope.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExplicitContent {
