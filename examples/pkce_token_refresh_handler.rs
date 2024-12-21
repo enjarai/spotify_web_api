@@ -12,7 +12,7 @@ fn main() -> anyhow::Result<()> {
         "http://localhost:8888/callback",
         scopes::user_details(),
     )?
-    .on_token_refresh(|token| {
+    .token_callback(|token| {
         println!("\nToken Refreshed: {token:#?}\n");
     });
 

@@ -177,8 +177,8 @@ where
     /// The current access token, if available.
     token: Arc<RwLock<Option<Token>>>,
 
-    /// A handler to call when the access token is refreshed.
-    on_token_refresh: Option<Box<dyn Fn(Token) + 'static>>,
+    /// A handler to call when the access token acquires a new value.
+    token_callback: Option<Box<dyn Fn(Token) + 'static>>,
 }
 
 impl<A> Spotify<A>
@@ -195,7 +195,7 @@ where
             api_url,
             auth,
             token: Arc::new(RwLock::new(None)),
-            on_token_refresh: None,
+            token_callback: None,
         };
         Ok(api)
     }
@@ -226,14 +226,7 @@ where
 
         if let Some(refresh_token) = refresh_token {
             let new_token = self.auth.refresh_token(&self.client, &refresh_token)?;
-
             self.set_token(new_token);
-
-            if let Some(callback) = &self.on_token_refresh {
-                // token should be available here
-                let token = self.token.read().clone().expect("Token is not set");
-                callback(token);
-            }
         }
 
         let call = || -> Result<_, RestError> {
@@ -321,6 +314,11 @@ where
     fn set_token(&self, mut token: Token) {
         token.expires_at = chrono::Utc::now()
             .checked_add_signed(chrono::Duration::seconds(token.expires_in as i64));
+
+        if let Some(callback) = &self.token_callback {
+            callback(token.clone());
+        }
+
         *self.token.write() = Some(token);
     }
 }
@@ -387,9 +385,9 @@ impl Spotify<AuthCodePKCE> {
         self
     }
 
-    /// Sets a handler to be called when the access token is refreshed.
-    pub fn on_token_refresh(mut self, handler: impl Fn(Token) + 'static) -> Self {
-        self.on_token_refresh = Some(Box::new(handler));
+    /// Sets a handler to be called when the access token acquires a new value.
+    pub fn token_callback(mut self, handler: impl Fn(Token) + 'static) -> Self {
+        self.token_callback = Some(Box::new(handler));
         self
     }
 
@@ -487,14 +485,7 @@ impl Spotify<AuthCodePKCE> {
             .ok_or(AuthError::EmptyRefreshToken)?;
 
         let token = self.auth.refresh_token(&self.client, &refresh_token)?;
-
         self.set_token(token);
-
-        if let Some(callback) = &self.on_token_refresh {
-            // token should be available here
-            let token = self.token.read().clone().expect("Token is not set");
-            callback(token);
-        }
 
         Ok(())
     }
@@ -625,8 +616,8 @@ where
     /// The current access token, if available.
     token: Arc<RwLock<Option<Token>>>,
 
-    /// A handler to call when the access token is refreshed.
-    on_token_refresh: Option<Box<dyn Fn(Token) + Send + Sync + 'static>>,
+    /// A handler to call when the access token acquires a new value.
+    token_callback: Option<Box<dyn Fn(Token) + Send + Sync + 'static>>,
 }
 
 impl<A> AsyncSpotify<A>
@@ -643,7 +634,7 @@ where
             api_url,
             auth,
             token: Arc::new(RwLock::new(None)),
-            on_token_refresh: None,
+            token_callback: None,
         };
         Ok(api)
     }
@@ -681,12 +672,6 @@ where
                 .await?;
 
             self.set_token(new_token);
-
-            if let Some(callback) = &self.on_token_refresh {
-                // token should be available here
-                let token = self.token.read().clone().expect("Token is not set");
-                callback(token);
-            }
         }
 
         let call = || async {
@@ -774,6 +759,11 @@ where
     fn set_token(&self, mut token: Token) {
         token.expires_at = chrono::Utc::now()
             .checked_add_signed(chrono::Duration::seconds(token.expires_in as i64));
+
+        if let Some(callback) = &self.token_callback {
+            callback(token.clone());
+        }
+
         *self.token.write() = Some(token);
     }
 }
@@ -839,9 +829,9 @@ impl AsyncSpotify<AuthCodePKCE> {
         self
     }
 
-    /// Sets a handler to be called when the access token is refreshed.
-    pub fn on_token_refresh(mut self, handler: impl Fn(Token) + Send + Sync + 'static) -> Self {
-        self.on_token_refresh = Some(Box::new(handler));
+    /// Sets a handler to be called when the access token acquires a new value.
+    pub fn token_callback(mut self, handler: impl Fn(Token) + Send + Sync + 'static) -> Self {
+        self.token_callback = Some(Box::new(handler));
         self
     }
 
@@ -948,12 +938,6 @@ impl AsyncSpotify<AuthCodePKCE> {
             .await?;
 
         self.set_token(token);
-
-        if let Some(callback) = &self.on_token_refresh {
-            // token should be available here
-            let token = self.token.read().clone().expect("Token is not set");
-            callback(token);
-        }
 
         Ok(())
     }
