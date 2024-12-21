@@ -176,6 +176,9 @@ where
 
     /// The current access token, if available.
     token: Arc<RwLock<Option<Token>>>,
+
+    /// A handler to call when the access token is refreshed.
+    on_token_refresh: Option<Box<dyn Fn(Token) + 'static>>,
 }
 
 impl<A> Spotify<A>
@@ -192,6 +195,7 @@ where
             api_url,
             auth,
             token: Arc::new(RwLock::new(None)),
+            on_token_refresh: None,
         };
         Ok(api)
     }
@@ -222,6 +226,11 @@ where
 
         if let Some(refresh_token) = refresh_token {
             let new_token = self.auth.refresh_token(&self.client, &refresh_token)?;
+
+            if let Some(handler) = &self.on_token_refresh {
+                handler(new_token.clone());
+            }
+
             self.set_token(new_token);
         }
 
@@ -376,6 +385,12 @@ impl Spotify<AuthCodePKCE> {
         self
     }
 
+    /// Sets a handler to be called when the access token is refreshed.
+    pub fn on_token_refresh(mut self, handler: impl Fn(Token) + 'static) -> Self {
+        self.on_token_refresh = Some(Box::new(handler));
+        self
+    }
+
     /// Constructs the full URL for user authorization.
     ///
     /// This method generates the state and code verifier parameters to produce the complete
@@ -470,6 +485,11 @@ impl Spotify<AuthCodePKCE> {
             .ok_or(AuthError::EmptyRefreshToken)?;
 
         let token = self.auth.refresh_token(&self.client, &refresh_token)?;
+
+        if let Some(handler) = &self.on_token_refresh {
+            handler(token.clone());
+        }
+
         self.set_token(token);
 
         Ok(())
@@ -600,6 +620,9 @@ where
 
     /// The current access token, if available.
     token: Arc<RwLock<Option<Token>>>,
+
+    /// A handler to call when the access token is refreshed.
+    on_token_refresh: Option<Box<dyn Fn(Token) + Send + Sync + 'static>>,
 }
 
 impl<A> AsyncSpotify<A>
@@ -616,6 +639,7 @@ where
             api_url,
             auth,
             token: Arc::new(RwLock::new(None)),
+            on_token_refresh: None,
         };
         Ok(api)
     }
@@ -651,6 +675,11 @@ where
                 .auth
                 .refresh_token_async(&self.client, &refresh_token)
                 .await?;
+
+            if let Some(handler) = &self.on_token_refresh {
+                handler(new_token.clone());
+            }
+
             self.set_token(new_token);
         }
 
@@ -804,6 +833,12 @@ impl AsyncSpotify<AuthCodePKCE> {
         self
     }
 
+    /// Sets a handler to be called when the access token is refreshed.
+    pub fn on_token_refresh(mut self, handler: impl Fn(Token) + Send + Sync + 'static) -> Self {
+        self.on_token_refresh = Some(Box::new(handler));
+        self
+    }
+
     /// Constructs the full URL for user authorization.
     ///
     /// This method generates the state and code verifier parameters to produce the complete
@@ -905,6 +940,10 @@ impl AsyncSpotify<AuthCodePKCE> {
             .auth
             .refresh_token_async(&self.client, &refresh_token)
             .await?;
+
+        if let Some(handler) = &self.on_token_refresh {
+            handler(token.clone());
+        }
 
         self.set_token(token);
 
