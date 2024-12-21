@@ -227,11 +227,13 @@ where
         if let Some(refresh_token) = refresh_token {
             let new_token = self.auth.refresh_token(&self.client, &refresh_token)?;
 
-            if let Some(handler) = &self.on_token_refresh {
-                handler(new_token.clone());
-            }
-
             self.set_token(new_token);
+
+            if let Some(callback) = &self.on_token_refresh {
+                // token should be available here
+                let token = self.token.read().clone().expect("Token is not set");
+                callback(token);
+            }
         }
 
         let call = || -> Result<_, RestError> {
@@ -486,11 +488,13 @@ impl Spotify<AuthCodePKCE> {
 
         let token = self.auth.refresh_token(&self.client, &refresh_token)?;
 
-        if let Some(handler) = &self.on_token_refresh {
-            handler(token.clone());
-        }
-
         self.set_token(token);
+
+        if let Some(callback) = &self.on_token_refresh {
+            // token should be available here
+            let token = self.token.read().clone().expect("Token is not set");
+            callback(token);
+        }
 
         Ok(())
     }
@@ -676,11 +680,13 @@ where
                 .refresh_token_async(&self.client, &refresh_token)
                 .await?;
 
-            if let Some(handler) = &self.on_token_refresh {
-                handler(new_token.clone());
-            }
-
             self.set_token(new_token);
+
+            if let Some(callback) = &self.on_token_refresh {
+                // token should be available here
+                let token = self.token.read().clone().expect("Token is not set");
+                callback(token);
+            }
         }
 
         let call = || async {
@@ -941,11 +947,13 @@ impl AsyncSpotify<AuthCodePKCE> {
             .refresh_token_async(&self.client, &refresh_token)
             .await?;
 
-        if let Some(handler) = &self.on_token_refresh {
-            handler(token.clone());
-        }
-
         self.set_token(token);
+
+        if let Some(callback) = &self.on_token_refresh {
+            // token should be available here
+            let token = self.token.read().clone().expect("Token is not set");
+            callback(token);
+        }
 
         Ok(())
     }
