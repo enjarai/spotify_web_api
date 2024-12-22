@@ -1,7 +1,7 @@
 use super::{Icon, Page};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Category {
     /// A link to the Web API endpoint returning full details of the category.
     pub href: String,
@@ -17,7 +17,7 @@ pub struct Category {
 }
 
 /// A list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Categories {
     pub categories: Page<Category>,
 }

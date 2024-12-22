@@ -1,7 +1,7 @@
 use super::{ContextType, Cursors, EpisodeId, ExternalUrls, ItemType, Track, TrackId, TrackItem};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Device {
     /// The device ID. This ID is unique and persistent to some extent.
     /// However, this is not guaranteed and any cached `device_id` should periodically be cleared out and refetched as necessary.
@@ -32,7 +32,7 @@ pub struct Device {
     pub supports_volume: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Devices {
     pub devices: Vec<Option<Device>>,
 }
@@ -56,7 +56,7 @@ impl std::fmt::Display for RepeatState {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Context {
     /// The object type.
     #[serde(rename = "type")]
@@ -81,7 +81,7 @@ pub enum CurrentlyPlayingType {
     Unknown,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct PlaybackState {
     /// The device that is currently active.
     pub device: Device,
@@ -114,7 +114,7 @@ pub struct PlaybackState {
     pub actions: Actions,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Actions {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interrupting_playback: Option<bool>,
@@ -154,7 +154,7 @@ pub struct Actions {
     pub transferring_playback: Option<bool>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct CurrentlyPlaying {
     /// The context object.
     pub context: Option<Context>,
@@ -178,7 +178,7 @@ pub struct CurrentlyPlaying {
     pub actions: Actions,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct PlayHistory {
     /// The track the user listened to.
     pub track: Track,
@@ -190,7 +190,7 @@ pub struct PlayHistory {
     pub context: Context,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct RecentlyPlayedTracks {
     /// A link to the Web API endpoint returning the full result of the request.
     pub href: String,
@@ -210,7 +210,7 @@ pub struct RecentlyPlayedTracks {
     pub items: Vec<PlayHistory>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Queue {
     /// The currently playing track or episode.
     pub currently_playing: Option<TrackItem>,

@@ -1,7 +1,7 @@
 use super::{Copyright, ExternalUrls, Image, ItemType, Market, Page, SimplifiedEpisode};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Show {
     /// A list of the countries in which the show can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
@@ -63,7 +63,7 @@ pub struct Show {
     pub episodes: Page<SimplifiedEpisode>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedShow {
     /// A list of the countries in which the show can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
@@ -122,7 +122,7 @@ pub struct SimplifiedShow {
     pub total_episodes: usize,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedShow {
     /// The date and time the show was saved. Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC)
     /// with a zero offset: YYYY-MM-DDTHH:MM:SSZ. If the time is imprecise (for example, the date/time of an album release),
@@ -134,7 +134,7 @@ pub struct SavedShow {
 }
 
 /// Spotify catalog information for several shows.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Shows {
     pub shows: Vec<SimplifiedShow>,
 }

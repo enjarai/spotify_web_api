@@ -3,7 +3,7 @@ use super::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Episode {
     /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
     #[deprecated]
@@ -80,7 +80,7 @@ pub struct Episode {
     pub show: SimplifiedShow,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedEpisode {
     /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
     #[deprecated]
@@ -154,12 +154,12 @@ pub struct SimplifiedEpisode {
 }
 
 /// Spotify catalog information for several episodes.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Episodes {
     pub episodes: Vec<Option<Episode>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedEpisode {
     /// The date and time the episode was saved.
     /// Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.

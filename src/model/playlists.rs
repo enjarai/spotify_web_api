@@ -4,7 +4,7 @@ use super::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Playlist {
     /// true if the owner allows other users to modify the playlist.
     pub collaborative: bool,
@@ -55,7 +55,7 @@ pub struct Playlist {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedPlaylist {
     /// true if the owner allows other users to modify the playlist.
     pub collaborative: bool,
@@ -104,7 +104,7 @@ pub struct SimplifiedPlaylist {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct PlaylistTrack {
     /// The date and time the track or episode was added.
     /// Note: some very old playlists may return None in this field.
@@ -127,7 +127,7 @@ pub struct PlaylistTrack {
     pub track: TrackItem,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct AddedBy {
     /// Known public external URLs for this user.
     pub external_urls: ExternalUrls,
@@ -150,7 +150,7 @@ pub struct AddedBy {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SnapshotId {
     /// The version identifier for the current playlist.
     /// Can be supplied in other requests to target a specific playlist version.

@@ -1,19 +1,19 @@
 use super::{Copyright, ExternalUrls, Image, ItemType, Market, Page, SimplifiedChapter};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Author {
     /// The name of the author.
     pub name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Narrator {
     /// The name of the Narrator.
     pub name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Audiobook {
     /// The author(s) for the audiobook.
     pub authors: Vec<Author>,
@@ -82,7 +82,7 @@ pub struct Audiobook {
     pub chapters: Page<SimplifiedChapter>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedAudiobook {
     /// The author(s) for the audiobook.
     pub authors: Vec<Author>,
@@ -150,7 +150,7 @@ pub struct SimplifiedAudiobook {
 }
 
 /// Spotify catalog information for several audiobooks
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Audiobooks {
     pub audiobooks: Vec<Option<Audiobook>>,
 }

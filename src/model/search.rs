@@ -5,7 +5,7 @@ use super::{
 use serde::{Deserialize, Serialize};
 
 /// Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SearchResults {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

@@ -3,7 +3,7 @@ use super::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct LinkedFrom {
     /// Known external URLs for this item.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -27,7 +27,7 @@ pub struct LinkedFrom {
     pub uri: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Track {
     /// The album on which the track appears. The album object includes a link in href to full information about the album.
     pub album: SimplifiedAlbum,
@@ -100,7 +100,7 @@ pub struct Track {
     pub is_local: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedTrack {
     /// The album on which the track appears. The album object includes a link in href to full information about the album.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,7 +168,7 @@ pub struct SimplifiedTrack {
     pub is_local: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedTrack {
     /// The date and time the track was saved.
     /// Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.
@@ -181,12 +181,12 @@ pub struct SavedTrack {
 }
 
 /// Spotify catalog information for several tracks.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Tracks {
     pub tracks: Vec<Option<Track>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct TrackReference {
     /// A link to the Web API endpoint where full details of the playlist's tracks can be retrieved.
     pub href: String,

@@ -1,7 +1,7 @@
 use super::{Cursors, ExternalUrls, Followers, Image, ItemType};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Artist {
     /// Known external URLs for this artist.
     pub external_urls: ExternalUrls,
@@ -38,7 +38,7 @@ pub struct Artist {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedArtist {
     /// Known external URLs for this artist.
     pub external_urls: ExternalUrls,
@@ -63,12 +63,12 @@ pub struct SimplifiedArtist {
 }
 
 /// Spotify catalog information for several artists
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Artists {
     pub artists: Vec<Option<Artist>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FollowedArtist {
     /// A link to the Web API endpoint returning the full result of the request.
     pub href: String,
@@ -88,7 +88,7 @@ pub struct FollowedArtist {
     pub items: Vec<Artist>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FollowedArtists {
     pub artists: FollowedArtist,
 }

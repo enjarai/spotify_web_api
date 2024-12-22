@@ -20,7 +20,7 @@ impl std::fmt::Display for SubscriptionType {
 }
 
 /// The user's explicit content settings. This field is only available when the current user has granted access to the user-read-private scope.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ExplicitContent {
     /// When true, indicates that explicit content should not be played.
     pub filter_enabled: bool,
@@ -29,7 +29,7 @@ pub struct ExplicitContent {
     pub filter_locked: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct CurrentUserProfile {
     /// The country of the user, as set in the user's account profile.
     /// An [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -80,7 +80,7 @@ pub struct CurrentUserProfile {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct UserProfile {
     /// The name displayed on the user's profile. None if not available.
     pub display_name: Option<String>,
@@ -108,7 +108,7 @@ pub struct UserProfile {
     pub uri: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct UserReference {
     /// Known public external URLs for this user.
     pub external_urls: ExternalUrls,

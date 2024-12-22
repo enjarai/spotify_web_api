@@ -4,7 +4,7 @@ use super::{
 };
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Chapter {
     /// A URL to a 30 second preview (MP3 format) of the chapter. None if not available.
     #[deprecated]
@@ -82,7 +82,7 @@ pub struct Chapter {
     pub audiobook: SimplifiedAudiobook,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedChapter {
     /// A URL to a 30 second preview (MP3 format) of the chapter. None if not available.
     #[deprecated]
@@ -158,7 +158,7 @@ pub struct SimplifiedChapter {
 }
 
 /// Spotify catalog information for several audiobook chapters
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Chapters {
     pub chapters: Vec<Option<Chapter>>,
 }

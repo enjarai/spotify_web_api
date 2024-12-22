@@ -49,7 +49,7 @@ impl AlbumType {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Album {
     /// The type of the album.
     pub album_type: AlbumType,
@@ -127,7 +127,7 @@ pub struct Album {
     pub album_group: Option<AlbumType>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedAlbum {
     /// The type of the album.
     pub album_type: AlbumType,
@@ -184,12 +184,12 @@ pub struct SimplifiedAlbum {
 }
 
 /// Spotify catalog information for several albums
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Albums {
     pub albums: Vec<Option<Album>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedAlbum {
     /// The date and time the track was saved.
     /// Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC) with a zero offset: YYYY-MM-DDTHH:MM:SSZ.
@@ -202,7 +202,7 @@ pub struct SavedAlbum {
 }
 
 /// A list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse” tab).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct NewReleases {
     pub albums: Page<SimplifiedAlbum>,
 }

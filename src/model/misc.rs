@@ -36,7 +36,7 @@ impl std::fmt::Display for ItemType {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Image {
     /// The source URL of the image.
     pub url: String,
@@ -48,7 +48,7 @@ pub struct Image {
     pub width: Option<u16>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Icon {
     /// The source URL of the image.
     pub url: String,
@@ -60,19 +60,19 @@ pub struct Icon {
     pub width: Option<u16>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct VideoThumbnail {
     // The source URL of the image.
     pub url: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ExternalUrls {
     /// The [Spotify URL](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the object.
     pub spotify: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ExternalIds {
     /// [International Standard Recording Code](http://en.wikipedia.org/wiki/International_Standard_Recording_Code)
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -87,7 +87,7 @@ pub struct ExternalIds {
     pub upc: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Followers {
     /// This will always be set to null, as the Web API does not support it at the moment.
     pub href: Option<String>,
@@ -104,7 +104,7 @@ pub enum ReleaseDatePrecision {
     Day,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Restrictions {
     /// The reason for the restriction.
     pub reason: String,
@@ -119,7 +119,7 @@ pub enum CopyrightType {
     P,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Copyright {
     /// The copyright text for this content.
     pub text: String,
@@ -129,7 +129,7 @@ pub struct Copyright {
     pub type_: CopyrightType,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Page<T> {
     /// A link to the Web API endpoint returning the full result of the request.
     pub href: String,
@@ -152,7 +152,7 @@ pub struct Page<T> {
     pub items: Vec<T>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Cursors {
     /// The cursor to use as key to find the next page of items.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,7 +163,7 @@ pub struct Cursors {
     pub before: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ResumePoint {
     /// Whether or not the episode has been fully played by the user.
     pub fully_played: bool,
@@ -172,7 +172,7 @@ pub struct ResumePoint {
     pub resume_position_ms: u32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum TrackItem {
@@ -278,7 +278,7 @@ impl std::fmt::Display for TopItemType {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum TopItem {
