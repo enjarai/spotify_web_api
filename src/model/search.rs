@@ -9,31 +9,31 @@ use serde::{Deserialize, Serialize};
 pub struct SearchResults {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub playlists: Option<Page<SimplifiedPlaylist>>,
+    pub playlists: Option<Page<Option<SimplifiedPlaylist>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub albums: Option<Page<SimplifiedAlbum>>,
+    pub albums: Option<Page<Option<SimplifiedAlbum>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub artists: Option<Page<Artist>>,
+    pub artists: Option<Page<Option<Artist>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub tracks: Option<Page<Track>>,
+    pub tracks: Option<Page<Option<Track>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub shows: Option<Page<SimplifiedShow>>,
+    pub shows: Option<Page<Option<SimplifiedShow>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub episodes: Option<Page<SimplifiedEpisode>>,
+    pub episodes: Option<Page<Option<SimplifiedEpisode>>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub audiobooks: Option<Page<SimplifiedAudiobook>>,
+    pub audiobooks: Option<Page<Option<SimplifiedAudiobook>>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -425,6 +425,99 @@ mod tests {
 						"uri": "string",
 						"total_chapters": 0
 					}
+				]
+			}
+        }
+        "#;
+
+        crate::test::assert_deserialized!(SearchResults, json);
+    }
+
+    #[test]
+    fn search_with_null() {
+        let json = r#"
+        {
+			"playlists": {
+				"href": "https://api.spotify.com/v1/search?offset=0&limit=3&query=weyes%20blood&type=playlist&locale=en-US,en;q%3D0.9",
+				"limit": 3,
+				"next": "https://api.spotify.com/v1/search?offset=3&limit=3&query=weyes%20blood&type=playlist&locale=en-US,en;q%3D0.9",
+				"offset": 0,
+				"previous": null,
+				"total": 1000,
+				"items": [
+					{
+						"collaborative": false,
+						"description": "a selection of tracks&#x2F;artists heard in Natalie Mering&#x27;s radio shows or cited by her as influences on her music in interviews; also added some tracks that strongly remind me of her style and some of my favourite tracks of hers. playlist contains dream pop, soft rock, prog rock, soft jazz etc",
+						"external_urls": {
+							"spotify": "https://open.spotify.com/playlist/15BgYv4yT01R0WzCQIvovG"
+						},
+						"href": "https://api.spotify.com/v1/playlists/15BgYv4yT01R0WzCQIvovG",
+						"id": "15BgYv4yT01R0WzCQIvovG",
+						"images": [
+							{
+								"height": null,
+								"url": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da84ad34370274867428c199df89",
+								"width": null
+							}
+						],
+						"name": "weyes blood, queen of feminine harmonic sensuality",
+						"owner": {
+							"display_name": "shalante",
+							"external_urls": {
+								"spotify": "https://open.spotify.com/user/21hzwclnnfsqv5izwormhwqja"
+							},
+							"href": "https://api.spotify.com/v1/users/21hzwclnnfsqv5izwormhwqja",
+							"id": "21hzwclnnfsqv5izwormhwqja",
+							"type": "user",
+							"uri": "spotify:user:21hzwclnnfsqv5izwormhwqja"
+						},
+						"primary_color": null,
+						"public": true,
+						"snapshot_id": "AAAANzRDyojBpbI4dp7oi8VXSTqYGiHU",
+						"tracks": {
+							"href": "https://api.spotify.com/v1/playlists/15BgYv4yT01R0WzCQIvovG/tracks",
+							"total": 23
+						},
+						"type": "playlist",
+						"uri": "spotify:playlist:15BgYv4yT01R0WzCQIvovG"
+					},
+					{
+						"collaborative": false,
+						"description": "continuously updating",
+						"external_urls": {
+							"spotify": "https://open.spotify.com/playlist/4M20pNFDm9AcD3EmQZS7v2"
+						},
+						"href": "https://api.spotify.com/v1/playlists/4M20pNFDm9AcD3EmQZS7v2",
+						"id": "4M20pNFDm9AcD3EmQZS7v2",
+						"images": [
+							{
+								"height": null,
+								"url": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da847aa80cdd93e3ef6d0519faca",
+								"width": null
+							}
+						],
+						"name": "ascending with weyes blood ",
+						"owner": {
+							"display_name": "emma",
+							"external_urls": {
+								"spotify": "https://open.spotify.com/user/31yrzgikh2zwd4xlfhfhlbckhkia"
+							},
+							"href": "https://api.spotify.com/v1/users/31yrzgikh2zwd4xlfhfhlbckhkia",
+							"id": "31yrzgikh2zwd4xlfhfhlbckhkia",
+							"type": "user",
+							"uri": "spotify:user:31yrzgikh2zwd4xlfhfhlbckhkia"
+						},
+						"primary_color": null,
+						"public": true,
+						"snapshot_id": "AAAAucAZZRdsOpAfca28X80jqFiCy4FQ",
+						"tracks": {
+							"href": "https://api.spotify.com/v1/playlists/4M20pNFDm9AcD3EmQZS7v2/tracks",
+							"total": 25
+						},
+						"type": "playlist",
+						"uri": "spotify:playlist:4M20pNFDm9AcD3EmQZS7v2"
+					},
+					null
 				]
 			}
         }
