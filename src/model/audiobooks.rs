@@ -19,6 +19,7 @@ pub struct Audiobook {
     pub authors: Vec<Author>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
     /// The copyright statements of the audiobook.
@@ -87,6 +88,7 @@ pub struct SimplifiedAudiobook {
     pub authors: Vec<Author>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
     /// The copyright statements of the audiobook.

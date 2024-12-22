@@ -59,6 +59,7 @@ pub struct Album {
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
     /// Known external URLs for this album.
@@ -136,6 +137,7 @@ pub struct SimplifiedAlbum {
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
+    #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
     /// Known external URLs for this album.
