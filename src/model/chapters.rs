@@ -12,6 +12,7 @@ pub struct Chapter {
     pub audio_preview_url: Option<String>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[cfg(feature = "markets")]
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
@@ -90,6 +91,7 @@ pub struct SimplifiedChapter {
     pub audio_preview_url: Option<String>,
 
     /// A list of the countries in which the audiobook can be played, identified by their [ISO 3166-1 alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code.
+    #[cfg(feature = "markets")]
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
 
