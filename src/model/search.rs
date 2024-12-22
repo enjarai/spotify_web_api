@@ -8,24 +8,31 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchResults {
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub playlists: Option<Page<SimplifiedPlaylist>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub albums: Option<Page<SimplifiedAlbum>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub artists: Option<Page<Artist>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub tracks: Option<Page<Track>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub shows: Option<Page<SimplifiedShow>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub episodes: Option<Page<SimplifiedEpisode>>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub audiobooks: Option<Page<SimplifiedAudiobook>>,
 }
 
