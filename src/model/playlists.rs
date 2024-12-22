@@ -45,6 +45,7 @@ pub struct Playlist {
     pub snapshot_id: String,
 
     /// The tracks of the playlist.
+    #[cfg(feature = "include_items")]
     pub tracks: Page<PlaylistTrack>,
 
     /// The object type: "playlist"

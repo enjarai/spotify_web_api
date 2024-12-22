@@ -61,6 +61,7 @@ pub struct Show {
     pub total_episodes: usize,
 
     /// The episodes of the show.
+    #[cfg(feature = "include_items")]
     pub episodes: Page<SimplifiedEpisode>,
 }
 

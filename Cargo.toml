@@ -55,8 +55,9 @@ thiserror = "2.0.3"
 url = "2.5.0"
 
 [features]
-default = ["markets"]
+default = ["markets", "include_items"]
 markets = []
+include_items = []
 
 [dev-dependencies]
 anyhow = "1.0.93"
