@@ -236,6 +236,13 @@ impl TrackItem {
             Self::Episode(episode) => episode.explicit,
         }
     }
+
+    pub fn uri(&self) -> &str {
+        match &self {
+            Self::Track(track) => track.uri.as_str(),
+            Self::Episode(episode) => episode.uri.as_str(),
+        }
+    }
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq, Eq)]
