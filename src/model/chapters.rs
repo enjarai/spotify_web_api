@@ -27,7 +27,7 @@ pub struct Chapter {
     pub html_description: String,
 
     /// The chapter length in milliseconds.
-    pub duration_ms: u64,
+    pub duration_ms: u32,
 
     /// Whether or not the chapter has explicit content (true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,
@@ -106,7 +106,7 @@ pub struct SimplifiedChapter {
     pub html_description: String,
 
     /// The chapter length in milliseconds.
-    pub duration_ms: u64,
+    pub duration_ms: u32,
 
     /// Whether or not the chapter has explicit content (true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,

@@ -44,7 +44,7 @@ pub struct Track {
     pub disc_number: u8,
 
     /// The track length in milliseconds.
-    pub duration_ms: u64,
+    pub duration_ms: u32,
 
     /// Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,
@@ -119,7 +119,7 @@ pub struct SimplifiedTrack {
     pub disc_number: u8,
 
     /// The track length in milliseconds.
-    pub duration_ms: u64,
+    pub duration_ms: u32,
 
     /// Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
     pub explicit: bool,

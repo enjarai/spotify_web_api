@@ -202,7 +202,7 @@ impl TrackItem {
         }
     }
 
-    pub fn duration_ms(&self) -> u64 {
+    pub fn duration_ms(&self) -> u32 {
         match &self {
             Self::Track(track) => track.duration_ms,
             Self::Episode(episode) => episode.duration_ms,
