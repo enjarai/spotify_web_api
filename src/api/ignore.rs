@@ -29,15 +29,21 @@ where
 
         self.endpoint.parameters().add_to_url(&mut url);
 
+        let (mime, data) = self
+            .endpoint
+            .body()?
+            .map_or((None, Vec::new()), |(mime, data)| {
+                (Some(mime), data.clone())
+            });
+
         let req = Request::builder()
             .method(self.endpoint.method())
             .uri(query::url_to_http_uri(&url));
 
-        let (req, data) = if let Some((mime, data)) = self.endpoint.body()? {
-            let req = req.header(header::CONTENT_TYPE, mime);
-            (req, data)
+        let req = if let Some(mime) = mime {
+            req.header(header::CONTENT_TYPE, mime)
         } else {
-            (req, Vec::new())
+            req
         };
 
         let rsp = client.rest(req, data)?;

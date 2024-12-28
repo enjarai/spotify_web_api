@@ -4,6 +4,7 @@ mod error;
 mod ignore;
 mod paged;
 mod params;
+mod raw;
 
 pub mod common;
 pub(crate) mod query;
@@ -30,6 +31,7 @@ pub use ignore::*;
 pub use paged::*;
 pub use params::*;
 pub use query::{AsyncQuery, Query};
+pub use raw::*;
 
 mod prelude {
     pub use super::Pageable;

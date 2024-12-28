@@ -111,6 +111,7 @@ Supported endpoints are organized under the [`api`](https://github.com/ry-sev/sp
 There are additional helpers to handle different cases:
 - [`api::ignore`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/ignore.rs): Ignore the Spotify response (useful for POST or PUT endpoints).
 - [`api::paged`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/paged/all_at_once.rs): Fetch results that are paginated.
+- [`api::raw`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/raw.rs): Return the raw data from Spotify instead of deserializing into a structure.
 
 You're not restricted to the predefined endpoints; you can define your own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
 
