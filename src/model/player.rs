@@ -34,7 +34,7 @@ pub struct Device {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Devices {
-    pub devices: Vec<Option<Device>>,
+    pub devices: Vec<Device>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
