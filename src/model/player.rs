@@ -34,6 +34,7 @@ pub struct Device {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Devices {
+    #[serde(default)]
     pub devices: Vec<Device>,
 }
 
