@@ -25,7 +25,8 @@ pub struct StartPlayback {
     offset: Option<Offset>,
 
     /// Indicates from what position to start playback.
-    position_ms: u32,
+    #[builder(setter(strip_option), default)]
+    position_ms: Option<u32>,
 }
 
 impl StartPlaybackBuilder {
@@ -53,7 +54,7 @@ impl<T: Into<String>> From<T> for StartPlayback {
             context_uri: None,
             uris: None,
             offset: None,
-            position_ms: 0,
+            position_ms: None,
         }
     }
 }
@@ -93,7 +94,13 @@ impl Endpoint for StartPlayback {
             }
         }
 
-        body["position_ms"] = self.position_ms.into();
+        if let Some(position_ms) = self.position_ms {
+            body["position_ms"] = position_ms.into();
+        }
+
+        if body == serde_json::json!({}) {
+            return Ok(None);
+        }
 
         JsonParams::into_body(&body)
     }
@@ -112,10 +119,8 @@ mod tests {
     fn test_start_playback_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .method(Method::PUT)
-            .content_type("application/json")
             .endpoint("me/player/play")
             .add_query_params(&[("device_id", "xxxxxxxxxxxxxxxxxxxxxx")])
-            .body_str(r#"{"position_ms":0}"#)
             .build()
             .unwrap();
 
