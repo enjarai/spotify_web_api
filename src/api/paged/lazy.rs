@@ -137,7 +137,7 @@ where
             req = req.header(header::CONTENT_TYPE, mime);
         }
 
-        if self.paged.endpoint.method() == Method::POST {
+        if matches!(self.paged.endpoint.method(), Method::POST | Method::PUT) {
             req = req.header(header::CONTENT_LENGTH, data.len().to_string());
         }
 
