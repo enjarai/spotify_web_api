@@ -77,16 +77,24 @@ where
 
         self.endpoint.parameters().add_to_url(&mut url);
 
-        let req = Request::builder()
+        let (mime, data) = self
+            .endpoint
+            .body()?
+            .map_or((None, Vec::new()), |(mime, data)| {
+                (Some(mime), data.clone())
+            });
+
+        let mut req = Request::builder()
             .method(self.endpoint.method())
             .uri(query::url_to_http_uri(&url));
 
-        let (req, data) = if let Some((mime, data)) = self.endpoint.body()? {
-            let req = req.header(header::CONTENT_TYPE, mime);
-            (req, data)
-        } else {
-            (req, Vec::new())
-        };
+        if let Some(mime) = mime {
+            req = req.header(header::CONTENT_TYPE, mime);
+        }
+
+        if self.endpoint.method() == Method::POST {
+            req = req.header(header::CONTENT_LENGTH, data.len().to_string());
+        }
 
         let rsp = client.rest_async(req, data).await?;
         let status = rsp.status();
