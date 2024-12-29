@@ -7,10 +7,7 @@ use crate::{
 use async_trait::async_trait;
 use bytes::Bytes;
 use futures_util::Stream;
-use http::{
-    request::Builder as RequestBuilder,
-    {header, Request, Response},
-};
+use http::{header, request::Builder as RequestBuilder, Method, Request, Response};
 use parking_lot::RwLock;
 use serde::de::DeserializeOwned;
 use url::Url;
@@ -132,15 +129,17 @@ where
             .body()?
             .map_or((None, Vec::new()), |(mime, data)| (Some(mime), data));
 
-        let req = Request::builder()
+        let mut req = Request::builder()
             .method(self.paged.endpoint.method())
             .uri(query::url_to_http_uri(url));
 
-        let req = if let Some(mime) = mime {
-            req.header(header::CONTENT_TYPE, mime)
-        } else {
-            req
-        };
+        if let Some(mime) = mime {
+            req = req.header(header::CONTENT_TYPE, mime);
+        }
+
+        if self.paged.endpoint.method() == Method::POST {
+            req = req.header(header::CONTENT_LENGTH, data.len().to_string());
+        }
 
         Ok((req, data))
     }

@@ -98,15 +98,16 @@ where
             (Some(mime), data.clone())
         });
 
-        let req = Request::builder()
+        let mut req = Request::builder()
             .method(self.method())
             .uri(query::url_to_http_uri(&url));
 
-        let req = if let Some(mime) = mime {
-            req.header(header::CONTENT_TYPE, mime)
-        } else {
-            req
-        };
+        if let Some(mime) = mime {
+            req = req.header(header::CONTENT_TYPE, mime);
+        }
+        if self.method() == Method::POST {
+            req = req.header(header::CONTENT_LENGTH, data.len().to_string());
+        }
 
         let rsp = client.rest(req, data)?;
         let status = rsp.status();
@@ -140,15 +141,17 @@ where
             (Some(mime), data.clone())
         });
 
-        let req = Request::builder()
+        let mut req = Request::builder()
             .method(self.method())
             .uri(query::url_to_http_uri(&url));
 
-        let req = if let Some(mime) = mime {
-            req.header(header::CONTENT_TYPE, mime)
-        } else {
-            req
-        };
+        if let Some(mime) = mime {
+            req = req.header(header::CONTENT_TYPE, mime);
+        }
+
+        if self.method() == Method::POST {
+            req = req.header(header::CONTENT_LENGTH, data.len().to_string());
+        }
 
         let rsp = client.rest_async(req, data).await?;
         let status = rsp.status();

@@ -9,7 +9,7 @@ use crate::{
 };
 use bytes::Bytes;
 pub use client_credentials::ClientCredentials;
-use http::{request::Builder, HeaderMap, HeaderValue, Request, Response as HttpResponse};
+use http::{header, request::Builder, HeaderMap, HeaderValue, Request, Response as HttpResponse};
 pub use pkce::AuthCodePKCE;
 use reqwest::blocking::Client;
 use thiserror::Error;
@@ -37,7 +37,7 @@ pub enum AuthError {
     HeaderValue {
         /// The source of the error.
         #[from]
-        source: http::header::InvalidHeaderValue,
+        source: header::InvalidHeaderValue,
     },
 
     /// The URL failed to parse.
@@ -160,7 +160,7 @@ fn set_auth_header<'a>(
 ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
     let mut header_value = HeaderValue::from_str(value)?;
     header_value.set_sensitive(true);
-    headers.insert(http::header::AUTHORIZATION, header_value);
+    headers.insert(header::AUTHORIZATION, header_value);
     Ok(headers)
 }
 
@@ -189,11 +189,11 @@ fn http_request_and_data(
             (Some(mime), data.clone())
         });
 
-    let req = if let Some(mime) = mime {
-        req.header(http::header::CONTENT_TYPE, mime)
-    } else {
-        req
-    };
+    if let Some(mime) = mime {
+        req = req.header(header::CONTENT_TYPE, mime);
+    }
+
+    req = req.header(header::CONTENT_LENGTH, data.len().to_string());
 
     Ok((req, data))
 }
@@ -257,7 +257,7 @@ fn parse_response(rsp: &http::Response<Bytes>) -> Result<Token, ApiError<RestErr
         return Err(ApiError::from_spotify_with_status(status, v));
     } else if status == http::StatusCode::MOVED_PERMANENTLY {
         return Err(ApiError::moved_permanently(
-            rsp.headers().get(http::header::LOCATION),
+            rsp.headers().get(header::LOCATION),
         ));
     }
 

@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use http::{header, Request};
+use http::{header, Method, Request};
 
 use crate::api::{query, ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query};
 
@@ -72,15 +72,17 @@ where
                 (Some(mime), data.clone())
             });
 
-        let req = Request::builder()
+        let mut req = Request::builder()
             .method(self.endpoint.method())
             .uri(query::url_to_http_uri(&url));
 
-        let req = if let Some(mime) = mime {
-            req.header(header::CONTENT_TYPE, mime)
-        } else {
-            req
-        };
+        if let Some(mime) = mime {
+            req = req.header(header::CONTENT_TYPE, mime);
+        }
+
+        if self.endpoint.method() == Method::POST {
+            req = req.header(header::CONTENT_LENGTH, data.len().to_string());
+        }
 
         let rsp = client.rest_async(req, data).await?;
         let status = rsp.status();
