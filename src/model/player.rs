@@ -222,12 +222,12 @@ pub struct Queue {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Offset {
-    Position(u32),
+    Position(usize),
     Uri(ContextType),
 }
 
-impl From<u32> for Offset {
-    fn from(position: u32) -> Self {
+impl From<usize> for Offset {
+    fn from(position: usize) -> Self {
         Self::Position(position)
     }
 }
