@@ -20,6 +20,21 @@ pub enum IdType {
     Episode,
 }
 
+impl std::fmt::Display for IdType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::User => "user",
+            Self::Album => "album",
+            Self::Artist => "artist",
+            Self::Playlist => "playlist",
+            Self::Track => "track",
+            Self::Show => "show",
+            Self::Episode => "episode",
+        };
+        write!(f, "{s}")
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ContextType {
     Album(AlbumId),
@@ -39,18 +54,27 @@ impl ContextType {
     }
 }
 
-impl std::fmt::Display for IdType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let s = match self {
-            Self::User => "user",
-            Self::Album => "album",
-            Self::Artist => "artist",
-            Self::Playlist => "playlist",
-            Self::Track => "track",
-            Self::Show => "show",
-            Self::Episode => "episode",
-        };
-        write!(f, "{s}")
+impl From<AlbumId> for ContextType {
+    fn from(id: AlbumId) -> Self {
+        Self::Album(id)
+    }
+}
+
+impl From<ArtistId> for ContextType {
+    fn from(id: ArtistId) -> Self {
+        Self::Artist(id)
+    }
+}
+
+impl From<PlaylistId> for ContextType {
+    fn from(id: PlaylistId) -> Self {
+        Self::Playlist(id)
+    }
+}
+
+impl From<ShowId> for ContextType {
+    fn from(id: ShowId) -> Self {
+        Self::Show(id)
     }
 }
 
