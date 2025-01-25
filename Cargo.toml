@@ -28,31 +28,31 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 endpoint_derive = { path = "endpoint_derive" }
-async-trait = "0.1.83"
+async-trait = "0.1.85"
 base64 = "0.22.1"
-bytes = "1.8.0"
-chrono = { version = "0.4.38", default-features = false, features = [
+bytes = "1.9.0"
+chrono = { version = "0.4.39", default-features = false, features = [
 	"serde",
 	"now",
 ] }
 derive_builder = "0.20.2"
 futures-util = { version = "0.3.31", default-features = false }
-http = "1.1.0"
-itertools = "0.13.0"
-log = "0.4.22"
+http = "1.2.0"
+itertools = "0.14.0"
+log = "0.4.25"
 parking_lot = "0.12.3"
 percent-encoding = "2.3.1"
 rand = "0.8.5"
-reqwest = { version = "0.12.9", default-features = false, features = [
+reqwest = { version = "0.12.12", default-features = false, features = [
 	"blocking",
 	"rustls-tls",
 ] }
-serde = { version = "1.0.215", features = ["derive"] }
-serde_json = "1.0.133"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.137"
 serde_urlencoded = "0.7.1"
 sha2 = "0.10.8"
-thiserror = "2.0.3"
-url = "2.5.0"
+thiserror = "2.0.11"
+url = "2.5.4"
 
 [features]
 default = ["markets", "include_items"]
@@ -60,10 +60,10 @@ markets = []
 include_items = []
 
 [dev-dependencies]
-anyhow = "1.0.93"
+anyhow = "1.0.95"
 dotenv = "0.15.0"
-tokio = { version = "1.41.1", features = ["rt", "rt-multi-thread", "macros"] }
-webbrowser = "1.0.2"
+tokio = { version = "1.43.0", features = ["rt", "rt-multi-thread", "macros"] }
+webbrowser = "1.0.3"
 
 [workspace.lints.rust]
 unsafe_code = "deny"
