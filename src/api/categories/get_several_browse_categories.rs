@@ -9,7 +9,7 @@ pub struct GetSeveralBrowseCategories {
     /// Note: if locale is not supplied, or if the specified language is not available, the category strings returned will be in the Spotify default language (American English).
     ///
     /// Example: `sv_SE`
-    locale: Option<String>,
+    pub locale: Option<String>,
 }
 
 impl GetSeveralBrowseCategories {

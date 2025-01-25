@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = GET, path = "albums/{id}")]
 pub struct GetAlbum {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
-    id: String,
+    pub id: String,
 }
 
 impl GetAlbum {

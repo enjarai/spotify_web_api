@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = GET, path = "me/tracks/contains")]
 pub struct CheckUserSavedTracks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the tracks.
-    ids: Vec<String>,
+    pub ids: Vec<String>,
 }
 
 impl CheckUserSavedTracksBuilder {

@@ -7,7 +7,7 @@ use crate::api::prelude::*;
 #[endpoint(method = PUT, path = "me/tracks")]
 pub struct SaveTracksforCurrentUser {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the tracks.
-    ids: Vec<String>,
+    pub ids: Vec<String>,
 }
 
 impl SaveTracksforCurrentUserBuilder {

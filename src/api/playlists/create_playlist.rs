@@ -8,28 +8,28 @@ use serde_json::json;
 pub struct CreatePlaylist {
     /// The user's [Spotify user ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
     #[builder(setter(into))]
-    id: String,
+    pub id: String,
 
     /// The new name for the playlist, for example "My New Playlist Title".
     #[builder(setter(into))]
-    name: String,
+    pub name: String,
 
     /// The playlist's public/private status (if it should be added to the user's profile or not):
     /// true the playlist will be public,
     /// false the playlist will be private, null the playlist status is not relevant.
     /// For more about public/private status, see [Working with Playlists](https://developer.spotify.com/documentation/web-api/concepts/playlists).
     #[builder(setter(strip_option), default)]
-    public: Option<bool>,
+    pub public: Option<bool>,
 
     /// If true, the playlist will become collaborative and other users will be able to modify the playlist in their Spotify client.
     /// # Note:
     /// You can only set collaborative to true on non-public playlists.
     #[builder(setter(strip_option), default)]
-    collaborative: Option<bool>,
+    pub collaborative: Option<bool>,
 
     /// Value for playlist description as displayed in Spotify Clients and in the Web API.
     #[builder(setter(into, strip_option), default)]
-    description: Option<String>,
+    pub description: Option<String>,
 }
 
 impl CreatePlaylist {

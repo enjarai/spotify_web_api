@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = GET, path = "playlists/{id}/images")]
 pub struct GetPlaylistCoverImage {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    id: String,
+    pub id: String,
 }
 
 impl GetPlaylistCoverImage {

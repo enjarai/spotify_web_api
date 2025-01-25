@@ -10,23 +10,23 @@ use crate::{
 pub struct StartPlayback {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     #[builder(setter(into, strip_option), default)]
-    device_id: Option<String>,
+    pub device_id: Option<String>,
 
     /// Spotify URI of the context to play.
     #[builder(setter(into, strip_option), default)]
-    context_uri: Option<ContextType>,
+    pub context_uri: Option<ContextType>,
 
     /// Spotify track URIs to play.
     #[builder(setter(strip_option), default)]
-    uris: Option<Vec<TrackId>>,
+    pub uris: Option<Vec<TrackId>>,
 
     /// Indicates from where in the context playback should start.
     #[builder(setter(into, strip_option), default)]
-    offset: Option<Offset>,
+    pub offset: Option<Offset>,
 
     /// Indicates from what position to start playback.
     #[builder(setter(strip_option), default)]
-    position_ms: Option<u32>,
+    pub position_ms: Option<u32>,
 }
 
 impl StartPlaybackBuilder {

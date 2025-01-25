@@ -5,11 +5,11 @@ use crate::{api::prelude::*, model::FollowedArtistsType};
 #[endpoint(method = GET, path = "me/following")]
 pub struct GetFollowedArtists {
     /// The ID type: currently only artist is supported.
-    type_: FollowedArtistsType,
+    pub type_: FollowedArtistsType,
 
     /// The last artist ID retrieved from the previous request.
     #[builder(setter(into, strip_option), default)]
-    after: Option<String>,
+    pub after: Option<String>,
 }
 
 impl GetFollowedArtists {

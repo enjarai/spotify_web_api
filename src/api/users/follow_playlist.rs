@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = PUT, path = "playlists/{id}/followers")]
 pub struct FollowPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    id: String,
+    pub id: String,
 
     /// Defaults to true.
     /// If true the playlist will be included in user's public playlists (added to profile),
@@ -13,7 +13,7 @@ pub struct FollowPlaylist {
     /// For more about public/private status, see [Working with Playlists](https://developer.spotify.com/documentation/web-api/concepts/playlists)
     #[builder(default = true)]
     #[endpoint(body)]
-    public: bool,
+    pub public: bool,
 }
 
 impl FollowPlaylist {

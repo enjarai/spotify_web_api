@@ -8,10 +8,10 @@ use crate::{api::prelude::*, model::PlaylistItem};
 pub struct AddItemToPlaybackQueue {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     #[builder(setter(into, strip_option), default)]
-    device_id: Option<String>,
+    pub device_id: Option<String>,
 
     /// The uri of the item to add to the queue. Must be a track or an episode uri.
-    uri: PlaylistItem,
+    pub uri: PlaylistItem,
 }
 
 impl AddItemToPlaybackQueue {

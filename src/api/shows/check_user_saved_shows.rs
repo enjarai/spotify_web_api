@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = GET, path = "me/shows/contains")]
 pub struct CheckUserSavedShows {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the shows.
-    ids: Vec<String>,
+    pub ids: Vec<String>,
 }
 
 impl CheckUserSavedShowsBuilder {

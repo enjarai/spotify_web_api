@@ -7,10 +7,10 @@ use crate::api::{prelude::*, Endpoint};
 pub struct SetPlaybackVolume {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     #[builder(setter(into, strip_option), default)]
-    device_id: Option<String>,
+    pub device_id: Option<String>,
 
     /// The volume to set. Must be a value from 0 to 100 inclusive.
-    volume_percent: u8,
+    pub volume_percent: u8,
 }
 
 impl SetPlaybackVolume {

@@ -8,10 +8,10 @@ use crate::api::prelude::*;
 pub struct TogglePlaybackShuffle {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     #[builder(setter(into, strip_option), default)]
-    device_id: Option<String>,
+    pub device_id: Option<String>,
 
     // The shuffle state.
-    state: bool,
+    pub state: bool,
 }
 
 impl TogglePlaybackShuffle {

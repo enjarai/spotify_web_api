@@ -6,7 +6,7 @@ use crate::api::prelude::*;
 pub struct GetSingleBrowseCategory {
     /// The [Spotify category ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the category.
     #[builder(setter(into))]
-    id: String,
+    pub id: String,
 
     /// The desired language, consisting of an [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code and an [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2), joined by an underscore. For example: `es_MX`, meaning "Spanish (Mexico)". Provide this parameter if you want the category strings returned in a particular language.
     ///
@@ -14,7 +14,7 @@ pub struct GetSingleBrowseCategory {
     ///
     /// Example: `sv_SE`
     #[builder(setter(into, strip_option), default)]
-    locale: Option<String>,
+    pub locale: Option<String>,
 }
 
 impl GetSingleBrowseCategory {

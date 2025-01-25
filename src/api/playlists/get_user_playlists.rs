@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = GET, path = "users/{id}/playlists")]
 pub struct GetUserPlaylists {
     /// The user's [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
-    id: String,
+    pub id: String,
 }
 
 impl GetUserPlaylists {

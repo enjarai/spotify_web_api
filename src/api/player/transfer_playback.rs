@@ -11,13 +11,13 @@ pub struct TransferPlayback {
     /// # Note
     /// Although an array is accepted, only a single `device_id` is currently supported. Supplying more than one will return 400 Bad Request
     #[endpoint(body)]
-    device_ids: Vec<String>,
+    pub device_ids: Vec<String>,
 
     /// `true`: ensure playback happens on new device.
     /// `false` or not provided: keep the current playback state.
     #[endpoint(body)]
     #[builder(default)]
-    play: bool,
+    pub play: bool,
 }
 
 impl TransferPlaybackBuilder {

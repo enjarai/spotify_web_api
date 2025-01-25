@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = DELETE, path = "me/audiobooks")]
 pub struct RemoveUserSavedAudiobooks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
-    ids: Vec<String>,
+    pub ids: Vec<String>,
 }
 
 impl RemoveUserSavedAudiobooksBuilder {

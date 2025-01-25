@@ -8,7 +8,7 @@ use crate::{
 #[endpoint(method = GET, path = "me/top/{type_}")]
 pub struct GetUserTopItems {
     /// The type of entity to return. Valid values: artists or tracks
-    type_: TopItemType,
+    pub type_: TopItemType,
 
     /// Over what time frame the affinities are computed.
     ///
@@ -20,7 +20,7 @@ pub struct GetUserTopItems {
     ///
     /// `short_term` (approximately last 4 weeks). Default: `medium_term`
     #[builder(setter(strip_option), default)]
-    time_range: Option<TimeRange>,
+    pub time_range: Option<TimeRange>,
 }
 
 impl GetUserTopItems {

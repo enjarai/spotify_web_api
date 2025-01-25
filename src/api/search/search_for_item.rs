@@ -9,10 +9,10 @@ use crate::{
 pub struct SearchForItem {
     /// Your search query.
     #[builder(setter(into))]
-    q: String,
+    pub q: String,
 
     /// A list of item types to search across. Search results include hits from all the specified item types.
-    type_: Vec<SearchType>,
+    pub type_: Vec<SearchType>,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -22,12 +22,12 @@ pub struct SearchForItem {
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     #[builder(setter(into, strip_option), default)]
-    market: Option<Market>,
+    pub market: Option<Market>,
 
     /// If `include_external=audio` is specified it signals that the client can play externally hosted audio content, and marks the content as playable in the response.
     /// By default externally hosted audio content is marked as unplayable in the response.
     #[builder(setter(strip_option), default)]
-    include_external: Option<IncludeExternalType>,
+    pub include_external: Option<IncludeExternalType>,
 }
 
 impl SearchForItemBuilder {

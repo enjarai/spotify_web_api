@@ -9,15 +9,15 @@ use serde_json::json;
 pub struct RemovePlaylistItems {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     #[builder(setter(into))]
-    id: String,
+    pub id: String,
 
     /// A list of [Spotify URIs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs.
-    tracks: Vec<PlaylistItem>,
+    pub tracks: Vec<PlaylistItem>,
 
     /// The playlist's snapshot ID against which you want to make the changes.
     /// The API will validate that the specified items exist and in the specified positions and make the changes, even if more recent changes have been made to the playlist.
     #[builder(setter(into))]
-    snapshot_id: String,
+    pub snapshot_id: String,
 }
 
 impl RemovePlaylistItems {

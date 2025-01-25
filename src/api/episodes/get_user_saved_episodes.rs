@@ -14,7 +14,7 @@ pub struct GetUserSavedEpisodes {
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     #[builder(setter(into, strip_option), default)]
-    market: Option<Market>,
+    pub market: Option<Market>,
 }
 
 impl GetUserSavedEpisodes {

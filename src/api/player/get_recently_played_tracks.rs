@@ -9,11 +9,11 @@ use crate::{
 #[derive(Debug, Clone, Builder)]
 pub struct GetRecentlyPlayedTracks {
     /// The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
-    limit: Option<u8>,
+    pub limit: Option<u8>,
 
     /// The Unix timestamp in milliseconds. Returns all items after (but not including) this cursor position.
     /// If after is specified, before must not be specified.
-    timeframe: QueryRange,
+    pub timeframe: QueryRange,
 }
 
 impl GetRecentlyPlayedTracks {

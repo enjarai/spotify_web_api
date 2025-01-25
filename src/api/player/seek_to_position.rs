@@ -8,12 +8,12 @@ use crate::api::prelude::*;
 pub struct SeekToPosition {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     #[builder(setter(into, strip_option), default)]
-    device_id: Option<String>,
+    pub device_id: Option<String>,
 
     /// The position in milliseconds to seek to.
     /// Passing in a position that is greater than the length of the track will cause the player to start playing the next song.
     #[builder(default)]
-    position_ms: u32,
+    pub position_ms: u32,
 }
 
 impl SeekToPosition {

@@ -13,27 +13,27 @@ use serde_json::json;
 pub struct UpdatePlaylistItems {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     #[builder(setter(into))]
-    id: String,
+    pub id: String,
 
     /// A list of [Spotify URIs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs.
     #[builder(default)]
-    uris: Option<Vec<PlaylistItem>>,
+    pub uris: Option<Vec<PlaylistItem>>,
 
     /// The position of the first item to be reordered.
     #[builder(default)]
-    range_start: u32,
+    pub range_start: u32,
 
     /// The position where the items should be inserted.
     #[builder(default)]
-    insert_before: u32,
+    pub insert_before: u32,
 
     /// The amount of items to be reordered. Defaults to 1 if not set.
     #[builder(setter(strip_option), default)]
-    range_length: Option<usize>,
+    pub range_length: Option<usize>,
 
     /// The playlist's snapshot ID against which you want to make the changes.
     #[builder(setter(into, strip_option), default)]
-    snapshot_id: Option<String>,
+    pub snapshot_id: Option<String>,
 }
 
 impl UpdatePlaylistItems {

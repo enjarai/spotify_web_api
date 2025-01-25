@@ -5,7 +5,7 @@ use crate::api::prelude::*;
 #[endpoint(method = DELETE, path = "me/shows")]
 pub struct RemoveUserSavedShows {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the shows.
-    ids: Vec<String>,
+    pub ids: Vec<String>,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -15,7 +15,7 @@ pub struct RemoveUserSavedShows {
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
     #[builder(setter(into, strip_option), default)]
-    market: Option<Market>,
+    pub market: Option<Market>,
 }
 
 impl RemoveUserSavedShowsBuilder {
