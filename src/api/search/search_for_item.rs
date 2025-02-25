@@ -1,5 +1,5 @@
 use crate::{
-    api::{common::path_escaped, prelude::*, Endpoint},
+    api::{Endpoint, common::path_escaped, prelude::*},
     model::{IncludeExternalType, SearchType},
 };
 

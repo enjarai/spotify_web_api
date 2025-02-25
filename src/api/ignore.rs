@@ -1,8 +1,8 @@
-use crate::api::{query, ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query};
+use crate::api::{ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query, query};
 use async_trait::async_trait;
 use http::{
-    header::{self, LOCATION},
     Method, Request,
+    header::{self, LOCATION},
 };
 
 /// A query modifier that ignores the data returned from an endpoint.

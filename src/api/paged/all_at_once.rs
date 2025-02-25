@@ -1,10 +1,10 @@
-use super::{Pageable, Pagination, MAX_LIMIT};
+use super::{MAX_LIMIT, Pageable, Pagination};
 use crate::{
-    api::{query, ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query},
+    api::{ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query, query},
     model::Page,
 };
 use async_trait::async_trait;
-use http::{header, Method, Request};
+use http::{Method, Request, header};
 use parking_lot::Mutex;
 use serde::de::DeserializeOwned;
 use std::sync::Arc;

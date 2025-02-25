@@ -1,13 +1,13 @@
 use self::query::{AsyncQuery, Query};
 use super::{Pageable, Paged, Pagination};
 use crate::{
-    api::{query, ApiError, AsyncClient, Client, Endpoint, RestClient},
+    api::{ApiError, AsyncClient, Client, Endpoint, RestClient, query},
     model::Page,
 };
 use async_trait::async_trait;
 use bytes::Bytes;
 use futures_util::Stream;
-use http::{header, request::Builder as RequestBuilder, Method, Request, Response};
+use http::{Method, Request, Response, header, request::Builder as RequestBuilder};
 use parking_lot::RwLock;
 use serde::de::DeserializeOwned;
 use url::Url;

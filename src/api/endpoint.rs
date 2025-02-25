@@ -6,8 +6,8 @@ use super::{
 };
 use async_trait::async_trait;
 use http::{
-    header::{self, LOCATION},
     Method, Request,
+    header::{self, LOCATION},
 };
 use serde::de::DeserializeOwned;
 use std::borrow::Cow;

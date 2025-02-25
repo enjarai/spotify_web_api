@@ -1,5 +1,5 @@
 use crate::{
-    api::{prelude::*, Endpoint},
+    api::{Endpoint, prelude::*},
     model::PlaylistItem,
 };
 

@@ -1,9 +1,9 @@
 use crate::{
     api::{self, ApiError, RestClient},
     auth::{
+        AuthCodePKCE, AuthError, AuthResult, ClientCredentials,
         private::{AsyncRefresh, AuthFlow, Refresh},
         scopes::Scope,
-        AuthCodePKCE, AuthError, AuthResult, ClientCredentials,
     },
     model::Token,
 };
@@ -11,7 +11,7 @@ use async_trait::async_trait;
 use bytes::Bytes;
 use http::{HeaderMap, HeaderValue, Response as HttpResponse};
 use parking_lot::RwLock;
-use reqwest::{blocking::Client, Client as AsyncClient};
+use reqwest::{Client as AsyncClient, blocking::Client};
 use std::{collections::HashSet, sync::Arc};
 use thiserror::Error;
 use url::Url;

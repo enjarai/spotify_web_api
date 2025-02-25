@@ -1,7 +1,7 @@
-use darling::{ast, FromDeriveInput, FromField};
+use darling::{FromDeriveInput, FromField, ast};
 use proc_macro::TokenStream;
-use quote::{quote, ToTokens};
-use syn::{parse_macro_input, DeriveInput};
+use quote::{ToTokens, quote};
+use syn::{DeriveInput, parse_macro_input};
 
 #[proc_macro_derive(Endpoint, attributes(endpoint))]
 pub fn derive_endpoint(input: TokenStream) -> TokenStream {

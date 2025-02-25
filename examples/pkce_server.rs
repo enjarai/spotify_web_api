@@ -1,9 +1,9 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use spotify_web_api::{
-    api::{users::GetCurrentUserProfile, Query as _},
+    Spotify,
+    api::{Query as _, users::GetCurrentUserProfile},
     auth::scopes,
     model::CurrentUserProfile,
-    Spotify,
 };
 use std::{
     env,
@@ -65,7 +65,9 @@ fn handle_connection(mut stream: TcpStream) -> Option<String> {
         if let Some(method) = parts.next() {
             if method == "GET" {
                 if let Some(url) = parts.next() {
-                    let response = format!("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html><head><title>{APP_NAME}</title></head><body><h1>{APP_NAME}</h1><p>Authorization successful. You can now close this tab and return to the application.</p></body></html>");
+                    let response = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html><head><title>{APP_NAME}</title></head><body><h1>{APP_NAME}</h1><p>Authorization successful. You can now close this tab and return to the application.</p></body></html>"
+                    );
 
                     let _ = stream.write_all(response.as_bytes());
                     if let Err(e) = stream.flush() {
@@ -78,7 +80,9 @@ fn handle_connection(mut stream: TcpStream) -> Option<String> {
         }
     }
 
-    let response = format!("HTTP/1.1 400 Bad Request\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html><head><title>{APP_NAME}</title></head><body><h1>{APP_NAME}</h1><p>Bad request</p></body></html>");
+    let response = format!(
+        "HTTP/1.1 400 Bad Request\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html><head><title>{APP_NAME}</title></head><body><h1>{APP_NAME}</h1><p>Bad request</p></body></html>"
+    );
 
     let _ = stream.write_all(response.as_bytes());
     if let Err(e) = stream.flush() {

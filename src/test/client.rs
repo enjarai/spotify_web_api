@@ -5,7 +5,7 @@ use crate::{
 use async_trait::async_trait;
 use bytes::Bytes;
 use derive_builder::Builder;
-use http::{header, request::Builder as RequestBuilder, Method, Response, StatusCode};
+use http::{Method, Response, StatusCode, header, request::Builder as RequestBuilder};
 use serde::Serialize;
 use std::{borrow::Cow, collections::HashMap, fmt::Debug};
 use thiserror::Error;

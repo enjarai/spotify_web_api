@@ -13,11 +13,7 @@ pub trait ParamValue<'a> {
 
 impl ParamValue<'static> for bool {
     fn as_value(&self) -> Cow<'static, str> {
-        if *self {
-            "true".into()
-        } else {
-            "false".into()
-        }
+        if *self { "true".into() } else { "false".into() }
     }
 }
 
@@ -197,8 +193,8 @@ impl JsonParams {
         if let Some(obj) = val.as_object_mut() {
             obj.retain(|_, v| {
                 !v.is_null()
-                    && v.as_array().map_or(true, |a| !a.is_empty())
-                    && v.as_object().map_or(true, |o| !o.is_empty())
+                    && v.as_array().is_none_or(|a| !a.is_empty())
+                    && v.as_object().is_none_or(|o| !o.is_empty())
             });
         }
 

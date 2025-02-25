@@ -1,6 +1,6 @@
 use spotify_web_api::{
-    api::{tracks::GetTrack, Query as _},
     Spotify,
+    api::{Query as _, tracks::GetTrack},
 };
 use std::env;
 

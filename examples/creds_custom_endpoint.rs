@@ -1,7 +1,7 @@
 use http::Method;
 use spotify_web_api::{
-    api::{Endpoint, Query as _},
     Spotify,
+    api::{Endpoint, Query as _},
 };
 use std::{borrow::Cow, env};
 
@@ -12,7 +12,7 @@ struct Track {
 
 struct TrackID<'a>(&'a str);
 
-impl<'a> Endpoint for TrackID<'a> {
+impl Endpoint for TrackID<'_> {
     fn method(&self) -> Method {
         Method::GET
     }

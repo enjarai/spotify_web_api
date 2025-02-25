@@ -1,7 +1,7 @@
 use spotify_web_api::{
-    api::{artists::GetArtist, Query as _},
-    model::Artist,
     Spotify,
+    api::{Query as _, artists::GetArtist},
+    model::Artist,
 };
 use std::env;
 

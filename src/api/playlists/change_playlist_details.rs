@@ -1,4 +1,4 @@
-use crate::api::{prelude::*, Endpoint};
+use crate::api::{Endpoint, prelude::*};
 use serde_json::json;
 
 /// Change a playlist's name and public/private state. (The user must, of course, own the playlist.)

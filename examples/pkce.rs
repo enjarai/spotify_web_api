@@ -1,8 +1,8 @@
 use spotify_web_api::{
-    api::{artists::GetArtist, Query as _},
+    Spotify,
+    api::{Query as _, artists::GetArtist},
     auth::scopes,
     model::Artist,
-    Spotify,
 };
 use std::{
     env,

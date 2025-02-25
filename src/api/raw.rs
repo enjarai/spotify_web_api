@@ -1,7 +1,6 @@
+use crate::api::{ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query, query};
 use async_trait::async_trait;
-use http::{header, Method, Request};
-
-use crate::api::{query, ApiError, AsyncClient, AsyncQuery, Client, Endpoint, Query};
+use http::{Method, Request, header};
 
 /// A query modifier that returns the raw data from the endpoint.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

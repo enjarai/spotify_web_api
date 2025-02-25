@@ -1,4 +1,4 @@
-use chrono::{serde::ts_seconds_option, DateTime, TimeDelta, Utc};
+use chrono::{DateTime, TimeDelta, Utc, serde::ts_seconds_option};
 use serde::{Deserialize, Serialize};
 
 /// Represents an OAuth 2.0 access token for authenticating API requests.
@@ -61,9 +61,8 @@ impl Token {
     /// - `true`: If the token is expired or the expiration time is not set.
     /// - `false`: If the token is still valid.
     pub fn is_expired(&self) -> bool {
-        self.expires_at.map_or(true, |expires_at| {
-            Utc::now() + TimeDelta::seconds(10) >= expires_at
-        })
+        self.expires_at
+            .is_none_or(|expires_at| Utc::now() + TimeDelta::seconds(10) >= expires_at)
     }
 }
 

@@ -1,8 +1,8 @@
 use spotify_web_api::{
-    api::{users::GetCurrentUserProfile, Query as _},
+    Spotify,
+    api::{Query as _, users::GetCurrentUserProfile},
     auth::scopes,
     model::CurrentUserProfile,
-    Spotify,
 };
 use std::{env, fs};
 

@@ -3,13 +3,13 @@ mod pkce;
 pub mod scopes;
 
 use crate::{
-    api::{query, ApiError, FormParams},
-    model::Token,
     RestError,
+    api::{ApiError, FormParams, query},
+    model::Token,
 };
 use bytes::Bytes;
 pub use client_credentials::ClientCredentials;
-use http::{header, request::Builder, HeaderMap, HeaderValue, Request, Response as HttpResponse};
+use http::{HeaderMap, HeaderValue, Request, Response as HttpResponse, header, request::Builder};
 pub use pkce::AuthCodePKCE;
 use reqwest::blocking::Client;
 use thiserror::Error;
@@ -76,7 +76,9 @@ pub enum AuthError {
     /// This error occurs when the state value is expected but not present.
     /// Ensure that the `user_authorization_url()` method is called to generate
     /// a proper authorization URL that includes the state parameter.
-    #[error("AuthCodePKCE's state is None. Make sure to generate a user authorization URL by calling user_authorization_url()")]
+    #[error(
+        "AuthCodePKCE's state is None. Make sure to generate a user authorization URL by calling user_authorization_url()"
+    )]
     NoState,
 
     /// Indicates that the code verifier is missing.
@@ -84,7 +86,9 @@ pub enum AuthError {
     /// This error occurs when the code verifier is expected but not present.
     /// Ensure that the `user_authorization_url()` method is called to generate
     /// the code verifier required for the PKCE flow.
-    #[error("AuthCodePKCE's code_verifier is None. Make sure to generate a code verifier by calling user_authorization_url()")]
+    #[error(
+        "AuthCodePKCE's code_verifier is None. Make sure to generate a code verifier by calling user_authorization_url()"
+    )]
     NoCodeVerifier,
 
     /// Represents an error when the access token is empty, indicating that
@@ -100,7 +104,7 @@ pub enum AuthError {
 
 pub(crate) mod private {
     use super::AuthError;
-    use crate::{api::ApiError, model::Token, RestError};
+    use crate::{RestError, api::ApiError, model::Token};
     use async_trait::async_trait;
     use reqwest::blocking::Client;
 

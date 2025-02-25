@@ -1,7 +1,7 @@
 use super::error::ApiError;
 use async_trait::async_trait;
 use bytes::Bytes;
-use http::{request::Builder as RequestBuilder, Response};
+use http::{Response, request::Builder as RequestBuilder};
 use std::error::Error;
 use url::Url;
 

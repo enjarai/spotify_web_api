@@ -1,4 +1,4 @@
-use crate::api::{prelude::*, Endpoint};
+use crate::api::{Endpoint, prelude::*};
 
 /// Set the volume for the user’s current playback device.
 /// This API only works for users who have Spotify Premium.

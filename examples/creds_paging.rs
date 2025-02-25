@@ -1,7 +1,7 @@
 use spotify_web_api::{
-    api::{self, albums::GetAlbumTracks, Query as _},
-    model::SimplifiedTrack,
     Spotify,
+    api::{self, Query as _, albums::GetAlbumTracks},
+    model::SimplifiedTrack,
 };
 use std::env;
 

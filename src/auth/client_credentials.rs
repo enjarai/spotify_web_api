@@ -1,10 +1,10 @@
 use super::private::{AsyncRefresh, AuthFlow, Refresh};
 use crate::{
+    RestError,
     api::{ApiError, FormParams},
     model::Token,
-    RestError,
 };
-use base64::{engine::general_purpose, Engine as _};
+use base64::{Engine as _, engine::general_purpose};
 use reqwest::blocking::Client;
 
 /// Represents the Client Credentials authentication flow for Spotify.

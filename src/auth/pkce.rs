@@ -1,12 +1,12 @@
 use super::{
-    private::{AsyncRefresh, AuthFlow, Refresh},
     AuthError, AuthResult,
+    private::{AsyncRefresh, AuthFlow, Refresh},
 };
 use crate::{
+    RestError,
     api::{ApiError, FormParams, QueryParams},
     auth::scopes::{self, Scope},
     model::Token,
-    RestError,
 };
 use async_trait::async_trait;
 use reqwest::blocking::Client;
@@ -265,8 +265,8 @@ impl AsyncRefresh for AuthCodePKCE {
 }
 
 mod crypto {
-    use base64::{engine::general_purpose, Engine as _};
-    use rand::{thread_rng, Rng};
+    use base64::{Engine as _, engine::general_purpose};
+    use rand::Rng as _;
     use sha2::{Digest, Sha256};
 
     const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
@@ -284,10 +284,10 @@ mod crypto {
     }
 
     pub fn random_string(length: usize) -> String {
-        let mut rng = thread_rng();
+        let mut rng = rand::rng();
         let s: String = (0..length)
             .map(|_| {
-                let idx = rng.gen_range(0..CHARSET.len());
+                let idx = rng.random_range(0..CHARSET.len());
                 CHARSET[idx] as char
             })
             .collect();

@@ -1,4 +1,4 @@
-use spotify_web_api::{auth::scopes, Spotify};
+use spotify_web_api::{Spotify, auth::scopes};
 use std::{
     env,
     io::{self, Write},
