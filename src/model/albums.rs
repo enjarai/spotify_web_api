@@ -104,7 +104,7 @@ pub struct Album {
     pub artists: Vec<SimplifiedArtist>,
 
     /// The tracks of the album.
-    #[cfg(feature = "include_items")]
+    #[cfg(feature = "page_items")]
     pub tracks: Page<SimplifiedTrack>,
 
     /// The copyright statements of the album.

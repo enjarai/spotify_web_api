@@ -32,8 +32,8 @@ async-trait = "0.1.88"
 base64 = "0.22.1"
 bytes = "1.10.1"
 chrono = { version = "0.4.40", default-features = false, features = [
-	"serde",
-	"now",
+    "serde",
+    "now",
 ] }
 derive_builder = "0.20.2"
 futures-util = { version = "0.3.31", default-features = false }
@@ -44,8 +44,8 @@ parking_lot = "0.12.3"
 percent-encoding = "2.3.1"
 rand = "0.9.0"
 reqwest = { version = "0.12.15", default-features = false, features = [
-	"blocking",
-	"rustls-tls",
+    "blocking",
+    "rustls-tls",
 ] }
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
@@ -55,9 +55,9 @@ thiserror = "2.0.12"
 url = "2.5.4"
 
 [features]
-default = ["markets", "include_items"]
+default = ["markets", "page_items"]
 markets = []
-include_items = []
+page_items = []
 
 [dev-dependencies]
 anyhow = "1.0.97"

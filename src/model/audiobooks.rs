@@ -80,7 +80,7 @@ pub struct Audiobook {
     pub total_chapters: usize,
 
     /// A list of simplified chapters in this audiobook.
-    #[cfg(feature = "include_items")]
+    #[cfg(feature = "page_items")]
     pub chapters: Page<SimplifiedChapter>,
 }
 
