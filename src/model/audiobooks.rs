@@ -152,6 +152,32 @@ pub struct SimplifiedAudiobook {
     pub total_chapters: usize,
 }
 
+impl From<Audiobook> for SimplifiedAudiobook {
+    fn from(audiobook: Audiobook) -> Self {
+        Self {
+            authors: audiobook.authors,
+            available_markets: audiobook.available_markets,
+            copyrights: audiobook.copyrights,
+            description: audiobook.description,
+            html_description: audiobook.html_description,
+            edition: Some(audiobook.edition),
+            explicit: audiobook.explicit,
+            external_urls: audiobook.external_urls,
+            href: audiobook.href,
+            id: audiobook.id,
+            images: audiobook.images,
+            languages: audiobook.languages,
+            media_type: audiobook.media_type,
+            name: audiobook.name,
+            narrators: audiobook.narrators,
+            publisher: audiobook.publisher,
+            type_: audiobook.type_,
+            uri: audiobook.uri,
+            total_chapters: audiobook.total_chapters,
+        }
+    }
+}
+
 /// Spotify catalog information for several audiobooks
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Audiobooks {

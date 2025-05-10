@@ -125,6 +125,30 @@ pub struct SimplifiedShow {
     pub total_episodes: usize,
 }
 
+impl From<Show> for SimplifiedShow {
+    fn from(show: Show) -> Self {
+        Self {
+            available_markets: show.available_markets,
+            copyrights: show.copyrights,
+            description: show.description,
+            html_description: show.html_description,
+            explicit: show.explicit,
+            external_urls: show.external_urls,
+            href: show.href,
+            id: show.id,
+            images: show.images,
+            is_externally_hosted: show.is_externally_hosted,
+            languages: show.languages,
+            media_type: show.media_type,
+            name: show.name,
+            publisher: show.publisher,
+            type_: show.type_,
+            uri: show.uri,
+            total_episodes: show.total_episodes,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedShow {
     /// The date and time the show was saved. Timestamps are returned in ISO 8601 format as Coordinated Universal Time (UTC)

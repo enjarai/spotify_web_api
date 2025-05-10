@@ -149,6 +149,32 @@ pub struct SimplifiedChapter {
     pub restrictions: Option<Restrictions>,
 }
 
+impl From<Chapter> for SimplifiedChapter {
+    fn from(chapter: Chapter) -> Self {
+        Self {
+            available_markets: chapter.available_markets,
+            chapter_number: chapter.chapter_number,
+            description: chapter.description,
+            html_description: chapter.html_description,
+            duration_ms: chapter.duration_ms,
+            explicit: chapter.explicit,
+            external_urls: chapter.external_urls,
+            href: chapter.href,
+            id: chapter.id,
+            images: chapter.images,
+            is_playable: chapter.is_playable,
+            languages: chapter.languages,
+            name: chapter.name,
+            release_date: chapter.release_date,
+            release_date_precision: chapter.release_date_precision,
+            resume_point: chapter.resume_point,
+            type_: chapter.type_,
+            uri: chapter.uri,
+            restrictions: chapter.restrictions,
+        }
+    }
+}
+
 /// Spotify catalog information for several audiobook chapters
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Chapters {

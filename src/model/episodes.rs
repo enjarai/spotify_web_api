@@ -134,6 +134,31 @@ pub struct SimplifiedEpisode {
     pub restrictions: Option<Restrictions>,
 }
 
+impl From<Episode> for SimplifiedEpisode {
+    fn from(episode: Episode) -> Self {
+        Self {
+            description: episode.description,
+            html_description: episode.html_description,
+            duration_ms: episode.duration_ms,
+            explicit: episode.explicit,
+            external_urls: episode.external_urls,
+            href: episode.href,
+            id: episode.id,
+            images: episode.images,
+            is_externally_hosted: episode.is_externally_hosted,
+            is_playable: episode.is_playable,
+            languages: episode.languages,
+            name: episode.name,
+            release_date: episode.release_date,
+            release_date_precision: episode.release_date_precision,
+            resume_point: episode.resume_point,
+            type_: episode.type_,
+            uri: episode.uri,
+            restrictions: episode.restrictions,
+        }
+    }
+}
+
 /// Spotify catalog information for several episodes.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Episodes {

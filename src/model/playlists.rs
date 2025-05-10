@@ -105,6 +105,30 @@ pub struct SimplifiedPlaylist {
     pub uri: String,
 }
 
+impl From<Playlist> for SimplifiedPlaylist {
+    fn from(playlist: Playlist) -> Self {
+        Self {
+            collaborative: playlist.collaborative,
+            description: playlist.description,
+            external_urls: playlist.external_urls,
+            href: playlist.href,
+            id: playlist.id,
+            images: playlist.images,
+            name: playlist.name,
+            owner: playlist.owner,
+            primary_color: playlist.primary_color,
+            public: playlist.public,
+            snapshot_id: playlist.snapshot_id,
+            tracks: Some(TrackReference {
+                href: playlist.tracks.href,
+                total: playlist.tracks.total,
+            }),
+            type_: playlist.type_,
+            uri: playlist.uri,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct PlaylistTrack {
     /// The date and time the track or episode was added.

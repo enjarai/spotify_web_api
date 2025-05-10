@@ -160,6 +160,30 @@ pub struct SimplifiedTrack {
     pub is_local: bool,
 }
 
+impl From<Track> for SimplifiedTrack {
+    fn from(track: Track) -> Self {
+        Self {
+            album: Some(track.album),
+            artists: track.artists,
+            available_markets: track.available_markets,
+            disc_number: track.disc_number,
+            duration_ms: track.duration_ms,
+            explicit: track.explicit,
+            external_urls: track.external_urls,
+            href: track.href,
+            id: track.id,
+            is_playable: track.is_playable,
+            linked_from: track.linked_from,
+            restrictions: track.restrictions,
+            name: track.name,
+            track_number: track.track_number,
+            type_: track.type_,
+            uri: track.uri,
+            is_local: track.is_local,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SavedTrack {
     /// The date and time the track was saved.

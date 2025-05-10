@@ -62,6 +62,19 @@ pub struct SimplifiedArtist {
     pub uri: String,
 }
 
+impl From<Artist> for SimplifiedArtist {
+    fn from(artist: Artist) -> Self {
+        Self {
+            external_urls: artist.external_urls,
+            href: artist.href,
+            id: artist.id,
+            name: artist.name,
+            type_: artist.type_,
+            uri: artist.uri,
+        }
+    }
+}
+
 /// Spotify catalog information for several artists
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Artists {

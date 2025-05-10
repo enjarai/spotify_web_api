@@ -181,6 +181,27 @@ pub struct SimplifiedAlbum {
     pub artists: Vec<SimplifiedArtist>,
 }
 
+impl From<Album> for SimplifiedAlbum {
+    fn from(album: Album) -> Self {
+        Self {
+            album_type: album.album_type,
+            total_tracks: album.total_tracks,
+            available_markets: album.available_markets,
+            external_urls: album.external_urls,
+            href: album.href,
+            id: album.id,
+            images: album.images,
+            name: album.name,
+            release_date: Some(album.release_date),
+            release_date_precision: Some(album.release_date_precision),
+            restrictions: album.restrictions,
+            type_: album.type_,
+            uri: album.uri,
+            artists: album.artists,
+        }
+    }
+}
+
 /// Spotify catalog information for several albums
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Albums {
