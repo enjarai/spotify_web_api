@@ -28,28 +28,7 @@ pub struct ClientCredentials {
 impl AuthFlow for ClientCredentials {}
 impl AsyncAuthFlow for ClientCredentials {}
 
-// impl Refresh for ClientCredentials {}
-// impl AsyncRefresh for ClientCredentials {}
-
 impl ClientCredentials {
-    /// Creates a new instance of `ClientCredentials` with the provided client ID and secret.
-    ///
-    /// This constructor is used to create a `ClientCredentials` instance, which can then be used
-    /// to authenticate with Spotify's API by requesting an access token.
-    ///
-    /// # Parameters
-    /// - `client_id`: The Client ID of your Spotify application.
-    /// - `client_secret`: The Client Secret of your Spotify application.
-    ///
-    /// # Returns
-    /// A new instance of `ClientCredentials`.
-    ///
-    /// # Example
-    /// ```
-    /// use spotify_web_api::auth::ClientCredentials;
-    ///
-    /// let client_credentials = ClientCredentials::new("your-client-id", "your-client-secret");
-    /// ```
     pub fn new(client_id: impl Into<String>, client_secret: impl Into<String>) -> Self {
         Self {
             client_id: client_id.into(),
@@ -57,12 +36,12 @@ impl ClientCredentials {
         }
     }
 
-    pub(crate) fn request_token(&self, client: &Client) -> Result<Token, ApiError<RestError>> {
+    pub fn request_token(&self, client: &Client) -> Result<Token, ApiError<RestError>> {
         let (auth, params) = self.auth_value_and_params();
         super::request_token(client, Some(auth), params)
     }
 
-    pub(crate) async fn request_token_async(
+    pub async fn request_token_async(
         &self,
         client: &reqwest::Client,
     ) -> Result<Token, ApiError<RestError>> {

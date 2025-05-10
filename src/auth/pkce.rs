@@ -63,27 +63,8 @@ pub struct AuthCodePKCE {
 }
 
 impl AuthCodePKCE {
-    /// Creates a new instance of the `AuthCodePKCE` struct.
-    ///
-    /// This method initializes the struct with the provided client ID, redirect URI, and optional scopes.
-    /// It sets the `state` and `code_verifier` fields to `None`, as they will be generated
-    /// during the authorization process.
-    ///
-    /// # Parameters
-    /// - `client_id`: The Client ID of your Spotify application.
-    /// - `redirect_uri`: The URI to redirect to after user authorization.
-    /// - `scopes`: An optional set of scopes defining the level of access requested from the user.
-    ///
-    /// # Returns
-    /// A new instance of `AuthCodePKCE` with the provided values.
-    ///
-    /// # Example
-    /// ```
-    /// use std::collections::HashSet;
-    /// use spotify_web_api::auth::{AuthCodePKCE, scopes};
-    ///
-    /// let pkce = AuthCodePKCE::new("client_id", "http://localhost:8080/callback", scopes::user_details());
-    /// ```
+    // This sets the `state` and `code_verifier` fields to `None`, as they will be generated
+    // during the authorization process.
     pub fn new(
         client_id: impl Into<String>,
         redirect_uri: impl Into<String>,
@@ -98,11 +79,11 @@ impl AuthCodePKCE {
         }
     }
 
-    pub(crate) fn set_scopes(&mut self, scopes: Option<HashSet<Scope>>) {
+    pub fn set_scopes(&mut self, scopes: Option<HashSet<Scope>>) {
         self.scopes = scopes;
     }
 
-    pub(crate) fn user_authorization_url(&mut self) -> String {
+    pub fn user_authorization_url(&mut self) -> String {
         let code_verifier = crypto::generate_code_verifier(128);
         let code_challenge = crypto::generate_code_challenge(&code_verifier);
         let state = crypto::random_string(16);
@@ -128,7 +109,7 @@ impl AuthCodePKCE {
         url.as_str().to_owned()
     }
 
-    pub(crate) fn verify_authorization_code(&self, url: &str) -> AuthResult<String> {
+    pub fn verify_authorization_code(&self, url: &str) -> AuthResult<String> {
         let self_state = self.state.as_ref().ok_or(AuthError::NoState)?;
 
         let url = Url::parse(url)?;
@@ -160,11 +141,7 @@ impl AuthCodePKCE {
         }
     }
 
-    pub(crate) fn request_token(
-        &self,
-        code: &str,
-        client: &Client,
-    ) -> Result<Token, ApiError<RestError>> {
+    pub fn request_token(&self, code: &str, client: &Client) -> Result<Token, ApiError<RestError>> {
         let code_verifier = self
             .code_verifier
             .as_ref()
@@ -173,7 +150,7 @@ impl AuthCodePKCE {
         super::request_token(client, None, params)
     }
 
-    pub(crate) async fn request_token_async(
+    pub async fn request_token_async(
         &self,
         code: &str,
         client: &reqwest::Client,
@@ -186,7 +163,7 @@ impl AuthCodePKCE {
         super::request_token_async(client, None, params).await
     }
 
-    pub(crate) fn request_token_from_redirect_url(
+    pub fn request_token_from_redirect_url(
         &self,
         url: &str,
         client: &Client,
@@ -200,7 +177,7 @@ impl AuthCodePKCE {
         super::request_token(client, None, params)
     }
 
-    pub(crate) async fn request_token_from_redirect_url_async(
+    pub async fn request_token_from_redirect_url_async(
         &self,
         url: &str,
         client: &reqwest::Client,

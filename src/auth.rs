@@ -8,9 +8,9 @@ use crate::{
     model::Token,
 };
 use bytes::Bytes;
-pub use client_credentials::ClientCredentials;
+pub(crate) use client_credentials::ClientCredentials;
 use http::{HeaderMap, HeaderValue, Request, Response as HttpResponse, header, request::Builder};
-pub use pkce::AuthCodePKCE;
+pub(crate) use pkce::AuthCodePKCE;
 use reqwest::blocking::Client;
 use thiserror::Error;
 use url::Url;
