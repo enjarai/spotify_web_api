@@ -2,7 +2,7 @@ use crate::{
     api::{self, ApiError, RestClient},
     auth::{
         AuthCodePKCE, AuthError, AuthResult, ClientCredentials,
-        private::{AsyncRefresh, AuthFlow, Refresh},
+        private::{AsyncAuthFlow, AuthFlow},
         scopes::Scope,
     },
     model::Token,
@@ -163,7 +163,7 @@ impl SpotifyError {
 
 pub struct Spotify<A>
 where
-    A: AuthFlow + Refresh,
+    A: AuthFlow,
 {
     /// The client to use for API calls.
     client: Client,
@@ -183,7 +183,7 @@ where
 
 impl<A> Spotify<A>
 where
-    A: AuthFlow + Refresh,
+    A: AuthFlow,
 {
     fn new_impl(auth: A) -> SpotifyResult<Self> {
         let api_url = Url::parse(BASE_API_URL)?;
@@ -577,7 +577,7 @@ impl Spotify<ClientCredentials> {
 
 impl<A> RestClient for Spotify<A>
 where
-    A: AuthFlow + Refresh,
+    A: AuthFlow,
 {
     type Error = RestError;
 
@@ -589,7 +589,7 @@ where
 
 impl<A> api::Client for Spotify<A>
 where
-    A: AuthFlow + Refresh,
+    A: AuthFlow,
 {
     fn rest(
         &self,
@@ -602,7 +602,7 @@ where
 
 pub struct AsyncSpotify<A>
 where
-    A: AuthFlow + AsyncRefresh,
+    A: AsyncAuthFlow,
 {
     /// The client to use for API calls.
     client: reqwest::Client,
@@ -622,7 +622,7 @@ where
 
 impl<A> AsyncSpotify<A>
 where
-    A: AuthFlow + AsyncRefresh + Sync,
+    A: AsyncAuthFlow + Sync,
 {
     fn new_impl(auth: A) -> SpotifyResult<Self> {
         let api_url = Url::parse(BASE_API_URL)?;
@@ -1017,7 +1017,7 @@ impl AsyncSpotify<ClientCredentials> {
 #[async_trait]
 impl<A> RestClient for AsyncSpotify<A>
 where
-    A: AuthFlow + AsyncRefresh,
+    A: AsyncAuthFlow,
 {
     type Error = RestError;
 
@@ -1030,7 +1030,7 @@ where
 #[async_trait]
 impl<A> api::AsyncClient for AsyncSpotify<A>
 where
-    A: AuthFlow + AsyncRefresh + Sync + Send,
+    A: AsyncAuthFlow + Sync + Send,
 {
     async fn rest_async(
         &self,

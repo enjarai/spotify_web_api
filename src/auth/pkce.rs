@@ -1,6 +1,6 @@
 use super::{
     AuthError, AuthResult,
-    private::{AsyncRefresh, AuthFlow, Refresh},
+    private::{AsyncAuthFlow, AuthFlow},
 };
 use crate::{
     RestError,
@@ -233,9 +233,7 @@ impl AuthCodePKCE {
     }
 }
 
-impl AuthFlow for AuthCodePKCE {}
-
-impl Refresh for AuthCodePKCE {
+impl AuthFlow for AuthCodePKCE {
     fn refresh_token(
         &self,
         client: &Client,
@@ -249,7 +247,7 @@ impl Refresh for AuthCodePKCE {
 }
 
 #[async_trait]
-impl AsyncRefresh for AuthCodePKCE {
+impl AsyncAuthFlow for AuthCodePKCE {
     async fn refresh_token_async(
         &self,
         client: &reqwest::Client,

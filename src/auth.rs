@@ -108,9 +108,7 @@ pub(crate) mod private {
     use async_trait::async_trait;
     use reqwest::blocking::Client;
 
-    pub trait AuthFlow {}
-
-    pub trait Refresh {
+    pub trait AuthFlow {
         fn refresh_token(
             &self,
             client: &Client,
@@ -123,7 +121,7 @@ pub(crate) mod private {
     }
 
     #[async_trait]
-    pub trait AsyncRefresh {
+    pub trait AsyncAuthFlow {
         async fn refresh_token_async(
             &self,
             client: &reqwest::Client,
