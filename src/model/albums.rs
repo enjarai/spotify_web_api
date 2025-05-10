@@ -113,11 +113,6 @@ pub struct Album {
     /// Known external IDs for the album.
     pub external_ids: ExternalIds,
 
-    /// A list of the genres the album is associated with. If not yet classified, the array is empty.
-    #[deprecated = "This field is always empty"]
-    #[serde(default)]
-    pub genres: Vec<String>,
-
     /// The label associated with the album.
     pub label: String,
 

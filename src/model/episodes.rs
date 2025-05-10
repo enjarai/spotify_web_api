@@ -5,11 +5,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Episode {
-    /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
-    #[deprecated]
-    #[serde(default)]
-    pub audio_preview_url: Option<String>,
-
     /// A description of the episode. HTML tags are stripped away from this field,
     /// use `html_description` field in case HTML tags are needed.
     pub description: String,
@@ -40,11 +35,6 @@ pub struct Episode {
 
     /// True if the episode is playable in the given market. Otherwise false.
     pub is_playable: bool,
-
-    /// The language used in the episode, identified by a [ISO 639 ](https://en.wikipedia.org/wiki/ISO_639) code.
-    #[deprecated = "This field is deprecated and might be removed in the future. Please use the `languages` field instead"]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub language: Option<String>,
 
     /// A list of the languages used in the episode, identified by their [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639) code.
     pub languages: Vec<String>,
@@ -82,10 +72,6 @@ pub struct Episode {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct SimplifiedEpisode {
-    /// A URL to a 30 second preview (MP3 format) of the episode. null if not available.
-    #[deprecated]
-    pub audio_preview_url: Option<String>,
-
     /// A description of the episode. HTML tags are stripped away from this field,
     /// use `html_description` field in case HTML tags are needed.
     pub description: String,
@@ -116,11 +102,6 @@ pub struct SimplifiedEpisode {
 
     /// True if the episode is playable in the given market. Otherwise false.
     pub is_playable: bool,
-
-    /// The language used in the episode, identified by a [ISO 639 ](https://en.wikipedia.org/wiki/ISO_639) code.
-    #[deprecated = "This field is deprecated and might be removed in the future. Please use the `languages` field instead"]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub language: Option<String>,
 
     /// A list of the languages used in the episode, identified by their [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639) code.
     pub languages: Vec<String>,
