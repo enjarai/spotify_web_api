@@ -128,6 +128,7 @@ pub struct SimplifiedShow {
 impl From<Show> for SimplifiedShow {
     fn from(show: Show) -> Self {
         Self {
+            #[cfg(feature = "markets")]
             available_markets: show.available_markets,
             copyrights: show.copyrights,
             description: show.description,

@@ -186,6 +186,7 @@ impl From<Album> for SimplifiedAlbum {
         Self {
             album_type: album.album_type,
             total_tracks: album.total_tracks,
+            #[cfg(feature = "markets")]
             available_markets: album.available_markets,
             external_urls: album.external_urls,
             href: album.href,

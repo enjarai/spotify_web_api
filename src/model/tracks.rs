@@ -165,6 +165,7 @@ impl From<Track> for SimplifiedTrack {
         Self {
             album: Some(track.album),
             artists: track.artists,
+            #[cfg(feature = "markets")]
             available_markets: track.available_markets,
             disc_number: track.disc_number,
             duration_ms: track.duration_ms,

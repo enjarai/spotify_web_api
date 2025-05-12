@@ -156,6 +156,7 @@ impl From<Audiobook> for SimplifiedAudiobook {
     fn from(audiobook: Audiobook) -> Self {
         Self {
             authors: audiobook.authors,
+            #[cfg(feature = "markets")]
             available_markets: audiobook.available_markets,
             copyrights: audiobook.copyrights,
             description: audiobook.description,

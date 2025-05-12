@@ -152,6 +152,7 @@ pub struct SimplifiedChapter {
 impl From<Chapter> for SimplifiedChapter {
     fn from(chapter: Chapter) -> Self {
         Self {
+            #[cfg(feature = "markets")]
             available_markets: chapter.available_markets,
             chapter_number: chapter.chapter_number,
             description: chapter.description,
