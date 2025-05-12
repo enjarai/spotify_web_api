@@ -217,9 +217,9 @@ impl AuthFlow for AuthCodePKCE {
         refresh_token: &str,
     ) -> Result<Token, ApiError<RestError>> {
         let params = self.refresh_token_request_params(refresh_token);
-        let (req, data) = super::http_request_and_data(None, params)?;
-        let rsp = super::http_response(client, req, data).map_err(ApiError::client)?;
-        super::parse_response(&rsp)
+        let (request, data) = super::init_http_request_and_data(None, params)?;
+        let response = super::send_http_request(client, request, data).map_err(ApiError::client)?;
+        super::parse_http_response(&response)
     }
 }
 
@@ -231,11 +231,11 @@ impl AsyncAuthFlow for AuthCodePKCE {
         refresh_token: &str,
     ) -> Result<Token, ApiError<RestError>> {
         let params = self.refresh_token_request_params(refresh_token);
-        let (req, data) = super::http_request_and_data(None, params)?;
-        let rsp = super::http_response_async(client, req, data)
+        let (request, data) = super::init_http_request_and_data(None, params)?;
+        let response = super::send_http_request_async(client, request, data)
             .await
             .map_err(ApiError::client)?;
-        super::parse_response(&rsp)
+        super::parse_http_response(&response)
     }
 }
 

@@ -136,27 +136,27 @@ pub(crate) mod private {
 
 fn request_token(
     client: &Client,
-    auth_header_value: Option<String>,
+    authorization_header: Option<String>,
     params: FormParams<'_>,
 ) -> Result<Token, ApiError<RestError>> {
-    let (req, data) = http_request_and_data(auth_header_value, params)?;
-    let rsp = http_response(client, req, data).map_err(ApiError::client)?;
-    parse_response(&rsp)
+    let (request, data) = init_http_request_and_data(authorization_header, params)?;
+    let response = send_http_request(client, request, data).map_err(ApiError::client)?;
+    parse_http_response(&response)
 }
 
 async fn request_token_async(
     client: &reqwest::Client,
-    auth_header_value: Option<String>,
+    authorization_header: Option<String>,
     params: FormParams<'_>,
 ) -> Result<Token, ApiError<RestError>> {
-    let (req, data) = http_request_and_data(auth_header_value, params)?;
-    let rsp = http_response_async(client, req, data)
+    let (request, data) = init_http_request_and_data(authorization_header, params)?;
+    let response = send_http_request_async(client, request, data)
         .await
         .map_err(ApiError::client)?;
-    parse_response(&rsp)
+    parse_http_response(&response)
 }
 
-fn set_auth_header<'a>(
+fn set_authorization_header<'a>(
     headers: &'a mut HeaderMap<HeaderValue>,
     value: &str,
 ) -> AuthResult<&'a mut HeaderMap<HeaderValue>> {
@@ -166,9 +166,8 @@ fn set_auth_header<'a>(
     Ok(headers)
 }
 
-#[inline(always)]
-fn http_request_and_data(
-    auth_header_value: Option<String>,
+fn init_http_request_and_data(
+    authorization_header: Option<String>,
     params: FormParams<'_>,
 ) -> Result<(Builder, Vec<u8>), ApiError<RestError>> {
     let url = Url::parse("https://accounts.spotify.com/api/token")?;
@@ -177,8 +176,8 @@ fn http_request_and_data(
         .method(http::Method::POST)
         .uri(query::url_to_http_uri(&url));
 
-    if let Some(value) = auth_header_value {
-        set_auth_header(
+    if let Some(value) = authorization_header {
+        set_authorization_header(
             req.headers_mut()
                 .expect("failed to get headers on the request builder"),
             &value,
@@ -200,68 +199,70 @@ fn http_request_and_data(
     Ok((req, data))
 }
 
-#[inline(always)]
-fn http_response(
+fn send_http_request(
     client: &Client,
-    req: Builder,
+    request: Builder,
     data: Vec<u8>,
 ) -> Result<http::Response<Bytes>, RestError> {
-    let http_request = req.body(data)?;
+    let http_request = request.body(data)?;
     let request = http_request.try_into()?;
-    let rsp = client.execute(request)?;
-    let mut http_rsp = HttpResponse::builder()
-        .status(rsp.status())
-        .version(rsp.version());
+    let response = client.execute(request)?;
 
-    let headers = http_rsp
+    let mut http_response = HttpResponse::builder()
+        .status(response.status())
+        .version(response.version());
+
+    let headers = http_response
         .headers_mut()
         .expect("failed to get headers on the request builder");
 
-    for (key, value) in rsp.headers() {
+    for (key, value) in response.headers() {
         headers.insert(key, value.clone());
     }
 
-    Ok(http_rsp.body(rsp.bytes()?)?)
+    Ok(http_response.body(response.bytes()?)?)
 }
 
-#[inline(always)]
-async fn http_response_async(
+async fn send_http_request_async(
     client: &reqwest::Client,
-    req: Builder,
+    request: Builder,
     data: Vec<u8>,
 ) -> Result<http::Response<Bytes>, RestError> {
-    let http_request = req.body(data)?;
+    let http_request = request.body(data)?;
     let request = http_request.try_into()?;
-    let rsp = client.execute(request).await?;
-    let mut http_rsp = HttpResponse::builder()
-        .status(rsp.status())
-        .version(rsp.version());
+    let response = client.execute(request).await?;
 
-    let headers = http_rsp
+    let mut http_response = HttpResponse::builder()
+        .status(response.status())
+        .version(response.version());
+
+    let headers = http_response
         .headers_mut()
         .expect("failed to get headers on the request builder");
 
-    for (key, value) in rsp.headers() {
+    for (key, value) in response.headers() {
         headers.insert(key, value.clone());
     }
 
-    Ok(http_rsp.body(rsp.bytes().await?)?)
+    Ok(http_response.body(response.bytes().await?)?)
 }
 
-#[inline(always)]
-fn parse_response(rsp: &http::Response<Bytes>) -> Result<Token, ApiError<RestError>> {
-    let status = rsp.status();
+fn parse_http_response<T>(response: &http::Response<Bytes>) -> Result<T, ApiError<RestError>>
+where
+    T: serde::de::DeserializeOwned,
+{
+    let status = response.status();
 
-    let v = serde_json::from_slice(rsp.body())
-        .map_err(|_e| ApiError::server_error(status, rsp.body()))?;
+    let v = serde_json::from_slice(response.body())
+        .map_err(|_e| ApiError::server_error(status, response.body()))?;
 
     if !status.is_success() {
         return Err(ApiError::from_spotify_with_status(status, v));
     } else if status == http::StatusCode::MOVED_PERMANENTLY {
         return Err(ApiError::moved_permanently(
-            rsp.headers().get(header::LOCATION),
+            response.headers().get(header::LOCATION),
         ));
     }
 
-    serde_json::from_value::<_>(v).map_err(ApiError::data_type::<Token>)
+    serde_json::from_value::<_>(v).map_err(ApiError::data_type::<T>)
 }
