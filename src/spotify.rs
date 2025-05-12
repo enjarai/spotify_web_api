@@ -18,6 +18,10 @@ use url::Url;
 
 const BASE_API_URL: &str = "https://api.spotify.com/v1/";
 
+pub type SpotifyPKCE = Spotify<AuthCodePKCE>;
+pub type SpotifyClientCredentials = Spotify<ClientCredentials>;
+pub type AsyncSpotifyPKCE = AsyncSpotify<AuthCodePKCE>;
+pub type AsyncSpotifyClientCredentials = AsyncSpotify<ClientCredentials>;
 pub type SpotifyResult<T> = Result<T, SpotifyError>;
 
 /// Represents errors that can occur during communication with the Spotify API.
