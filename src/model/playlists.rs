@@ -107,6 +107,20 @@ pub struct SimplifiedPlaylist {
 
 impl From<Playlist> for SimplifiedPlaylist {
     fn from(playlist: Playlist) -> Self {
+        let tracks = {
+            #[cfg(feature = "page_items")]
+            {
+                Some(TrackReference {
+                    href: playlist.tracks.href,
+                    total: playlist.tracks.total,
+                })
+            }
+            #[cfg(not(feature = "page_items"))]
+            {
+                None
+            }
+        };
+
         Self {
             collaborative: playlist.collaborative,
             description: playlist.description,
@@ -119,10 +133,7 @@ impl From<Playlist> for SimplifiedPlaylist {
             primary_color: playlist.primary_color,
             public: playlist.public,
             snapshot_id: playlist.snapshot_id,
-            tracks: Some(TrackReference {
-                href: playlist.tracks.href,
-                total: playlist.tracks.total,
-            }),
+            tracks,
             type_: playlist.type_,
             uri: playlist.uri,
         }
