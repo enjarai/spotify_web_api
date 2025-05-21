@@ -8,7 +8,7 @@ fn main() -> anyhow::Result<()> {
     let client_id = env::var("SPOTIFY_CLIENT_ID")?;
 
     let mut spotify =
-        Spotify::with_authorization_code_pkce(client_id, "http://localhost:8888/callback", None)?;
+        Spotify::with_authorization_code_pkce(client_id, "http://127.0.0.1:8888/callback", None)?;
 
     let user_auth_url = spotify.user_authorization_url();
 

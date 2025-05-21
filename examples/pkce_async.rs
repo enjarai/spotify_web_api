@@ -15,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
 
     let mut spotify = AsyncSpotify::with_authorization_code_pkce(
         client_id,
-        "http://localhost:8888/callback",
+        "http://127.0.0.1:8888/callback",
         scopes::user_details(),
     )?;
 

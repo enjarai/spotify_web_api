@@ -16,7 +16,7 @@ const PORT: u16 = 8888;
 
 fn main() -> Result<()> {
     let client_id = env::var("SPOTIFY_CLIENT_ID")?;
-    let redirect_uri = format!("http://localhost:{PORT}/callback");
+    let redirect_uri = format!("http://127.0.0.1:{PORT}/callback");
 
     let mut spotify =
         Spotify::with_authorization_code_pkce(client_id, redirect_uri, scopes::user_details())?;
@@ -34,7 +34,7 @@ fn main() -> Result<()> {
 }
 
 fn authenticate_user(user_auth_url: &str) -> Result<String> {
-    let listener = TcpListener::bind(format!("localhost:{PORT}"))?;
+    let listener = TcpListener::bind(format!("127.0.0.1:{PORT}"))?;
 
     if webbrowser::open(user_auth_url).is_err() {
         println!(
@@ -74,7 +74,7 @@ fn handle_connection(mut stream: TcpStream) -> Option<String> {
                         eprintln!("Error flushing stream: {e:?}");
                     }
 
-                    return Some(format!("http://localhost:{PORT}{url}"));
+                    return Some(format!("http://127.0.0.1:{PORT}{url}"));
                 }
             }
         }
