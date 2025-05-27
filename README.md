@@ -6,7 +6,7 @@ A wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/
 
 > Spotify Web API enables the creation of applications that can interact with Spotify's streaming service, such as retrieving content metadata, getting recommendations, creating and managing playlists, or controlling playback.
 
-> [!IMPORTANT]
+> [!WARNING]
 > This library is not yet published so breaking changes may occur.
 
 ## Adding as a Dependency
