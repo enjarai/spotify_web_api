@@ -15,10 +15,7 @@ mod tests {
 
     #[test]
     fn test_get_user_queue_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/player/queue")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/player/queue").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetUserQueue).query(&client).unwrap();
     }

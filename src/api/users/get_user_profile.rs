@@ -30,10 +30,7 @@ mod tests {
 
     #[test]
     fn test_get_user_profile_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("users/severino246")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("users/severino246").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetUserProfile::from("severino246"))
             .query(&client)

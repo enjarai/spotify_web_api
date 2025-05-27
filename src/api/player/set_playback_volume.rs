@@ -3,20 +3,13 @@ use crate::api::{Endpoint, prelude::*};
 /// Set the volume for the user’s current playback device.
 /// This API only works for users who have Spotify Premium.
 /// The order of execution is not guaranteed when you use this API with other Player API endpoints.
-#[derive(Debug, Clone, Builder)]
+#[derive(Debug, Clone)]
 pub struct SetPlaybackVolume {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
-    #[builder(setter(into, strip_option), default)]
     pub device_id: Option<String>,
 
     /// The volume to set. Must be a value from 0 to 100 inclusive.
     pub volume_percent: u8,
-}
-
-impl SetPlaybackVolume {
-    pub fn builder() -> SetPlaybackVolumeBuilder {
-        SetPlaybackVolumeBuilder::default()
-    }
 }
 
 impl Endpoint for SetPlaybackVolume {
@@ -62,8 +55,7 @@ mod tests {
             .method(Method::PUT)
             .endpoint("me/player/volume")
             .add_query_params(&[("volume_percent", "100")])
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(SetPlaybackVolume::from(255))
             .query(&client)

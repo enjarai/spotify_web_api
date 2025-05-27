@@ -34,8 +34,7 @@ mod tests {
     fn test_get_user_playlists_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("users/smedjan/playlists")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

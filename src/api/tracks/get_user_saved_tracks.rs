@@ -3,7 +3,7 @@ use crate::api::prelude::*;
 /// Get a list of the tracks saved in the current Spotify user's library.
 ///
 /// This API endpoint is in beta and could change without warning. Please share any feedback that you have, or issues that you discover, in the [Spotify developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
-#[derive(Default, Builder, Debug, Clone, Endpoint)]
+#[derive(Default, Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "me/tracks")]
 pub struct GetUserSavedTracks {
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -13,17 +13,18 @@ pub struct GetUserSavedTracks {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetUserSavedTracks {
-    pub fn builder() -> GetUserSavedTracksBuilder {
-        GetUserSavedTracksBuilder::default()
+impl Pageable for GetUserSavedTracks {}
+
+impl From<Market> for GetUserSavedTracks {
+    fn from(market: Market) -> Self {
+        Self {
+            market: Some(market),
+        }
     }
 }
-
-impl Pageable for GetUserSavedTracks {}
 
 #[cfg(test)]
 mod tests {
@@ -35,10 +36,7 @@ mod tests {
 
     #[test]
     fn test_get_user_saved_track_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/tracks")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/tracks").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         let endpoint = GetUserSavedTracks::default();
         api::ignore(endpoint).query(&client).unwrap();

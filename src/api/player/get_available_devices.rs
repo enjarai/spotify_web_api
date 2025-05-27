@@ -16,10 +16,7 @@ mod tests {
 
     #[test]
     fn test_get_available_devices_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/player/devices")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/player/devices").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetAvailableDevices).query(&client).unwrap();
     }

@@ -2,7 +2,7 @@ use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several audiobook chapters identified by their Spotify IDs.
 /// Chapters are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "chapters")]
 pub struct GetSeveralChapters {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the chapters.
@@ -15,20 +15,19 @@ pub struct GetSeveralChapters {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralChaptersBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralChapters {
-    pub fn builder() -> GetSeveralChaptersBuilder {
-        GetSeveralChaptersBuilder::default()
+impl<T, I> From<I> for GetSeveralChapters
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -48,17 +47,15 @@ mod tests {
                 "ids",
                 "0IsXVP0JmcB2adSE338GkK,3ZXb8FKZGU0EHALYX6uCzU,0D5wENdkdwbqlrHoaJ9g29",
             )])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralChapters::builder()
-            .id("0IsXVP0JmcB2adSE338GkK")
-            .id("3ZXb8FKZGU0EHALYX6uCzU")
-            .id("0D5wENdkdwbqlrHoaJ9g29")
-            .build()
-            .unwrap();
+        let endpoint = GetSeveralChapters::from([
+            "0IsXVP0JmcB2adSE338GkK",
+            "3ZXb8FKZGU0EHALYX6uCzU",
+            "0D5wENdkdwbqlrHoaJ9g29",
+        ]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

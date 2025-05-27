@@ -181,8 +181,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
@@ -204,8 +203,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
@@ -227,8 +225,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
@@ -250,8 +247,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=55).map(|value| DummyResult { value }));

@@ -8,12 +8,6 @@ pub struct GetAlbum {
     pub id: String,
 }
 
-impl GetAlbum {
-    pub fn new(id: impl Into<String>) -> Self {
-        Self::from(id)
-    }
-}
-
 impl<T: Into<String>> From<T> for GetAlbum {
     fn from(id: T) -> Self {
         Self { id: id.into() }
@@ -32,12 +26,11 @@ mod tests {
     fn test_get_album_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("albums/0oKvU088cLhKbbVvQc9lQF")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetAlbum::new("0oKvU088cLhKbbVvQc9lQF");
+        let endpoint = GetAlbum::from("0oKvU088cLhKbbVvQc9lQF");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

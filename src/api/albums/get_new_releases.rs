@@ -73,8 +73,7 @@ mod tests {
     fn test_get_new_releases_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("browse/new-releases")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, RESPONSE);
 

@@ -1,22 +1,17 @@
 use crate::{api::prelude::*, model::FollowedArtistsType};
 
 /// Get the current user's followed artists.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "me/following")]
 pub struct GetFollowedArtists {
     /// The ID type: currently only artist is supported.
     pub type_: FollowedArtistsType,
 
     /// The last artist ID retrieved from the previous request.
-    #[builder(setter(into, strip_option), default)]
     pub after: Option<String>,
 }
 
 impl GetFollowedArtists {
-    pub fn builder() -> GetFollowedArtistsBuilder {
-        GetFollowedArtistsBuilder::default()
-    }
-
     pub fn with_after(after: Option<impl Into<String>>) -> Self {
         Self {
             type_: FollowedArtistsType::Artist,
@@ -34,6 +29,12 @@ impl Default for GetFollowedArtists {
     }
 }
 
+impl From<FollowedArtistsType> for GetFollowedArtists {
+    fn from(type_: FollowedArtistsType) -> Self {
+        Self { type_, after: None }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -47,8 +48,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("me/following")
             .add_query_params(&[("type", "artist")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -63,8 +63,7 @@ mod tests {
             .endpoint("me/following")
             .add_query_params(&[("type", "artist")])
             .add_query_params(&[("after", "2CIMQHirSU0MQqyYHq0eOx")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

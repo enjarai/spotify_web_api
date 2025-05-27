@@ -32,10 +32,7 @@ mod tests {
 
     #[test]
     fn test_get_several_browse_categories_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("browse/categories")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("browse/categories").build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -49,8 +46,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("browse/categories")
             .add_query_params(&[("locale", "sv_SE")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

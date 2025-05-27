@@ -39,7 +39,6 @@ mod prelude {
         api::{BodyError, JsonParams, QueryParams},
         model::Market,
     };
-    pub use derive_builder::Builder;
     pub use endpoint_derive::Endpoint;
     pub use http::Method;
     pub use std::borrow::Cow;

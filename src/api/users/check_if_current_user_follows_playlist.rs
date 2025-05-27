@@ -32,8 +32,7 @@ mod tests {
     fn test_check_if_current_user_follows_playlist_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/followers/contains")
-            .build()
-            .unwrap();
+            .build();
 
         let expected_response = [false];
 

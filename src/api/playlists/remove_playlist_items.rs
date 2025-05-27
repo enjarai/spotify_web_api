@@ -5,10 +5,9 @@ use crate::{
 use serde_json::json;
 
 /// Remove one or more items from a user's playlist.
-#[derive(Debug, Clone, Builder)]
+#[derive(Debug, Clone)]
 pub struct RemovePlaylistItems {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    #[builder(setter(into))]
     pub id: String,
 
     /// A list of [Spotify URIs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs.
@@ -16,21 +15,7 @@ pub struct RemovePlaylistItems {
 
     /// The playlist's snapshot ID against which you want to make the changes.
     /// The API will validate that the specified items exist and in the specified positions and make the changes, even if more recent changes have been made to the playlist.
-    #[builder(setter(into))]
     pub snapshot_id: String,
-}
-
-impl RemovePlaylistItems {
-    pub fn builder() -> RemovePlaylistItemsBuilder {
-        RemovePlaylistItemsBuilder::default()
-    }
-}
-
-impl RemovePlaylistItemsBuilder {
-    pub fn track(&mut self, item: impl Into<PlaylistItem>) -> &mut Self {
-        self.tracks.get_or_insert_with(Vec::new).push(item.into());
-        self
-    }
 }
 
 impl Endpoint for RemovePlaylistItems {
@@ -78,21 +63,18 @@ mod tests {
             .content_type("application/json")
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/tracks")
             .body_str(r#"{"snapshot_id":"abc","tracks":[{"uri":"spotify:track:4iV5W9uYEdYUVa79Axb7Rh"},{"uri":"spotify:track:1301WleyT98MSxVHPZCA6M"}]}"#)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let track_1 = TrackId::from_id("4iV5W9uYEdYUVa79Axb7Rh").unwrap();
         let track_2 = TrackId::from_id("1301WleyT98MSxVHPZCA6M").unwrap();
 
-        let endpoint = RemovePlaylistItems::builder()
-            .id("3cEYpjA9oz9GiPac4AsH4n")
-            .snapshot_id("abc")
-            .track(track_1)
-            .track(track_2)
-            .build()
-            .unwrap();
+        let endpoint = RemovePlaylistItems {
+            id: "3cEYpjA9oz9GiPac4AsH4n".to_owned(),
+            snapshot_id: "abc".to_owned(),
+            tracks: vec![track_1.into(), track_2.into()],
+        };
 
         api::ignore(endpoint).query(&client).unwrap();
     }

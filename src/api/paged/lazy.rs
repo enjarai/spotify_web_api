@@ -350,8 +350,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
@@ -373,8 +372,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=255).map(|value| DummyResult { value }));
@@ -396,8 +394,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .paginated(true)
-            .build()
-            .unwrap();
+            .build();
 
         let client =
             PagedTestClient::new_raw(endpoint, (0..=55).map(|value| DummyResult { value }));
@@ -419,8 +416,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("paged_dummy")
             .add_query_params(&[("offset", "0"), ("limit", "50")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "not json");
 
@@ -442,8 +438,7 @@ mod tests {
             .endpoint("paged_dummy")
             .add_query_params(&[("offset", "0"), ("limit", "50")])
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -465,8 +460,7 @@ mod tests {
             .endpoint("paged_dummy")
             .add_query_params(&[("offset", "0"), ("limit", "50")])
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_json(
             endpoint,

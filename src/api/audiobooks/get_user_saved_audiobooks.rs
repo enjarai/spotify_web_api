@@ -17,10 +17,7 @@ mod tests {
 
     #[test]
     fn test_get_user_saved_audiobooks_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/audiobooks")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/audiobooks").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetUserSavedAudiobooks).query(&client).unwrap();
     }

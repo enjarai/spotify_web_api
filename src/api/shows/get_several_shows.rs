@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several shows based on their Spotify IDs.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "shows")]
 pub struct GetSeveralShows {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the shows.
@@ -14,20 +14,19 @@ pub struct GetSeveralShows {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralShowsBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralShows {
-    pub fn builder() -> GetSeveralShowsBuilder {
-        GetSeveralShowsBuilder::default()
+impl<T, I> From<I> for GetSeveralShows
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -44,16 +43,11 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("shows")
             .add_query_params(&[("ids", "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralShows::builder()
-            .id("5CfCWKI5pZ28U0uOzXkDHe")
-            .id("5as3aKmN2k11yfDDDSrvaZ")
-            .build()
-            .unwrap();
+        let endpoint = GetSeveralShows::from(["5CfCWKI5pZ28U0uOzXkDHe", "5as3aKmN2k11yfDDDSrvaZ"]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

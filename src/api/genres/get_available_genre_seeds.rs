@@ -18,8 +18,7 @@ mod tests {
     fn test_get_available_genre_seeds_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("recommendations/available-genre-seeds")
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetAvailableGenreSeeds).query(&client).unwrap();
     }
@@ -28,8 +27,7 @@ mod tests {
     fn test_get_available_genre_seeds_endpoint_with_response() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("recommendations/available-genre-seeds")
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_raw(endpoint, r#"{"genres": ["alternative", "samba"]}"#);
         let response: Genres = GetAvailableGenreSeeds.query(&client).unwrap();
         for genre in ["alternative", "samba"] {

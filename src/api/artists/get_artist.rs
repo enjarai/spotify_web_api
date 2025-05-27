@@ -8,12 +8,6 @@ pub struct GetArtist {
     pub id: String,
 }
 
-impl GetArtist {
-    pub fn new(id: impl Into<String>) -> Self {
-        Self::from(id)
-    }
-}
-
 impl<T: Into<String>> From<T> for GetArtist {
     fn from(id: T) -> Self {
         Self { id: id.into() }
@@ -32,12 +26,11 @@ mod tests {
     fn test_get_artist_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("artists/5dRk8JyA2Tg9wL0iiTqbVu")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint: GetArtist = GetArtist::new("5dRk8JyA2Tg9wL0iiTqbVu");
+        let endpoint: GetArtist = GetArtist::from("5dRk8JyA2Tg9wL0iiTqbVu");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

@@ -32,8 +32,7 @@ mod tests {
     fn test_get_playlist_cover_image_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/images")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

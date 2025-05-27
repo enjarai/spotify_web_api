@@ -4,34 +4,19 @@ use crate::{
 };
 
 /// Add one or more items to a user's playlist.
-#[derive(Debug, Clone, Builder)]
+#[derive(Debug, Clone)]
 pub struct AddItemsToPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    #[builder(setter(into))]
     pub id: String,
 
     /// The position to insert the items, a zero-based index.
     /// For example, to insert the items in the first position: position=0; to insert the items in the third position: position=2.
     /// If omitted, the items will be appended to the playlist.
     /// Items are added in the order they are listed in the query string or request body.
-    #[builder(setter(strip_option), default)]
     pub position: Option<u32>,
 
     /// A list of [Spotify URIs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs.
     pub uris: Vec<PlaylistItem>,
-}
-
-impl AddItemsToPlaylist {
-    pub fn builder() -> AddItemsToPlaylistBuilder {
-        AddItemsToPlaylistBuilder::default()
-    }
-}
-
-impl AddItemsToPlaylistBuilder {
-    pub fn uri(&mut self, item: impl Into<PlaylistItem>) -> &mut Self {
-        self.uris.get_or_insert_with(Vec::new).push(item.into());
-        self
-    }
 }
 
 impl Endpoint for AddItemsToPlaylist {
@@ -73,18 +58,17 @@ mod tests {
             .method(Method::POST)
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/tracks")
             .add_query_params(&[("uris", "spotify:track:60zbztYPxtTQLLcPVjnEZG")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let track = TrackId::from_id("60zbztYPxtTQLLcPVjnEZG").unwrap();
 
-        let endpoint = AddItemsToPlaylist::builder()
-            .id("3cEYpjA9oz9GiPac4AsH4n")
-            .uri(track)
-            .build()
-            .unwrap();
+        let endpoint = AddItemsToPlaylist {
+            id: "3cEYpjA9oz9GiPac4AsH4n".to_owned(),
+            position: None,
+            uris: vec![track.into()],
+        };
 
         api::ignore(endpoint).query(&client).unwrap();
     }

@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several tracks based on their Spotify IDs.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "tracks")]
 pub struct GetSeveralTracks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the tracks.
@@ -14,20 +14,19 @@ pub struct GetSeveralTracks {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralTracksBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralTracks {
-    pub fn builder() -> GetSeveralTracksBuilder {
-        GetSeveralTracksBuilder::default()
+impl<T, I> From<I> for GetSeveralTracks
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -44,16 +43,11 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("tracks")
             .add_query_params(&[("ids", "39joRyXYyjSpI6nKZHyWmH,5mPY98zmeNSp8cmrRtdUW3")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralTracks::builder()
-            .id("39joRyXYyjSpI6nKZHyWmH")
-            .id("5mPY98zmeNSp8cmrRtdUW3")
-            .build()
-            .unwrap();
+        let endpoint = GetSeveralTracks::from(["39joRyXYyjSpI6nKZHyWmH", "5mPY98zmeNSp8cmrRtdUW3"]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

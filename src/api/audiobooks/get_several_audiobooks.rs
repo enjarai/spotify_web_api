@@ -2,7 +2,7 @@ use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several audiobooks identified by their Spotify IDs.
 /// Audiobooks are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "audiobooks")]
 pub struct GetSeveralAudiobooks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
@@ -15,20 +15,19 @@ pub struct GetSeveralAudiobooks {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralAudiobooksBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralAudiobooks {
-    pub fn builder() -> GetSeveralAudiobooksBuilder {
-        GetSeveralAudiobooksBuilder::default()
+impl<T, I> From<I> for GetSeveralAudiobooks
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -48,17 +47,15 @@ mod tests {
                 "ids",
                 "18yVqkdbdRvS24c0Ilj2ci,1HGw3J3NxZO1TP1BTtVhpZ,7iHfbu1YPACw6oZPAFJtqe",
             )])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralAudiobooks::builder()
-            .id("18yVqkdbdRvS24c0Ilj2ci")
-            .id("1HGw3J3NxZO1TP1BTtVhpZ")
-            .id("7iHfbu1YPACw6oZPAFJtqe")
-            .build()
-            .unwrap();
+        let endpoint = GetSeveralAudiobooks::from([
+            "18yVqkdbdRvS24c0Ilj2ci",
+            "1HGw3J3NxZO1TP1BTtVhpZ",
+            "7iHfbu1YPACw6oZPAFJtqe",
+        ]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

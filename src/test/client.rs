@@ -4,48 +4,33 @@ use crate::{
 };
 use async_trait::async_trait;
 use bytes::Bytes;
-use derive_builder::Builder;
 use http::{Method, Response, StatusCode, header, request::Builder as RequestBuilder};
 use serde::Serialize;
 use std::{borrow::Cow, collections::HashMap, fmt::Debug};
 use thiserror::Error;
 use url::Url;
 
-#[derive(Debug, Builder)]
+#[derive(Debug)]
 pub struct ExpectedUrl {
-    #[builder(default = "Method::GET")]
+    // #[builder(default = "Method::GET")]
     pub method: Method,
 
     pub endpoint: &'static str,
 
-    #[builder(default)]
+    // #[builder(default)]
     pub query: Vec<(Cow<'static, str>, Cow<'static, str>)>,
 
-    #[builder(setter(strip_option, into), default)]
+    // #[builder(setter(strip_option, into), default)]
     pub content_type: Option<String>,
 
-    #[builder(default)]
+    // #[builder(default)]
     pub body: Vec<u8>,
 
-    #[builder(default = "StatusCode::OK")]
+    // #[builder(default = "StatusCode::OK")]
     pub status: StatusCode,
 
-    #[builder(default = "false")]
+    // #[builder(default = "false")]
     pub paginated: bool,
-}
-
-impl ExpectedUrlBuilder {
-    pub fn add_query_params(&mut self, pairs: &[(&'static str, &'static str)]) -> &mut Self {
-        self.query
-            .get_or_insert_with(Vec::new)
-            .extend(pairs.iter().copied().map(|(k, v)| (k.into(), v.into())));
-        self
-    }
-
-    pub fn body_str(&mut self, body: &str) -> &mut Self {
-        self.body = Some(body.bytes().collect());
-        self
-    }
 }
 
 impl ExpectedUrl {
@@ -86,6 +71,81 @@ impl ExpectedUrl {
     #[inline(always)]
     fn is_pagination_key(key: &str) -> bool {
         matches!(key, "limit" | "offset")
+    }
+}
+
+pub struct ExpectedUrlBuilder {
+    method: Method,
+    endpoint: &'static str,
+    query: Option<Vec<(Cow<'static, str>, Cow<'static, str>)>>,
+    content_type: Option<String>,
+    body: Option<Vec<u8>>,
+    status: StatusCode,
+    paginated: bool,
+}
+
+impl ExpectedUrlBuilder {
+    pub fn method(&mut self, method: Method) -> &mut Self {
+        self.method = method;
+        self
+    }
+
+    pub fn endpoint(&mut self, endpoint: &'static str) -> &mut Self {
+        self.endpoint = endpoint;
+        self
+    }
+
+    pub fn add_query_params(&mut self, pairs: &[(&'static str, &'static str)]) -> &mut Self {
+        self.query
+            .get_or_insert_with(Vec::new)
+            .extend(pairs.iter().copied().map(|(k, v)| (k.into(), v.into())));
+        self
+    }
+
+    pub fn content_type(&mut self, content_type: impl Into<String>) -> &mut Self {
+        self.content_type = Some(content_type.into());
+        self
+    }
+
+    pub fn body_str(&mut self, body: &str) -> &mut Self {
+        self.body = Some(body.bytes().collect());
+        self
+    }
+
+    pub fn status(&mut self, status: StatusCode) -> &mut Self {
+        self.status = status;
+        self
+    }
+
+    pub fn paginated(&mut self, paginated: bool) -> &mut Self {
+        self.paginated = paginated;
+        self
+    }
+
+    pub fn build(&self) -> ExpectedUrl {
+        ExpectedUrl {
+            method: self.method.clone(),
+            endpoint: self.endpoint,
+            query: self.query.clone().unwrap_or_default(),
+            content_type: self.content_type.clone(),
+            body: self.body.clone().unwrap_or_default(),
+            status: self.status,
+            paginated: self.paginated,
+        }
+    }
+}
+
+impl Default for ExpectedUrlBuilder {
+    fn default() -> Self {
+        Self {
+            method: Method::GET,
+            endpoint: "",
+            query: None,
+            content_type: None,
+            body: None,
+            status: StatusCode::OK,
+            paginated: false,
+        }
     }
 }
 

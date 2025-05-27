@@ -1,11 +1,10 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single track identified by its unique Spotify ID.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "tracks/{id}")]
 pub struct GetTrack {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the track.
-    #[builder(setter(into))]
     pub id: String,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -15,14 +14,7 @@ pub struct GetTrack {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
-}
-
-impl GetTrack {
-    pub fn builder() -> GetTrackBuilder {
-        GetTrackBuilder::default()
-    }
 }
 
 impl<T: Into<String>> From<T> for GetTrack {
@@ -46,8 +38,7 @@ mod tests {
     fn test_get_track_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("tracks/5IoBP6aTHHBStOrbLFc5uQ")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

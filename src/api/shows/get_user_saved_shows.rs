@@ -17,7 +17,7 @@ mod tests {
 
     #[test]
     fn test_get_user_saved_shows_endpoint() {
-        let endpoint = ExpectedUrl::builder().endpoint("me/shows").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/shows").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetUserSavedShows).query(&client).unwrap();
     }

@@ -16,14 +16,14 @@ mod tests {
 
     #[test]
     fn test_get_available_markets_endpoint() {
-        let endpoint = ExpectedUrl::builder().endpoint("markets").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("markets").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetAvailableMarkets).query(&client).unwrap();
     }
 
     #[test]
     fn test_get_available_markets_endpoint_with_response() {
-        let endpoint = ExpectedUrl::builder().endpoint("markets").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("markets").build();
         let client = SingleTestClient::new_raw(endpoint, r#"{"markets": ["CA", "BR", "IT"]}"#);
         let response: Markets = GetAvailableMarkets.query(&client).unwrap();
         for genre in ["CA", "BR", "IT"] {

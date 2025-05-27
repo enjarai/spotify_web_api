@@ -2,37 +2,38 @@ use crate::api::{Endpoint, prelude::*};
 use serde_json::json;
 
 /// Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
-#[derive(Debug, Builder, Clone)]
+#[derive(Debug, Clone)]
 pub struct ChangePlaylistDetails {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    #[builder(setter(into))]
     pub id: String,
 
     /// The new name for the playlist, for example "My New Playlist Title".
-    #[builder(setter(into, strip_option), default)]
     pub name: Option<String>,
 
     /// The playlist's public/private status (if it should be added to the user's profile or not):
     /// true the playlist will be public,
     /// false the playlist will be private, null the playlist status is not relevant.
     /// For more about public/private status, see [Working with Playlists](https://developer.spotify.com/documentation/web-api/concepts/playlists).
-    #[builder(setter(strip_option), default)]
     pub public: Option<bool>,
 
     /// If true, the playlist will become collaborative and other users will be able to modify the playlist in their Spotify client.
     /// # Note:
     /// You can only set collaborative to true on non-public playlists.
-    #[builder(setter(strip_option), default)]
     pub collaborative: Option<bool>,
 
     /// Value for playlist description as displayed in Spotify Clients and in the Web API.
-    #[builder(setter(into, strip_option), default)]
     pub description: Option<String>,
 }
 
 impl ChangePlaylistDetails {
-    pub fn builder() -> ChangePlaylistDetailsBuilder {
-        ChangePlaylistDetailsBuilder::default()
+    pub fn new(id: impl Into<String>) -> Self {
+        Self {
+            id: id.into(),
+            name: None,
+            public: None,
+            collaborative: None,
+            description: None,
+        }
     }
 }
 
@@ -83,18 +84,17 @@ mod tests {
             .content_type("application/json")
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n")
             .body_str(r#"{"description":"New Playlist Description","name":"Updated Playlist Name","public":false}"#)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = ChangePlaylistDetails::builder()
-            .id("3cEYpjA9oz9GiPac4AsH4n")
-            .name("Updated Playlist Name")
-            .description("New Playlist Description")
-            .public(false)
-            .build()
-            .unwrap();
+        let endpoint = ChangePlaylistDetails {
+            id: "3cEYpjA9oz9GiPac4AsH4n".to_owned(),
+            name: Some("Updated Playlist Name".to_owned()),
+            description: Some("New Playlist Description".to_owned()),
+            public: Some(false),
+            collaborative: None,
+        };
 
         api::ignore(endpoint).query(&client).unwrap();
     }

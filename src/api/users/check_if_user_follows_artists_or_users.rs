@@ -1,7 +1,7 @@
 use crate::{api::prelude::*, model::FollowType};
 
 /// Check to see if the current user is following one or more artists or other Spotify users.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "me/following/contains")]
 pub struct CheckIfUserFollowsArtistsOrUsers {
     /// The ID type.
@@ -10,19 +10,6 @@ pub struct CheckIfUserFollowsArtistsOrUsers {
     /// A list of the artist or the user [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
     /// A maximum of 50 IDs can be sent in one request.
     pub ids: Vec<String>,
-}
-
-impl CheckIfUserFollowsArtistsOrUsersBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl CheckIfUserFollowsArtistsOrUsers {
-    pub fn builder() -> CheckIfUserFollowsArtistsOrUsersBuilder {
-        CheckIfUserFollowsArtistsOrUsersBuilder::default()
-    }
 }
 
 #[cfg(test)]
@@ -42,20 +29,20 @@ mod tests {
                 "ids",
                 "2CIMQHirSU0MQqyYHq0eOx,57dN52uHvrHOxijzpIgu3E,1vCWHaC5f2uS3yhpwWbIA6",
             )])
-            .build()
-            .unwrap();
+            .build();
 
         let expected_response = [false, false, true];
 
         let client = SingleTestClient::new_json(endpoint, &expected_response);
 
-        let endpoint = CheckIfUserFollowsArtistsOrUsers::builder()
-            .type_(FollowType::Artist)
-            .id("2CIMQHirSU0MQqyYHq0eOx")
-            .id("57dN52uHvrHOxijzpIgu3E")
-            .id("1vCWHaC5f2uS3yhpwWbIA6")
-            .build()
-            .unwrap();
+        let endpoint = CheckIfUserFollowsArtistsOrUsers {
+            type_: FollowType::Artist,
+            ids: vec![
+                "2CIMQHirSU0MQqyYHq0eOx".to_owned(),
+                "57dN52uHvrHOxijzpIgu3E".to_owned(),
+                "1vCWHaC5f2uS3yhpwWbIA6".to_owned(),
+            ],
+        };
 
         let result: Vec<bool> = endpoint.query(&client).unwrap();
 

@@ -9,30 +9,24 @@ use serde_json::json;
 /// To replace items, include uris as either a query parameter or in the request's body.
 /// Replacing items in a playlist will overwrite its existing items.
 /// This operation can be used for replacing or clearing items in a playlist.
-#[derive(Debug, Clone, Builder)]
+#[derive(Debug, Clone)]
 pub struct UpdatePlaylistItems {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
-    #[builder(setter(into))]
     pub id: String,
 
     /// A list of [Spotify URIs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) to set, can be track or episode URIs.
-    #[builder(default)]
     pub uris: Option<Vec<PlaylistItem>>,
 
     /// The position of the first item to be reordered.
-    #[builder(default)]
     pub range_start: u32,
 
     /// The position where the items should be inserted.
-    #[builder(default)]
     pub insert_before: u32,
 
     /// The amount of items to be reordered. Defaults to 1 if not set.
-    #[builder(setter(strip_option), default)]
     pub range_length: Option<usize>,
 
     /// The playlist's snapshot ID against which you want to make the changes.
-    #[builder(setter(into, strip_option), default)]
     pub snapshot_id: Option<String>,
 }
 
@@ -42,16 +36,61 @@ impl UpdatePlaylistItems {
     }
 }
 
-impl UpdatePlaylistItemsBuilder {
-    pub fn uri(&mut self, item: impl Into<PlaylistItem>) -> &mut Self {
-        match self.uris {
-            Some(ref mut uris) => uris.get_or_insert_with(Vec::new).push(item.into()),
-            None => {
-                self.uris = Some(Some(vec![item.into()]));
-            }
-        }
+#[derive(Default, Clone)]
+pub struct UpdatePlaylistItemsBuilder {
+    id: String,
+    uris: Option<Vec<PlaylistItem>>,
+    range_start: u32,
+    insert_before: u32,
+    range_length: Option<usize>,
+    snapshot_id: Option<String>,
+}
 
+impl UpdatePlaylistItemsBuilder {
+    pub fn id<S: Into<String>>(mut self, id: S) -> Self {
+        self.id = id.into();
         self
+    }
+
+    pub fn uri(mut self, uri: PlaylistItem) -> Self {
+        self.uris.get_or_insert_with(Vec::new).push(uri);
+        self
+    }
+
+    pub fn uris(mut self, uris: Vec<PlaylistItem>) -> Self {
+        self.uris = Some(uris);
+        self
+    }
+
+    pub fn range_start(mut self, range_start: u32) -> Self {
+        self.range_start = range_start;
+        self
+    }
+
+    pub fn insert_before(mut self, insert_before: u32) -> Self {
+        self.insert_before = insert_before;
+        self
+    }
+
+    pub fn range_length(mut self, range_length: usize) -> Self {
+        self.range_length = Some(range_length);
+        self
+    }
+
+    pub fn snapshot_id<S: Into<String>>(mut self, snapshot_id: S) -> Self {
+        self.snapshot_id = Some(snapshot_id.into());
+        self
+    }
+
+    pub fn build(self) -> UpdatePlaylistItems {
+        UpdatePlaylistItems {
+            id: self.id,
+            uris: self.uris,
+            range_start: self.range_start,
+            insert_before: self.insert_before,
+            range_length: self.range_length,
+            snapshot_id: self.snapshot_id,
+        }
     }
 }
 
@@ -108,8 +147,7 @@ mod tests {
             .content_type("application/json")
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/tracks")
             .body_str(r#"{"insert_before":3,"range_length":2,"range_start":1}"#)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -118,8 +156,7 @@ mod tests {
             .range_start(1)
             .insert_before(3)
             .range_length(2)
-            .build()
-            .unwrap();
+            .build();
 
         api::ignore(endpoint).query(&client).unwrap();
     }

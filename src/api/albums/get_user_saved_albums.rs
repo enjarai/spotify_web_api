@@ -14,28 +14,15 @@ pub struct GetUserSavedAlbums {
     pub market: Option<Market>,
 }
 
-impl GetUserSavedAlbums {
-    pub fn with_market(market: Market) -> Self {
-        Self {
-            market: Some(market),
-        }
-    }
-}
-
 impl Pageable for GetUserSavedAlbums {}
 
-impl From<&Market> for GetUserSavedAlbums {
-    fn from(market: &Market) -> Self {
+impl<T> From<T> for GetUserSavedAlbums
+where
+    T: Into<Market>,
+{
+    fn from(market: T) -> Self {
         Self {
-            market: Some(market.to_owned()),
-        }
-    }
-}
-
-impl From<Market> for GetUserSavedAlbums {
-    fn from(market: Market) -> Self {
-        Self {
-            market: Some(market),
+            market: Some(market.into()),
         }
     }
 }
@@ -50,10 +37,7 @@ mod tests {
 
     #[test]
     fn test_get_user_saved_albums_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/albums")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/albums").build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

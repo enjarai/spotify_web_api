@@ -1,11 +1,10 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information about an show's episodes.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "shows/{id}/episodes")]
 pub struct GetShowEpisodes {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the show.
-    #[builder(setter(into))]
     pub id: String,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -15,14 +14,7 @@ pub struct GetShowEpisodes {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
-}
-
-impl GetShowEpisodes {
-    pub fn builder() -> GetShowEpisodesBuilder {
-        GetShowEpisodesBuilder::default()
-    }
 }
 
 impl Pageable for GetShowEpisodes {}
@@ -48,8 +40,7 @@ mod tests {
     fn test_get_show_episodes_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("shows/38bS44xjbVVZ3No3ByF1dJ/episodes")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

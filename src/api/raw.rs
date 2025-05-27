@@ -124,7 +124,7 @@ mod tests {
 
     #[test]
     fn test_spotify_non_json_response() {
-        let endpoint = ExpectedUrl::builder().endpoint("dummy").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("dummy").build();
         let client = SingleTestClient::new_raw(endpoint, "not json");
 
         let data = api::raw(Dummy).query(&client).unwrap();
@@ -133,7 +133,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_spotify_non_json_response_async() {
-        let endpoint = ExpectedUrl::builder().endpoint("dummy").build().unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("dummy").build();
         let client = SingleTestClient::new_raw(endpoint, "not json");
 
         let data = api::raw(Dummy).query_async(&client).await.unwrap();
@@ -145,8 +145,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let err = api::raw(Dummy).query(&client).unwrap_err();
@@ -162,8 +161,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_json(
             endpoint,
             &json!({
@@ -185,8 +183,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_json(
             endpoint,
             &json!({
@@ -208,8 +205,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("dummy")
             .status(StatusCode::NOT_FOUND)
-            .build()
-            .unwrap();
+            .build();
         let err_obj = json!({
             "bogus": "dummy error message",
         });

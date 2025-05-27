@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Remove one or more shows from the Spotify user's library.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = DELETE, path = "me/shows")]
 pub struct RemoveUserSavedShows {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the shows.
@@ -14,20 +14,19 @@ pub struct RemoveUserSavedShows {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl RemoveUserSavedShowsBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl RemoveUserSavedShows {
-    pub fn builder() -> RemoveUserSavedShowsBuilder {
-        RemoveUserSavedShowsBuilder::default()
+impl<T, I> From<I> for RemoveUserSavedShows
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -46,16 +45,12 @@ mod tests {
             .method(Method::DELETE)
             .endpoint("me/shows")
             .add_query_params(&[("ids", "5CfCWKI5pZ28U0uOzXkDHe,5as3aKmN2k11yfDDDSrvaZ")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = RemoveUserSavedShows::builder()
-            .id("5CfCWKI5pZ28U0uOzXkDHe")
-            .id("5as3aKmN2k11yfDDDSrvaZ")
-            .build()
-            .unwrap();
+        let endpoint =
+            RemoveUserSavedShows::from(["5CfCWKI5pZ28U0uOzXkDHe", "5as3aKmN2k11yfDDDSrvaZ"]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

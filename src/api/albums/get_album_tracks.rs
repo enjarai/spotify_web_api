@@ -1,11 +1,10 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "albums/{id}/tracks")]
 pub struct GetAlbumTracks {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
-    #[builder(setter(into))]
     pub id: String,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -15,14 +14,7 @@ pub struct GetAlbumTracks {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
-}
-
-impl GetAlbumTracks {
-    pub fn builder() -> GetAlbumTracksBuilder {
-        GetAlbumTracksBuilder::default()
-    }
 }
 
 impl Pageable for GetAlbumTracks {}
@@ -48,8 +40,7 @@ mod tests {
     fn test_get_album_tracks_endpoint() {
         let endpoint = ExpectedUrl::builder()
             .endpoint("albums/66q0q162WOFuidbucN1Jdp/tracks")
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 

@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for multiple albums identified by their Spotify IDs.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "albums")]
 pub struct GetSeveralAlbums {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
@@ -14,20 +14,19 @@ pub struct GetSeveralAlbums {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralAlbumsBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralAlbums {
-    pub fn builder() -> GetSeveralAlbumsBuilder {
-        GetSeveralAlbumsBuilder::default()
+impl<T, I> From<I> for GetSeveralAlbums
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -47,17 +46,15 @@ mod tests {
                 "ids",
                 "382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc",
             )])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralAlbums::builder()
-            .id("382ObEPsp2rxGrnsizN5TX")
-            .id("1A2GTWGtFfWp7KSQTwWOyo")
-            .id("2noRn2Aes5aoNVsU6iWThc")
-            .build()
-            .unwrap();
+        let endpoint = GetSeveralAlbums::from([
+            "382ObEPsp2rxGrnsizN5TX",
+            "1A2GTWGtFfWp7KSQTwWOyo",
+            "2noRn2Aes5aoNVsU6iWThc",
+        ]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

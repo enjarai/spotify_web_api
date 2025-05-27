@@ -6,44 +6,82 @@ use crate::{
 /// Start a new context or resume current playback on the user's active device.
 /// This API only works for users who have Spotify Premium.
 /// The order of execution is not guaranteed when you use this API with other Player API endpoints.
-#[derive(Debug, Default, Builder, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct StartPlayback {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
-    #[builder(setter(into, strip_option), default)]
     pub device_id: Option<String>,
 
     /// Spotify URI of the context to play.
-    #[builder(setter(into, strip_option), default)]
     pub context_uri: Option<ContextType>,
 
     /// Spotify track URIs to play.
-    #[builder(setter(strip_option), default)]
     pub uris: Option<Vec<TrackId>>,
 
     /// Indicates from where in the context playback should start.
-    #[builder(setter(into, strip_option), default)]
     pub offset: Option<Offset>,
 
     /// Indicates from what position to start playback.
-    #[builder(setter(strip_option), default)]
     pub position_ms: Option<u32>,
-}
-
-impl StartPlaybackBuilder {
-    pub fn uri(&mut self, uri: TrackId) -> &mut Self {
-        match self.uris {
-            Some(ref mut uris) => uris.get_or_insert_with(Vec::new).push(uri),
-            None => {
-                self.uris = Some(Some(vec![uri]));
-            }
-        }
-        self
-    }
 }
 
 impl StartPlayback {
     pub fn builder() -> StartPlaybackBuilder {
         StartPlaybackBuilder::default()
+    }
+}
+
+#[derive(Default, Clone)]
+pub struct StartPlaybackBuilder {
+    device_id: Option<String>,
+    context_uri: Option<ContextType>,
+    uris: Option<Vec<TrackId>>,
+    offset: Option<Offset>,
+    position_ms: Option<u32>,
+}
+
+impl StartPlaybackBuilder {
+    pub fn device_id(mut self, device_id: impl Into<String>) -> Self {
+        self.device_id = Some(device_id.into());
+        self
+    }
+
+    pub fn context_uri(mut self, context_uri: ContextType) -> Self {
+        self.context_uri = Some(context_uri);
+        self
+    }
+
+    pub fn uri(mut self, uri: TrackId) -> Self {
+        if let Some(ref mut uris) = self.uris {
+            uris.push(uri);
+        } else {
+            self.uris = Some(vec![uri]);
+        }
+        self
+    }
+
+    pub fn uris(mut self, uris: Vec<TrackId>) -> Self {
+        self.uris = Some(uris);
+        self
+    }
+
+    pub fn offset(mut self, offset: Offset) -> Self {
+        self.offset = Some(offset);
+        self
+    }
+
+    pub fn position_ms(mut self, position_ms: u32) -> Self {
+        self.position_ms = Some(position_ms);
+        self
+    }
+
+    pub fn build(self) -> StartPlayback {
+        StartPlayback {
+            device_id: self.device_id,
+            context_uri: self.context_uri,
+            uris: self.uris,
+            offset: self.offset,
+            position_ms: self.position_ms,
+        }
     }
 }
 
@@ -121,8 +159,7 @@ mod tests {
             .method(Method::PUT)
             .endpoint("me/player/play")
             .add_query_params(&[("device_id", "xxxxxxxxxxxxxxxxxxxxxx")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -139,8 +176,7 @@ mod tests {
             .endpoint("me/player/play")
             .add_query_params(&[("device_id", "xxxxxxxxxxxxxxxxxxxxxx")])
             .body_str(r#"{"context_uri":"spotify:album:5ht7ItJgpBH7W6vJ5BqpPr","offset":{"position":5},"position_ms":0}"#)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
@@ -151,8 +187,7 @@ mod tests {
             .offset(Offset::Position(5))
             .position_ms(0)
             .device_id("xxxxxxxxxxxxxxxxxxxxxx")
-            .build()
-            .unwrap();
+            .build();
 
         api::ignore(endpoint).query(&client).unwrap();
     }

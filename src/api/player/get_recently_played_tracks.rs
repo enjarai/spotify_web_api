@@ -6,7 +6,7 @@ use crate::{
 /// Get tracks from the current user's recently played tracks.
 /// # Note:
 /// Currently doesn't support podcast episodes.
-#[derive(Debug, Clone, Builder)]
+#[derive(Debug, Clone)]
 pub struct GetRecentlyPlayedTracks {
     /// The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50.
     pub limit: Option<u8>,
@@ -14,12 +14,6 @@ pub struct GetRecentlyPlayedTracks {
     /// The Unix timestamp in milliseconds. Returns all items after (but not including) this cursor position.
     /// If after is specified, before must not be specified.
     pub timeframe: QueryRange,
-}
-
-impl GetRecentlyPlayedTracks {
-    pub fn builder() -> GetRecentlyPlayedTracksBuilder {
-        GetRecentlyPlayedTracksBuilder::default()
-    }
 }
 
 impl Endpoint for GetRecentlyPlayedTracks {
@@ -73,8 +67,7 @@ mod tests {
             .endpoint("me/player/recently-played")
             .add_query_params(&[("limit", "20")])
             .add_query_params(&[("before", "1733877079")])
-            .build()
-            .unwrap();
+            .build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetRecentlyPlayedTracks::from(QueryRange::Before(
             1733877079,

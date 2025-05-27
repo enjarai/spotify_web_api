@@ -1,7 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several episodes based on their Spotify IDs.
-#[derive(Debug, Builder, Clone, Endpoint)]
+#[derive(Debug, Clone, Endpoint)]
 #[endpoint(method = GET, path = "episodes")]
 pub struct GetSeveralEpisodes {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the episodes.
@@ -14,20 +14,19 @@ pub struct GetSeveralEpisodes {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 }
 
-impl GetSeveralEpisodesBuilder {
-    pub fn id(&mut self, id: impl Into<String>) -> &mut Self {
-        self.ids.get_or_insert_with(Vec::new).push(id.into());
-        self
-    }
-}
-
-impl GetSeveralEpisodes {
-    pub fn builder() -> GetSeveralEpisodesBuilder {
-        GetSeveralEpisodesBuilder::default()
+impl<T, I> From<I> for GetSeveralEpisodes
+where
+    I: IntoIterator<Item = T>,
+    T: Into<String>,
+{
+    fn from(ids: I) -> Self {
+        Self {
+            ids: ids.into_iter().map(Into::into).collect(),
+            market: None,
+        }
     }
 }
 
@@ -44,16 +43,12 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("episodes")
             .add_query_params(&[("ids", "77o6BIVlYM3msb4MMIL1jH,0Q86acNRm6V9GYx55SXKwf")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetSeveralEpisodes::builder()
-            .id("77o6BIVlYM3msb4MMIL1jH")
-            .id("0Q86acNRm6V9GYx55SXKwf")
-            .build()
-            .unwrap();
+        let endpoint =
+            GetSeveralEpisodes::from(["77o6BIVlYM3msb4MMIL1jH", "0Q86acNRm6V9GYx55SXKwf"]);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

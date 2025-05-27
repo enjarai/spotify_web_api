@@ -17,10 +17,7 @@ mod tests {
 
     #[test]
     fn test_get_current_user_playlists_endpoint() {
-        let endpoint = ExpectedUrl::builder()
-            .endpoint("me/playlists")
-            .build()
-            .unwrap();
+        let endpoint = ExpectedUrl::builder().endpoint("me/playlists").build();
         let client = SingleTestClient::new_raw(endpoint, "");
         api::ignore(GetCurrentUserPlaylists).query(&client).unwrap();
     }

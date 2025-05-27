@@ -5,10 +5,9 @@ use crate::{
 
 /// Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that match a keyword string.
 /// Audiobooks are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
-#[derive(Debug, Builder, Clone)]
+#[derive(Debug, Clone)]
 pub struct SearchForItem {
     /// Your search query.
-    #[builder(setter(into))]
     pub q: String,
 
     /// A list of item types to search across. Search results include hits from all the specified item types.
@@ -21,25 +20,55 @@ pub struct SearchForItem {
     /// # Notes
     /// If neither market or user country are provided, the content is considered unavailable for the client.
     /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
-    #[builder(setter(into, strip_option), default)]
     pub market: Option<Market>,
 
     /// If `include_external=audio` is specified it signals that the client can play externally hosted audio content, and marks the content as playable in the response.
     /// By default externally hosted audio content is marked as unplayable in the response.
-    #[builder(setter(strip_option), default)]
     pub include_external: Option<IncludeExternalType>,
-}
-
-impl SearchForItemBuilder {
-    pub fn add_type(&mut self, ty: SearchType) -> &mut Self {
-        self.type_.get_or_insert_with(Vec::new).push(ty);
-        self
-    }
 }
 
 impl SearchForItem {
     pub fn builder() -> SearchForItemBuilder {
         SearchForItemBuilder::default()
+    }
+}
+
+#[derive(Default, Clone)]
+pub struct SearchForItemBuilder {
+    q: String,
+    type_: Option<Vec<SearchType>>,
+    market: Option<Market>,
+    include_external: Option<IncludeExternalType>,
+}
+
+impl SearchForItemBuilder {
+    pub fn q<S: Into<String>>(mut self, q: S) -> Self {
+        self.q = q.into();
+        self
+    }
+
+    pub fn add_type(mut self, ty: SearchType) -> Self {
+        self.type_.get_or_insert_with(Vec::new).push(ty);
+        self
+    }
+
+    pub fn market(mut self, market: Market) -> Self {
+        self.market = Some(market);
+        self
+    }
+
+    pub fn include_external(mut self, include_external: IncludeExternalType) -> Self {
+        self.include_external = Some(include_external);
+        self
+    }
+
+    pub fn build(self) -> SearchForItem {
+        SearchForItem {
+            q: self.q,
+            type_: self.type_.unwrap_or_default(),
+            market: self.market,
+            include_external: self.include_external,
+        }
     }
 }
 
@@ -85,16 +114,14 @@ mod tests {
             .endpoint("search")
             .add_query_params(&[("q", "remaster%20track:Doxy%20artist:Miles%20Davis")])
             .add_query_params(&[("type", "album")])
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = SearchForItem::builder()
             .q("remaster track:Doxy artist:Miles Davis")
             .add_type(SearchType::Album)
-            .build()
-            .unwrap();
+            .build();
 
         api::ignore(endpoint).query(&client).unwrap();
     }
@@ -106,17 +133,14 @@ mod tests {
             .add_query_params(&[("q", "remaster%20track:Doxy%20artist:Miles%20Davis")])
             .add_query_params(&[("type", "album")])
             .add_query_params(&[("include_external", "audio")])
-            .build()
-            .unwrap();
-
+            .build();
         let client = SingleTestClient::new_raw(endpoint, "");
 
         let endpoint = SearchForItem::builder()
             .q("remaster track:Doxy artist:Miles Davis")
             .add_type(SearchType::Album)
             .include_external(IncludeExternalType::Audio)
-            .build()
-            .unwrap();
+            .build();
 
         api::ignore(endpoint).query(&client).unwrap();
     }

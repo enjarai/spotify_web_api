@@ -33,8 +33,7 @@ mod tests {
         let endpoint = ExpectedUrl::builder()
             .endpoint("playlists/3cEYpjA9oz9GiPac4AsH4n/followers")
             .method(Method::DELETE)
-            .build()
-            .unwrap();
+            .build();
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
