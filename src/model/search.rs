@@ -48,6 +48,20 @@ pub enum SearchType {
     Audiobook,
 }
 
+impl SearchType {
+    pub fn all() -> &'static [Self] {
+        &[
+            Self::Album,
+            Self::Artist,
+            Self::Playlist,
+            Self::Track,
+            Self::Show,
+            Self::Episode,
+            Self::Audiobook,
+        ]
+    }
+}
+
 impl std::fmt::Display for SearchType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
