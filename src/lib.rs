@@ -8,7 +8,7 @@
 //!
 //! Client Credentials:
 //!
-//! ```rust
+//! ```no_run
 //! use spotify_web_api::{
 //!     api::{artists::GetArtist, Query as _},
 //!     model::Artist,
@@ -30,18 +30,18 @@
 //!
 //! Authorization Code with PKCE (async):
 //!
-//! ```rust
+//! ```no_run
 //! use spotify_web_api::{
 //!     api::{users::GetCurrentUserProfile, AsyncQuery as _},
 //!     auth::scopes,
 //!     model::CurrentUserProfile,
-//!     Spotify,
+//!     AsyncSpotify,
 //! };
 //! use std::io::{self, Write};
 //!
 //! #[tokio::main]
 //! async fn main() -> anyhow::Result<()> {
-//!     let mut spotify = Spotify::with_authorization_code_pkce(
+//!     let mut spotify = AsyncSpotify::with_authorization_code_pkce(
 //!         "client_id",
 //!         "http://127.0.0.1:8888/callback",
 //!         scopes::all(),
