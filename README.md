@@ -99,7 +99,7 @@ The following table summarizes the flows' behaviors:
 
 | Flow | Access User Resources | Requires Secret Key (Server-Side) | Access Token Refresh |
 | :--- | :--- | :--- | :--- |
-| Authorization code with PKCE | Yes | 	No | Yes |
+| Authorization code with PKCE | Yes | No | Yes |
 | Client credentials | No | Yes | No |
 
 ## API
@@ -116,6 +116,12 @@ There are additional helpers to handle different cases:
 You're not restricted to the predefined endpoints; you can define your own by implementing the [`Endpoint`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/endpoint.rs) trait. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_endpoint.rs).
 
 All endpoints return data types chosen by the caller, provided these types implement `serde`'s `Deserialize` trait. The library offers predefined structs in the [`model`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model.rs) module, but you are free to use your own structs by implementing the `Deserialize` trait. This flexibility is particularly useful when a custom data structure better suits the your needs or when avoiding the overhead of deserializing the entire response is desirable. [See example](https://github.com/ry-sev/spotify_web_api/blob/main/examples/creds_custom_model.rs).
+
+## Feature Flags
+
+A set of [feature flags](https://doc.rust-lang.org/cargo/reference/features.html#the-features-section) are available to customize the data models. **These are enabled by default**, but you can disable them to reduce the size of the compiled library or to avoid unnecessary data in your application.
+- `markets` - Enables the `available_markets` field in various models, such as [`Track`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model/tracks.rs#L41). This field contains a list of markets where the content is available.
+- `page_items` - Enables the field in various models that contain paginated items, such as the `tracks` field in [`Playlist`](https://github.com/ry-sev/spotify_web_api/blob/main/src/model/playlists.rs#L49).
 
 ## Implemented Endpoints
 
