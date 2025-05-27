@@ -64,8 +64,8 @@ impl StartPlaybackBuilder {
         self
     }
 
-    pub fn offset(mut self, offset: Offset) -> Self {
-        self.offset = Some(offset);
+    pub fn offset(mut self, offset: impl Into<Offset>) -> Self {
+        self.offset = Some(offset.into());
         self
     }
 
