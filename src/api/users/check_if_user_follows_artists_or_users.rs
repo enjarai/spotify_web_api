@@ -1,8 +1,7 @@
 use crate::{api::prelude::*, model::FollowType};
 
 /// Check to see if the current user is following one or more artists or other Spotify users.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/following/contains")]
+#[derive(Debug, Clone)]
 pub struct CheckIfUserFollowsArtistsOrUsers {
     /// The ID type.
     pub type_: FollowType,
@@ -10,6 +9,23 @@ pub struct CheckIfUserFollowsArtistsOrUsers {
     /// A list of the artist or the user [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
     /// A maximum of 50 IDs can be sent in one request.
     pub ids: Vec<String>,
+}
+
+impl Endpoint for CheckIfUserFollowsArtistsOrUsers {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/following/contains".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("type", &self.type_);
+        params.push("ids", &self.ids.join(","));
+        params
+    }
 }
 
 #[cfg(test)]

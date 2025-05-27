@@ -3,8 +3,7 @@ use crate::api::prelude::*;
 /// Remove one or more tracks from the current user's library.
 ///
 /// This API endpoint is in beta and could change without warning. Please share any feedback that you have, or issues that you discover, in the [Spotify developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "me/tracks")]
+#[derive(Debug, Clone)]
 pub struct RemoveUserSavedTracks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the tracks.
     pub ids: Vec<String>,
@@ -19,6 +18,22 @@ where
         Self {
             ids: ids.into_iter().map(Into::into).collect(),
         }
+    }
+}
+
+impl Endpoint for RemoveUserSavedTracks {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/tracks".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params
     }
 }
 

@@ -1,8 +1,8 @@
 use crate::api::prelude::*;
 
 /// Remove one or more shows from the Spotify user's library.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "me/shows")]
+#[derive(Debug, Clone)]
+// #[endpoint(method = DELETE, path = "me/shows")]
 pub struct RemoveUserSavedShows {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the shows.
     pub ids: Vec<String>,
@@ -27,6 +27,23 @@ where
             ids: ids.into_iter().map(Into::into).collect(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for RemoveUserSavedShows {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/shows".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

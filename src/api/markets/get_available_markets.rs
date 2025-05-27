@@ -1,9 +1,18 @@
 use crate::api::prelude::*;
 
 /// Get the list of markets where Spotify is available.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "markets")]
+#[derive(Default, Debug, Clone)]
 pub struct GetAvailableMarkets;
+
+impl Endpoint for GetAvailableMarkets {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "markets".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

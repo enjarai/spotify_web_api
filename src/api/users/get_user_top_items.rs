@@ -4,8 +4,7 @@ use crate::{
 };
 
 /// Get the current user's top artists or tracks based on calculated affinity.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/top/{type_}")]
+#[derive(Debug, Clone)]
 pub struct GetUserTopItems {
     /// The type of entity to return. Valid values: artists or tracks
     pub type_: TopItemType,
@@ -30,6 +29,22 @@ impl From<TopItemType> for GetUserTopItems {
             type_,
             time_range: None,
         }
+    }
+}
+
+impl Endpoint for GetUserTopItems {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("me/top/{}", self.type_).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("time_range", self.time_range.as_ref());
+        params
     }
 }
 

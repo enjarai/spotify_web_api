@@ -38,10 +38,9 @@ pub use raw::*;
 mod prelude {
     pub use super::Pageable;
     pub use crate::{
-        api::{BodyError, JsonParams, QueryParams},
+        api::{BodyError, Endpoint, JsonParams, QueryParams},
         model::Market,
     };
-    pub use endpoint_derive::Endpoint;
     pub use http::Method;
     pub use std::borrow::Cow;
 }

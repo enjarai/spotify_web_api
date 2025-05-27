@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Save one or more audiobooks to the current Spotify user's library.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = PUT, path = "me/audiobooks")]
+#[derive(Debug, Clone)]
 pub struct SaveAudiobooksforCurrentUser {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
     pub ids: Vec<String>,
@@ -17,6 +16,22 @@ where
         Self {
             ids: ids.into_iter().map(Into::into).collect(),
         }
+    }
+}
+
+impl Endpoint for SaveAudiobooksforCurrentUser {
+    fn method(&self) -> Method {
+        Method::PUT
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/audiobooks".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params
     }
 }
 

@@ -1,11 +1,20 @@
 use crate::api::prelude::*;
 
 /// Get a list of the playlists owned or followed by the current Spotify user.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/playlists")]
+#[derive(Default, Debug, Clone)]
 pub struct GetCurrentUserPlaylists;
 
 impl Pageable for GetCurrentUserPlaylists {}
+
+impl Endpoint for GetCurrentUserPlaylists {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/playlists".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

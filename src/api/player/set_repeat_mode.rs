@@ -3,8 +3,8 @@ use crate::{api::prelude::*, model::RepeatState};
 /// Set the repeat mode for the user's playback.
 /// This API only works for users who have Spotify Premium.
 /// The order of execution is not guaranteed when you use this API with other Player API endpoints.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = PUT, path = "me/player/repeat")]
+#[derive(Debug, Clone)]
+// #[endpoint(method = PUT, path = "me/player/repeat")]
 pub struct SetRepeatMode {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     pub device_id: Option<String>,
@@ -18,6 +18,23 @@ impl From<RepeatState> for SetRepeatMode {
             device_id: None,
             state,
         }
+    }
+}
+
+impl Endpoint for SetRepeatMode {
+    fn method(&self) -> Method {
+        Method::PUT
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/player/repeat".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("state", &self.state);
+        params.push_opt("device_id", self.device_id.as_ref());
+        params
     }
 }
 

@@ -3,8 +3,7 @@ use crate::api::prelude::*;
 /// Toggle shuffle on or off for user’s playback.
 /// This API only works for users who have Spotify Premium.
 /// The order of execution is not guaranteed when you use this API with other Player API endpoints.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = PUT, path = "me/player/shuffle")]
+#[derive(Debug, Clone)]
 pub struct TogglePlaybackShuffle {
     /// The id of the device this command is targeting. If not supplied, the user's currently active device is the target.
     pub device_id: Option<String>,
@@ -19,6 +18,23 @@ impl From<bool> for TogglePlaybackShuffle {
             device_id: None,
             state,
         }
+    }
+}
+
+impl Endpoint for TogglePlaybackShuffle {
+    fn method(&self) -> Method {
+        Method::PUT
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/player/shuffle".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("device_id", self.device_id.as_ref());
+        params.push("state", &self.state);
+        params
     }
 }
 

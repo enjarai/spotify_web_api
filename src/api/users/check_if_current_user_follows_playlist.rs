@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Check to see if the current user is following a specified playlist.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "playlists/{id}/followers/contains")]
+#[derive(Debug, Clone)]
 pub struct CheckIfCurrentUserFollowsPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     pub id: String,
@@ -17,6 +16,16 @@ impl CheckIfCurrentUserFollowsPlaylist {
 impl<T: Into<String>> From<T> for CheckIfCurrentUserFollowsPlaylist {
     fn from(id: T) -> Self {
         Self { id: id.into() }
+    }
+}
+
+impl Endpoint for CheckIfCurrentUserFollowsPlaylist {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("playlists/{}/followers/contains", self.id).into()
     }
 }
 

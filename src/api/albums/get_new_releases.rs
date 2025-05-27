@@ -1,12 +1,18 @@
 use crate::api::prelude::*;
 
 /// Get a list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse” tab).
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(
-	method = GET,
-	path = "browse/new-releases",
-)]
+#[derive(Default, Debug, Clone)]
 pub struct GetNewReleases;
+
+impl Endpoint for GetNewReleases {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "browse/new-releases".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

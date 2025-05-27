@@ -1,16 +1,36 @@
 use crate::{api::prelude::*, model::FollowType};
 
 /// Remove the current user as a follower of one or more artists or other Spotify users.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "me/following")]
+#[derive(Debug, Clone)]
 pub struct UnfollowArtistsOrUsers {
     /// The ID type.
     pub type_: FollowType,
 
     /// A list of the artist or the user [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
     /// A maximum of 50 IDs can be sent in one request.
-    #[endpoint(body)]
     pub ids: Vec<String>,
+}
+
+impl Endpoint for UnfollowArtistsOrUsers {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/following".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("type", &self.type_);
+        params
+    }
+
+    fn body(&self) -> Result<Option<(&'static str, Vec<u8>)>, BodyError> {
+        JsonParams::into_body(&serde_json::json!({
+            "ids": self.ids,
+        }))
+    }
 }
 
 #[cfg(test)]

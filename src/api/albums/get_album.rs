@@ -1,16 +1,43 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single album.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "albums/{id}")]
+#[derive(Debug, Clone)]
 pub struct GetAlbum {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
     pub id: String,
+
+    /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    /// If a country code is specified, only content that is available in that market will be returned.
+    /// If a valid user access token is specified in the request header, the country associated with the user account will take priority over this parameter.
+    ///
+    /// # Notes
+    /// If neither market or user country are provided, the content is considered unavailable for the client.
+    /// Users can view the country that is associated with their account in the [account settings](https://www.spotify.com/account/overview/).
+    pub market: Option<Market>,
 }
 
 impl<T: Into<String>> From<T> for GetAlbum {
     fn from(id: T) -> Self {
-        Self { id: id.into() }
+        Self {
+            id: id.into(),
+            market: None,
+        }
+    }
+}
+
+impl Endpoint for GetAlbum {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("albums/{}", self.id).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

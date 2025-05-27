@@ -2,8 +2,7 @@ use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several audiobook chapters identified by their Spotify IDs.
 /// Chapters are only available within the US, UK, Canada, Ireland, New Zealand and Australia markets.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "chapters")]
+#[derive(Debug, Clone)]
 pub struct GetSeveralChapters {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the chapters.
     pub ids: Vec<String>,
@@ -28,6 +27,23 @@ where
             ids: ids.into_iter().map(Into::into).collect(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetSeveralChapters {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "chapters".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

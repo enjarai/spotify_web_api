@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Add the current user as a follower of a playlist.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = PUT, path = "playlists/{id}/followers")]
+#[derive(Debug, Clone)]
 pub struct FollowPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     pub id: String,
@@ -11,7 +10,6 @@ pub struct FollowPlaylist {
     /// If true the playlist will be included in user's public playlists (added to profile),
     /// if false it will remain private.
     /// For more about public/private status, see [Working with Playlists](https://developer.spotify.com/documentation/web-api/concepts/playlists)
-    #[endpoint(body)]
     pub public: bool,
 }
 
@@ -30,6 +28,22 @@ impl<T: Into<String>> From<T> for FollowPlaylist {
             id: id.into(),
             public: true,
         }
+    }
+}
+
+impl Endpoint for FollowPlaylist {
+    fn method(&self) -> Method {
+        Method::PUT
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("playlists/{}/followers", self.id).into()
+    }
+
+    fn body(&self) -> Result<Option<(&'static str, Vec<u8>)>, BodyError> {
+        JsonParams::into_body(&serde_json::json!({
+            "public": self.public,
+        }))
     }
 }
 

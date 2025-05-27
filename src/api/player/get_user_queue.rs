@@ -1,9 +1,18 @@
 use crate::api::prelude::*;
 
 /// Get the list of objects that make up the user's queue.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/player/queue")]
+#[derive(Default, Debug, Clone)]
 pub struct GetUserQueue;
+
+impl Endpoint for GetUserQueue {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/player/queue".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

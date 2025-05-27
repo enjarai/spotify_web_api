@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Check if one or more audiobooks are already saved in the current Spotify user's library.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/audiobooks/contains")]
+#[derive(Debug, Clone)]
 pub struct CheckUserSavedAudiobooks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
     pub ids: Vec<String>,
@@ -17,6 +16,22 @@ where
         Self {
             ids: ids.into_iter().map(Into::into).collect(),
         }
+    }
+}
+
+impl Endpoint for CheckUserSavedAudiobooks {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/audiobooks/contains".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params
     }
 }
 

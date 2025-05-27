@@ -1,9 +1,18 @@
 use crate::api::prelude::*;
 
 /// Retrieve a list of available genres seed parameter values for [recommendations](https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "recommendations/available-genre-seeds")]
+#[derive(Default, Debug, Clone)]
 pub struct GetAvailableGenreSeeds;
+
+impl Endpoint for GetAvailableGenreSeeds {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "recommendations/available-genre-seeds".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -1,8 +1,7 @@
 use crate::{api::prelude::*, model::FollowedArtistsType};
 
 /// Get the current user's followed artists.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/following")]
+#[derive(Debug, Clone)]
 pub struct GetFollowedArtists {
     /// The ID type: currently only artist is supported.
     pub type_: FollowedArtistsType,
@@ -32,6 +31,23 @@ impl Default for GetFollowedArtists {
 impl From<FollowedArtistsType> for GetFollowedArtists {
     fn from(type_: FollowedArtistsType) -> Self {
         Self { type_, after: None }
+    }
+}
+
+impl Endpoint for GetFollowedArtists {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/following".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("type", &self.type_);
+        params.push_opt("after", self.after.as_ref());
+        params
     }
 }
 

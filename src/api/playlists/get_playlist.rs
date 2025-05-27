@@ -1,8 +1,8 @@
 use crate::api::prelude::*;
 
 /// Get a playlist owned by a Spotify user.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "playlists/{id}")]
+#[derive(Debug, Clone)]
+// #[endpoint(method = GET, path = "playlists/{id}")]
 pub struct GetPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     pub id: String,
@@ -23,6 +23,22 @@ impl<T: Into<String>> From<T> for GetPlaylist {
             id: id.into(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetPlaylist {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("playlists/{}", self.id).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

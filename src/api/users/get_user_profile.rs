@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get public profile information about a Spotify user.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "users/{id}")]
+#[derive(Default, Debug, Clone)]
 pub struct GetUserProfile {
     /// The user's [Spotify user ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids).
     pub id: String,
@@ -17,6 +16,16 @@ impl GetUserProfile {
 impl<T: Into<String>> From<T> for GetUserProfile {
     fn from(id: T) -> Self {
         Self { id: id.into() }
+    }
+}
+
+impl Endpoint for GetUserProfile {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("users/{}", self.id).into()
     }
 }
 

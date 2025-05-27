@@ -1,11 +1,20 @@
 use crate::api::prelude::*;
 
 /// Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/audiobooks")]
+#[derive(Default, Debug, Clone)]
 pub struct GetUserSavedAudiobooks;
 
 impl Pageable for GetUserSavedAudiobooks {}
+
+impl Endpoint for GetUserSavedAudiobooks {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/audiobooks".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

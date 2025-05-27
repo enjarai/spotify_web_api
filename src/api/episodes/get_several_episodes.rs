@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for several episodes based on their Spotify IDs.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "episodes")]
+#[derive(Debug, Clone)]
 pub struct GetSeveralEpisodes {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the episodes.
     pub ids: Vec<String>,
@@ -27,6 +26,23 @@ where
             ids: ids.into_iter().map(Into::into).collect(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetSeveralEpisodes {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "episodes".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

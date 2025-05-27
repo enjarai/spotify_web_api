@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information for a single track identified by its unique Spotify ID.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "tracks/{id}")]
+#[derive(Debug, Clone)]
 pub struct GetTrack {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the track.
     pub id: String,
@@ -23,6 +22,22 @@ impl<T: Into<String>> From<T> for GetTrack {
             id: id.into(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetTrack {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("tracks/{}", self.id).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

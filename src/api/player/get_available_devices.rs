@@ -2,9 +2,18 @@ use crate::api::prelude::*;
 
 /// Get information about a user’s available Spotify Connect devices.
 /// Some device models are not supported and will not be listed in the API response.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/player/devices")]
+#[derive(Default, Debug, Clone)]
 pub struct GetAvailableDevices;
+
+impl Endpoint for GetAvailableDevices {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/player/devices".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

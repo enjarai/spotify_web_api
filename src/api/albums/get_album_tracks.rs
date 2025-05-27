@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "albums/{id}/tracks")]
+#[derive(Debug, Clone)]
 pub struct GetAlbumTracks {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the album.
     pub id: String,
@@ -25,6 +24,22 @@ impl<T: Into<String>> From<T> for GetAlbumTracks {
             id: id.into(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetAlbumTracks {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("albums/{}/tracks", self.id).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

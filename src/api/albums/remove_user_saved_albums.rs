@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Remove one or more albums from the current user's 'Your Music' library.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "me/albums")]
+#[derive(Debug, Clone)]
 pub struct RemoveUserSavedAlbums {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the albums.
     pub ids: Vec<String>,
@@ -17,6 +16,22 @@ where
         Self {
             ids: ids.into_iter().map(Into::into).collect(),
         }
+    }
+}
+
+impl Endpoint for RemoveUserSavedAlbums {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/albums".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params
     }
 }
 

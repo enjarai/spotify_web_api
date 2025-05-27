@@ -1,11 +1,20 @@
 use crate::api::prelude::*;
 
 /// Get a list of shows saved in the current Spotify user's library.
-#[derive(Default, Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/shows")]
+#[derive(Default, Debug, Clone)]
 pub struct GetUserSavedShows;
 
 impl Pageable for GetUserSavedShows {}
+
+impl Endpoint for GetUserSavedShows {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/shows".into()
+    }
+}
 
 #[cfg(test)]
 mod tests {

@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get the current image associated with a specific playlist.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "playlists/{id}/images")]
+#[derive(Debug, Clone)]
 pub struct GetPlaylistCoverImage {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     pub id: String,
@@ -17,6 +16,16 @@ impl GetPlaylistCoverImage {
 impl<T: Into<String>> From<T> for GetPlaylistCoverImage {
     fn from(id: T) -> Self {
         Self { id: id.into() }
+    }
+}
+
+impl Endpoint for GetPlaylistCoverImage {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("playlists/{}/images", self.id).into()
     }
 }
 

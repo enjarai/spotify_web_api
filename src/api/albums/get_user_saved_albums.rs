@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get a list of the albums saved in the current Spotify user's 'Your Music' library.
-#[derive(Debug, Default, Clone, Endpoint)]
-#[endpoint(method = GET, path = "me/albums")]
+#[derive(Debug, Default, Clone)]
 pub struct GetUserSavedAlbums {
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -24,6 +23,22 @@ where
         Self {
             market: Some(market.into()),
         }
+    }
+}
+
+impl Endpoint for GetUserSavedAlbums {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/albums".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

@@ -1,12 +1,12 @@
 use crate::api::prelude::*;
 
 /// Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
-#[derive(Debug, Default, Clone, Endpoint)]
-#[endpoint(method = GET, path = "browse/categories")]
+#[derive(Debug, Default, Clone)]
 pub struct GetSeveralBrowseCategories {
     /// The desired language, consisting of an [ISO 639-1](http://en.wikipedia.org/wiki/ISO_639-1) language code and an [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2), joined by an underscore. For example: `es_MX`, meaning "Spanish (Mexico)". Provide this parameter if you want the category strings returned in a particular language.
     ///
-    /// Note: if locale is not supplied, or if the specified language is not available, the category strings returned will be in the Spotify default language (American English).
+    /// # Notes
+    /// if locale is not supplied, or if the specified language is not available, the category strings returned will be in the Spotify default language (American English).
     ///
     /// Example: `sv_SE`
     pub locale: Option<String>,
@@ -21,6 +21,22 @@ impl GetSeveralBrowseCategories {
 }
 
 impl Pageable for GetSeveralBrowseCategories {}
+
+impl Endpoint for GetSeveralBrowseCategories {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "browse/categories".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("locale", self.locale.as_ref());
+        params
+    }
+}
 
 #[cfg(test)]
 mod tests {

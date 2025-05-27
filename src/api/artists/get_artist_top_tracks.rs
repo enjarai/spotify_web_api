@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Get Spotify catalog information about an artist's top tracks by country.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = GET, path = "artists/{id}/top-tracks")]
+#[derive(Debug, Clone)]
 pub struct GetArtistTopTracks {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the artist.
     pub id: String,
@@ -23,6 +22,22 @@ impl<T: Into<String>> From<T> for GetArtistTopTracks {
             id: id.into(),
             market: None,
         }
+    }
+}
+
+impl Endpoint for GetArtistTopTracks {
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("artists/{}/top-tracks", self.id).into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push_opt("market", self.market.as_ref());
+        params
     }
 }
 

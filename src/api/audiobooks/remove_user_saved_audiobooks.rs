@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Remove one or more audiobooks from the Spotify user's library.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "me/audiobooks")]
+#[derive(Debug, Clone)]
 pub struct RemoveUserSavedAudiobooks {
     /// A list of [Spotify IDs](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for the audiobooks.
     pub ids: Vec<String>,
@@ -17,6 +16,22 @@ where
         Self {
             ids: ids.into_iter().map(Into::into).collect(),
         }
+    }
+}
+
+impl Endpoint for RemoveUserSavedAudiobooks {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        "me/audiobooks".into()
+    }
+
+    fn parameters(&self) -> QueryParams<'_> {
+        let mut params = QueryParams::default();
+        params.push("ids", &self.ids.join(","));
+        params
     }
 }
 

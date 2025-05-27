@@ -1,8 +1,7 @@
 use crate::api::prelude::*;
 
 /// Remove the current user as a follower of a playlist.
-#[derive(Debug, Clone, Endpoint)]
-#[endpoint(method = DELETE, path = "playlists/{id}/followers")]
+#[derive(Debug, Clone)]
 pub struct UnfollowPlaylist {
     /// The [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) of the playlist.
     pub id: String,
@@ -17,6 +16,16 @@ impl UnfollowPlaylist {
 impl<T: Into<String>> From<T> for UnfollowPlaylist {
     fn from(id: T) -> Self {
         Self { id: id.into() }
+    }
+}
+
+impl Endpoint for UnfollowPlaylist {
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn endpoint(&self) -> Cow<'static, str> {
+        format!("playlists/{}/followers", self.id).into()
     }
 }
 
