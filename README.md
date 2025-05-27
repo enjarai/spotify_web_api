@@ -104,7 +104,7 @@ The following table summarizes the flows' behaviors:
 
 ## API
 
-Supported endpoints are organized under the [`api`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api.rs) module. Each endpoint can be constructed using a builder pattern, allowing you to set the supported fields in a fluent and flexible manner. To interact with an endpoint, you can use either the `Query` or `AsyncQuery` [traits](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/query.rs).
+Supported endpoints are organized under the [`api`](https://github.com/ry-sev/spotify_web_api/blob/main/src/api.rs) module. To interact with an endpoint, you can use either the `Query` or `AsyncQuery` [traits](https://github.com/ry-sev/spotify_web_api/blob/main/src/api/query.rs).
 - `Query` is designed for blocking code, making it ideal for synchronous workflows or environments where asynchronous execution is unnecessary or not supported. Opt for this when simplicity is key, such as in single-threaded environments or scripts where blocking is acceptable.
 - `AsyncQuery` is intended for asynchronous code and integrates seamlessly with an asynchronous runtime of your choice, such as `Tokio` or `async-std`. This approach is particularly useful when working in environments that benefit from non-blocking operations. Use this trait when building applications that require high concurrency or when interacting with other asynchronous code.
 
