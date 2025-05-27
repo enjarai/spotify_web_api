@@ -5,6 +5,7 @@ authors.workspace = true
 edition.workspace = true
 description = "A wrapper for the Spotify Web API"
 readme = "README.md"
+homepage.workspace = true
 repository.workspace = true
 license.workspace = true
 keywords = ["spotify", "music", "api"]
