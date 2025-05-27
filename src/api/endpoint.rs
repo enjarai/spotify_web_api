@@ -33,6 +33,7 @@ impl UrlBase {
     }
 }
 
+/// A trait representing a Spotify API endpoint.
 pub trait Endpoint {
     /// The HTTP method to use for the endpoint.
     fn method(&self) -> Method;
