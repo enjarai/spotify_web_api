@@ -1,3 +1,5 @@
+//! Spotify Web API data model.
+
 pub mod albums;
 pub mod artists;
 pub mod audiobooks;

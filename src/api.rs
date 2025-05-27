@@ -1,3 +1,5 @@
+//! Spotify Web API endpoints.
+
 mod client;
 mod endpoint;
 mod error;

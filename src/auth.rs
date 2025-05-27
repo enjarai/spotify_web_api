@@ -1,3 +1,5 @@
+//! Types used in the authorization processs.
+
 mod client_credentials;
 mod pkce;
 pub mod scopes;

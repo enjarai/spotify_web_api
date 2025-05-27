@@ -1,3 +1,5 @@
+//! OAuth2.0 Scopes for the Spotify Web API.
+
 use std::collections::HashSet;
 
 /// Represents the various access scopes available in the Spotify Web API.
