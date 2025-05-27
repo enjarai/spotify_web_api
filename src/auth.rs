@@ -33,24 +33,16 @@ pub enum AuthError {
     /// # Details
     /// This variant wraps an `http::header::InvalidHeaderValue` error, which occurs
     /// when constructing an HTTP header fails due to invalid characters or formatting.
-    #[error("header value error: {source}")]
-    HeaderValue {
-        /// The source of the error.
-        #[from]
-        source: header::InvalidHeaderValue,
-    },
+    #[error("header value error: {0}")]
+    HeaderValue(#[from] header::InvalidHeaderValue),
 
     /// The URL failed to parse.
     ///
     /// # Details
     /// This variant wraps a `url::ParseError`, which occurs when a URL string
     /// cannot be correctly parsed.
-    #[error("failed to parse url: {source}")]
-    UrlParse {
-        /// The source of the error.
-        #[from]
-        source: url::ParseError,
-    },
+    #[error("failed to parse url: {0}")]
+    UrlParse(#[from] url::ParseError),
 
     /// Indicates that the authorization code was not found in the URL.
     ///

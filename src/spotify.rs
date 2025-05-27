@@ -41,34 +41,22 @@ pub enum RestError {
     /// This variant wraps an [`AuthError`] that occurs when there is an issue
     /// with the authorization process, such as an invalid state parameter
     /// or a missing authorization code.
-    #[error("error setting auth header: {source}")]
-    AuthError {
-        /// The source of the error.
-        #[from]
-        source: AuthError,
-    },
+    #[error("error setting auth header: {0}")]
+    AuthError(#[from] AuthError),
 
     /// An error during communication with the Spotify API.
     ///
     /// This variant wraps a `reqwest::Error`, which can occur due to network
     /// connectivity issues, timeouts, or unexpected responses from the Spotify API.
-    #[error("communication with spotify: {source}")]
-    Communication {
-        /// The source of the error.
-        #[from]
-        source: reqwest::Error,
-    },
+    #[error("communication with spotify: {0}")]
+    Communication(#[from] reqwest::Error),
 
     /// An error related to constructing or processing HTTP requests.
     ///
     /// This variant wraps an `http::Error`, which can occur when handling HTTP
     /// requests, such as invalid headers or improperly formed HTTP messages.
-    #[error("`http` error: {source}")]
-    Http {
-        /// The source of the error.
-        #[from]
-        source: http::Error,
-    },
+    #[error("`http` error: {0}")]
+    Http(#[from] http::Error),
 }
 
 /// Represents errors that can occur while interacting with the Spotify API.
@@ -86,39 +74,27 @@ pub enum SpotifyError {
     ///
     /// This variant wraps a `url::ParseError`, which indicates an invalid or
     /// malformed URL string.
-    #[error("failed to parse url: {source}")]
-    UrlParse {
-        /// The source of the error.
-        #[from]
-        source: url::ParseError,
-    },
+    #[error("failed to parse url: {0}")]
+    UrlParse(#[from] url::ParseError),
 
     /// An error related to setting the authentication header.
     ///
     /// This variant wraps an `AuthError`, which includes errors such as missing
     /// authorization codes or mismatched state parameters.
-    #[error("error setting auth header: {source}")]
-    AuthError {
-        /// The source of the error.
-        #[from]
-        source: AuthError,
-    },
+    #[error("error setting auth header: {0}")]
+    AuthError(#[from] AuthError),
 
     /// An error during communication with the Spotify API.
     ///
     /// This variant wraps a `reqwest::Error`, representing issues such as network
     /// connectivity failures, timeouts, or unexpected HTTP responses.
-    #[error("communication with spotify: {source}")]
-    Communication {
-        /// The source of the error.
-        #[from]
-        source: reqwest::Error,
-    },
+    #[error("communication with spotify: {0}")]
+    Communication(#[from] reqwest::Error),
 
     /// An HTTP error returned by the Spotify API.
     ///
     /// This variant indicates a non-2xx HTTP status code was received.
-    #[error("spotify HTTP error: {}", status)]
+    #[error("spotify HTTP error: {status}")]
     Http {
         /// The HTTP status code returned by the Spotify API.
         status: reqwest::StatusCode,
@@ -137,7 +113,6 @@ pub enum SpotifyError {
     #[error("could not parse {typename} data: {source}")]
     DataType {
         /// The source of the error.
-        #[source]
         source: serde_json::Error,
 
         /// The name of the type that failed to parse.
@@ -148,12 +123,8 @@ pub enum SpotifyError {
     ///
     /// This variant wraps an `ApiError` containing additional details about
     /// the underlying REST error.
-    #[error("api error: {source}")]
-    Api {
-        /// The source of the error.
-        #[from]
-        source: ApiError<RestError>,
-    },
+    #[error("api error: {0}")]
+    Api(#[from] ApiError<RestError>),
 }
 
 impl SpotifyError {

@@ -8,20 +8,12 @@ use thiserror::Error;
 #[non_exhaustive]
 pub enum BodyError {
     /// Body data could not be serialized from form parameters.
-    #[error("failed to URL encode form parameters: {source}")]
-    UrlEncoded {
-        /// The source of the error.
-        #[from]
-        source: serde_urlencoded::ser::Error,
-    },
+    #[error("failed to URL encode form parameters: {0}")]
+    UrlEncoded(#[from] serde_urlencoded::ser::Error),
 
     /// Body data could not be serialized to JSON from form parameters.
-    #[error("failed to JSON encode form parameters: {source}")]
-    JsonEncoded {
-        /// The source of the error.
-        #[from]
-        source: serde_json::Error,
-    },
+    #[error("failed to JSON encode form parameters: {0}")]
+    JsonEncoded(#[from] serde_json::Error),
 }
 
 /// Errors which may occur when using API endpoints.
@@ -32,43 +24,24 @@ where
     E: Error + Send + Sync + 'static,
 {
     /// The client encountered an error.
-    #[error("client error: {source}")]
-    Client {
-        /// The client error.
-        source: E,
-    },
+    #[error("client error: {0}")]
+    Client(E),
 
     /// Authentication failed.
-    #[error("failed to authenticate: {source}")]
-    Auth {
-        /// The source of the error.
-        #[from]
-        source: AuthError,
-    },
+    #[error("failed to authenticate: {0}")]
+    Auth(#[from] AuthError),
 
     /// The URL failed to parse.
-    #[error("failed to parse url: {source}")]
-    UrlParse {
-        /// The source of the error.
-        #[from]
-        source: url::ParseError,
-    },
+    #[error("failed to parse url: {0}")]
+    UrlParse(#[from] url::ParseError),
 
     /// Body data could not be created.
-    #[error("failed to create form data: {source}")]
-    Body {
-        /// The source of the error.
-        #[from]
-        source: BodyError,
-    },
+    #[error("failed to create form data: {0}")]
+    Body(#[from] BodyError),
 
     /// JSON deserialization from Spotify failed.
-    #[error("could not parse JSON response: {source}")]
-    Json {
-        /// The source of the error.
-        #[from]
-        source: serde_json::Error,
-    },
+    #[error("could not parse JSON response: {0}")]
+    Json(#[from] serde_json::Error),
 
     /// The resource has been moved permanently.
     #[error("moved permanently to: {}", location.as_ref().map_or("<UNKNOWN>", AsRef::as_ref))]
@@ -98,11 +71,8 @@ where
     },
 
     /// The client does not understand how to use an endpoint for the given URL base.
-    #[error("unsupported URL base: {url_base:?}")]
-    UnsupportedUrlBase {
-        /// The URL base that is not supported.
-        url_base: UrlBase,
-    },
+    #[error("unsupported URL base: {0:?}")]
+    UnsupportedUrlBase(UrlBase),
 
     /// Spotify returned an error message with an HTTP error.
     #[error("spotify server error ({status}): {msg}")]
@@ -141,7 +111,7 @@ where
 {
     /// Create an API error in a client error.
     pub fn client(source: E) -> Self {
-        Self::Client { source }
+        Self::Client(source)
     }
 
     /// Wrap a client error in another wrapper.
@@ -151,11 +121,11 @@ where
         W: Error + Send + Sync + 'static,
     {
         match self {
-            Self::Client { source } => ApiError::client(f(source)),
-            Self::UrlParse { source } => ApiError::UrlParse { source },
-            Self::Auth { source } => ApiError::Auth { source },
-            Self::Body { source } => ApiError::Body { source },
-            Self::Json { source } => ApiError::Json { source },
+            Self::Client(source) => ApiError::client(f(source)),
+            Self::UrlParse(source) => ApiError::UrlParse(source),
+            Self::Auth(source) => ApiError::Auth(source),
+            Self::Body(source) => ApiError::Body(source),
+            Self::Json(source) => ApiError::Json(source),
             Self::MovedPermanently { location } => ApiError::MovedPermanently { location },
             Self::SpotifyWithStatus { status, msg } => ApiError::SpotifyWithStatus { status, msg },
             Self::SpotifyService { status, data } => ApiError::SpotifyService { status, data },
@@ -166,7 +136,7 @@ where
                 ApiError::SpotifyUnrecognizedWithStatus { status, obj }
             }
             Self::DataType { source, typename } => ApiError::DataType { source, typename },
-            Self::UnsupportedUrlBase { url_base } => ApiError::UnsupportedUrlBase { url_base },
+            Self::UnsupportedUrlBase(url_base) => ApiError::UnsupportedUrlBase(url_base),
         }
     }
 
