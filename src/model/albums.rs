@@ -58,7 +58,9 @@ pub struct Album {
     pub total_tracks: usize,
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
+    ///
+    /// # Note
+    /// An album is considered available in a market when at least 1 of its tracks is available in that market.
     #[cfg(feature = "markets")]
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,
@@ -133,7 +135,9 @@ pub struct SimplifiedAlbum {
     pub total_tracks: usize,
 
     /// The markets in which the album is available: [ISO 3166-1 alpha-2 country codes](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    /// **NOTE**: an album is considered available in a market when at least 1 of its tracks is available in that market.
+    ///
+    /// # Note
+    /// An album is considered available in a market when at least 1 of its tracks is available in that market.
     #[cfg(feature = "markets")]
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub available_markets: Vec<Market>,

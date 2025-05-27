@@ -147,7 +147,9 @@ pub struct PlaylistTrack {
     pub added_at: Option<String>,
 
     /// The Spotify user who added the track or episode.
-    /// **Note**: some very old playlists may return None in this field.
+    ///
+    /// # Note
+    /// Some very old playlists may return None in this field.
     pub added_by: Option<AddedBy>,
 
     /// Whether this track or episode is a [local file](https://developer.spotify.com/documentation/web-api/concepts/playlists#local-files) or not.
