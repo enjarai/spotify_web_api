@@ -10,6 +10,7 @@ use serde::de::DeserializeOwned;
 use std::sync::Arc;
 use url::Url;
 
+/// A query modifier that paginates an endpoint.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Paged<E> {
     pub(crate) endpoint: E,
