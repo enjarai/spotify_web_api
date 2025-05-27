@@ -8,7 +8,7 @@ use crate::{
 #[derive(Debug, Clone)]
 pub struct SearchForItem {
     /// Your search query.
-    pub q: String,
+    pub query: String,
 
     /// A list of item types to search across. Search results include hits from all the specified item types.
     pub search_types: Vec<SearchType>,
@@ -33,7 +33,7 @@ impl SearchForItem {
         search_types: impl IntoIterator<Item = SearchType>,
     ) -> Self {
         Self {
-            q: query.into(),
+            query: query.into(),
             search_types: search_types.into_iter().collect(),
             market: None,
             include_external: None,
@@ -62,7 +62,7 @@ impl Endpoint for SearchForItem {
 
     fn parameters(&self) -> QueryParams<'_> {
         let mut params = QueryParams::default();
-        params.push("q", &format!("{}", path_escaped(&self.q)));
+        params.push("q", &format!("{}", path_escaped(&self.query)));
 
         let type_str = self
             .search_types
