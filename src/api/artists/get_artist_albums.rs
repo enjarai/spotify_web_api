@@ -22,17 +22,9 @@ pub struct GetArtistAlbums {
     pub market: Option<Market>,
 }
 
-#[derive(Default, Clone)]
-pub struct GetArtistAlbumsBuilder {
-    pub id: String,
-    pub include_groups: Option<Vec<AlbumType>>,
-    pub market: Option<Market>,
-}
-
-impl GetArtistAlbumsBuilder {
-    pub fn id<T: Into<String>>(mut self, id: T) -> Self {
-        self.id = id.into();
-        self
+impl GetArtistAlbums {
+    pub fn new(id: impl Into<String>) -> Self {
+        Self::from(id)
     }
 
     pub fn include_group(mut self, include_group: AlbumType) -> Self {
@@ -43,31 +35,9 @@ impl GetArtistAlbumsBuilder {
         self
     }
 
-    pub fn include_groups(mut self, groups: Vec<AlbumType>) -> Self {
-        match &mut self.include_groups {
-            Some(existing) => existing.extend(groups),
-            None => self.include_groups = Some(groups),
-        }
+    pub fn market(mut self, market: Market) -> Self {
+        self.market = Some(market);
         self
-    }
-
-    pub fn market<T: Into<Market>>(mut self, market: T) -> Self {
-        self.market = Some(market.into());
-        self
-    }
-
-    pub fn build(self) -> GetArtistAlbums {
-        GetArtistAlbums {
-            id: self.id,
-            include_groups: self.include_groups,
-            market: self.market,
-        }
-    }
-}
-
-impl GetArtistAlbums {
-    pub fn builder() -> GetArtistAlbumsBuilder {
-        GetArtistAlbumsBuilder::default()
     }
 }
 
@@ -125,11 +95,9 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetArtistAlbums::builder()
-            .id("0TnOYISbd1XYRBk9myaseg")
+        let endpoint = GetArtistAlbums::new("0TnOYISbd1XYRBk9myaseg")
             .include_group(AlbumType::Single)
-            .include_group(AlbumType::AppearsOn)
-            .build();
+            .include_group(AlbumType::AppearsOn);
 
         api::ignore(endpoint).query(&client).unwrap();
     }
@@ -142,9 +110,7 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = GetArtistAlbums::builder()
-            .id("0TnOYISbd1XYRBk9myaseg")
-            .build();
+        let endpoint = GetArtistAlbums::new("0TnOYISbd1XYRBk9myaseg");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

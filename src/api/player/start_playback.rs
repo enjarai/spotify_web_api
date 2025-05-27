@@ -25,21 +25,6 @@ pub struct StartPlayback {
 }
 
 impl StartPlayback {
-    pub fn builder() -> StartPlaybackBuilder {
-        StartPlaybackBuilder::default()
-    }
-}
-
-#[derive(Default, Clone)]
-pub struct StartPlaybackBuilder {
-    device_id: Option<String>,
-    context_uri: Option<ContextType>,
-    uris: Option<Vec<TrackId>>,
-    offset: Option<Offset>,
-    position_ms: Option<u32>,
-}
-
-impl StartPlaybackBuilder {
     pub fn device_id(mut self, device_id: impl Into<String>) -> Self {
         self.device_id = Some(device_id.into());
         self
@@ -50,17 +35,13 @@ impl StartPlaybackBuilder {
         self
     }
 
-    pub fn uri(mut self, uri: TrackId) -> Self {
-        if let Some(ref mut uris) = self.uris {
-            uris.push(uri);
-        } else {
-            self.uris = Some(vec![uri]);
-        }
+    pub fn uris(mut self, uris: Vec<TrackId>) -> Self {
+        self.uris = Some(uris);
         self
     }
 
-    pub fn uris(mut self, uris: Vec<TrackId>) -> Self {
-        self.uris = Some(uris);
+    pub fn uri(mut self, uri: TrackId) -> Self {
+        self.uris.get_or_insert_with(Vec::new).push(uri);
         self
     }
 
@@ -72,16 +53,6 @@ impl StartPlaybackBuilder {
     pub fn position_ms(mut self, position_ms: u32) -> Self {
         self.position_ms = Some(position_ms);
         self
-    }
-
-    pub fn build(self) -> StartPlayback {
-        StartPlayback {
-            device_id: self.device_id,
-            context_uri: self.context_uri,
-            uris: self.uris,
-            offset: self.offset,
-            position_ms: self.position_ms,
-        }
     }
 }
 
@@ -180,14 +151,13 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = StartPlayback::builder()
+        let endpoint = StartPlayback::default()
             .context_uri(ContextType::Album(
                 AlbumId::from_id("5ht7ItJgpBH7W6vJ5BqpPr").unwrap(),
             ))
             .offset(Offset::Position(5))
             .position_ms(0)
-            .device_id("xxxxxxxxxxxxxxxxxxxxxx")
-            .build();
+            .device_id("xxxxxxxxxxxxxxxxxxxxxx");
 
         api::ignore(endpoint).query(&client).unwrap();
     }

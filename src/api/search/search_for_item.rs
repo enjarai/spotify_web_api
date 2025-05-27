@@ -11,7 +11,7 @@ pub struct SearchForItem {
     pub q: String,
 
     /// A list of item types to search across. Search results include hits from all the specified item types.
-    pub type_: Vec<SearchType>,
+    pub search_types: Vec<SearchType>,
 
     /// An [ISO 3166-1 alpha-2 country code](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     /// If a country code is specified, only content that is available in that market will be returned.
@@ -28,28 +28,16 @@ pub struct SearchForItem {
 }
 
 impl SearchForItem {
-    pub fn builder() -> SearchForItemBuilder {
-        SearchForItemBuilder::default()
-    }
-}
-
-#[derive(Default, Clone)]
-pub struct SearchForItemBuilder {
-    q: String,
-    type_: Option<Vec<SearchType>>,
-    market: Option<Market>,
-    include_external: Option<IncludeExternalType>,
-}
-
-impl SearchForItemBuilder {
-    pub fn q<S: Into<String>>(mut self, q: S) -> Self {
-        self.q = q.into();
-        self
-    }
-
-    pub fn add_type(mut self, ty: SearchType) -> Self {
-        self.type_.get_or_insert_with(Vec::new).push(ty);
-        self
+    pub fn new(
+        query: impl Into<String>,
+        search_types: impl IntoIterator<Item = SearchType>,
+    ) -> Self {
+        Self {
+            q: query.into(),
+            search_types: search_types.into_iter().collect(),
+            market: None,
+            include_external: None,
+        }
     }
 
     pub fn market(mut self, market: Market) -> Self {
@@ -60,15 +48,6 @@ impl SearchForItemBuilder {
     pub fn include_external(mut self, include_external: IncludeExternalType) -> Self {
         self.include_external = Some(include_external);
         self
-    }
-
-    pub fn build(self) -> SearchForItem {
-        SearchForItem {
-            q: self.q,
-            type_: self.type_.unwrap_or_default(),
-            market: self.market,
-            include_external: self.include_external,
-        }
     }
 }
 
@@ -86,7 +65,7 @@ impl Endpoint for SearchForItem {
         params.push("q", &format!("{}", path_escaped(&self.q)));
 
         let type_str = self
-            .type_
+            .search_types
             .iter()
             .map(|x| x.to_string())
             .collect::<Vec<_>>()
@@ -118,10 +97,10 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = SearchForItem::builder()
-            .q("remaster track:Doxy artist:Miles Davis")
-            .add_type(SearchType::Album)
-            .build();
+        let endpoint = SearchForItem::new(
+            "remaster track:Doxy artist:Miles Davis",
+            [SearchType::Album],
+        );
 
         api::ignore(endpoint).query(&client).unwrap();
     }
@@ -136,11 +115,11 @@ mod tests {
             .build();
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = SearchForItem::builder()
-            .q("remaster track:Doxy artist:Miles Davis")
-            .add_type(SearchType::Album)
-            .include_external(IncludeExternalType::Audio)
-            .build();
+        let endpoint = SearchForItem::new(
+            "remaster track:Doxy artist:Miles Davis",
+            [SearchType::Album],
+        )
+        .include_external(IncludeExternalType::Audio);
 
         api::ignore(endpoint).query(&client).unwrap();
     }

@@ -31,24 +31,19 @@ pub struct UpdatePlaylistItems {
 }
 
 impl UpdatePlaylistItems {
-    pub fn builder() -> UpdatePlaylistItemsBuilder {
-        UpdatePlaylistItemsBuilder::default()
+    pub fn new(id: impl Into<String>, range_start: u32, insert_before: u32) -> Self {
+        Self {
+            id: id.into(),
+            uris: None,
+            range_start,
+            insert_before,
+            range_length: None,
+            snapshot_id: None,
+        }
     }
-}
 
-#[derive(Default, Clone)]
-pub struct UpdatePlaylistItemsBuilder {
-    id: String,
-    uris: Option<Vec<PlaylistItem>>,
-    range_start: u32,
-    insert_before: u32,
-    range_length: Option<usize>,
-    snapshot_id: Option<String>,
-}
-
-impl UpdatePlaylistItemsBuilder {
-    pub fn id<S: Into<String>>(mut self, id: S) -> Self {
-        self.id = id.into();
+    pub fn uris(mut self, uris: Vec<PlaylistItem>) -> Self {
+        self.uris = Some(uris);
         self
     }
 
@@ -57,40 +52,14 @@ impl UpdatePlaylistItemsBuilder {
         self
     }
 
-    pub fn uris(mut self, uris: Vec<PlaylistItem>) -> Self {
-        self.uris = Some(uris);
-        self
-    }
-
-    pub fn range_start(mut self, range_start: u32) -> Self {
-        self.range_start = range_start;
-        self
-    }
-
-    pub fn insert_before(mut self, insert_before: u32) -> Self {
-        self.insert_before = insert_before;
-        self
-    }
-
     pub fn range_length(mut self, range_length: usize) -> Self {
         self.range_length = Some(range_length);
         self
     }
 
-    pub fn snapshot_id<S: Into<String>>(mut self, snapshot_id: S) -> Self {
+    pub fn snapshot_id(mut self, snapshot_id: impl Into<String>) -> Self {
         self.snapshot_id = Some(snapshot_id.into());
         self
-    }
-
-    pub fn build(self) -> UpdatePlaylistItems {
-        UpdatePlaylistItems {
-            id: self.id,
-            uris: self.uris,
-            range_start: self.range_start,
-            insert_before: self.insert_before,
-            range_length: self.range_length,
-            snapshot_id: self.snapshot_id,
-        }
     }
 }
 
@@ -151,12 +120,7 @@ mod tests {
 
         let client = SingleTestClient::new_raw(endpoint, "");
 
-        let endpoint = UpdatePlaylistItems::builder()
-            .id("3cEYpjA9oz9GiPac4AsH4n")
-            .range_start(1)
-            .insert_before(3)
-            .range_length(2)
-            .build();
+        let endpoint = UpdatePlaylistItems::new("3cEYpjA9oz9GiPac4AsH4n", 1, 3).range_length(2);
 
         api::ignore(endpoint).query(&client).unwrap();
     }
