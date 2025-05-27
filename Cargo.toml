@@ -5,7 +5,7 @@ authors.workspace = true
 edition.workspace = true
 description = "A wrapper for the Spotify Web API"
 readme = "README.md"
-repository = "https://github.com/ry-sev/spotify_web_api"
+repository.workspace = true
 license.workspace = true
 keywords = ["spotify", "music", "api"]
 categories = ["api-bindings"]
@@ -24,10 +24,12 @@ members = ["endpoint_derive"]
 version = "0.1.0"
 authors = ["Ricky Severino"]
 edition = "2024"
+homepage = "https://github.com/ry-sev/spotify_web_api"
+repository = "https://github.com/ry-sev/spotify_web_api"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-endpoint_derive = { path = "endpoint_derive" }
+endpoint_derive = { version = "0.1.0", path = "endpoint_derive" }
 async-trait = "0.1.88"
 base64 = "0.22.1"
 bytes = "1.10.1"
