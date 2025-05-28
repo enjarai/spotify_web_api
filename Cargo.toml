@@ -9,7 +9,13 @@ repository = "https://github.com/ry-sev/spotify_web_api"
 license = "MIT OR Apache-2.0"
 keywords = ["spotify", "music", "api"]
 categories = ["api-bindings"]
-include = ["LICENSE-APACHE", "LICENSE-MIT", "**/*.rs", "Cargo.toml"]
+include = [
+    "LICENSE-APACHE",
+    "LICENSE-MIT",
+    "README.md",
+    "Cargo.toml",
+    "src/**/*",
+]
 
 [lib]
 path = "src/lib.rs"
