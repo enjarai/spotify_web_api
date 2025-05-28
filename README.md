@@ -6,21 +6,12 @@ A wrapper for the [Spotify Web API](https://developer.spotify.com/documentation/
 
 > Spotify Web API enables the creation of applications that can interact with Spotify's streaming service, such as retrieving content metadata, getting recommendations, creating and managing playlists, or controlling playback.
 
-> [!WARNING]
-> This library is not yet published so breaking changes may occur.
-
 ## Adding as a Dependency
 
-Since this library is not yet published on [crates.io](https://crates.io), you can add it to your project by referencing the GitHub repository in your `Cargo.toml` file:
-
-```toml
-spotify_web_api = { git = "https://github.com/ry-sev/spotify_web_api.git" }
-```
-
-or run the command
+You can add this to your project by running the command
 
 ```bash
-cargo add --git "https://github.com/ry-sev/spotify_web_api.git"
+cargo add spotify_web_api
 ```
 
 ## Examples
