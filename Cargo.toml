@@ -10,11 +10,11 @@ license = "MIT OR Apache-2.0"
 keywords = ["spotify", "music", "api"]
 categories = ["api-bindings"]
 include = [
-    "LICENSE-APACHE",
-    "LICENSE-MIT",
-    "README.md",
-    "Cargo.toml",
-    "src/**/*",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/Cargo.toml",
+    "/src/**/*",
 ]
 
 [lib]
